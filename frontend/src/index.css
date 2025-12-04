@@ -25,3 +25,14 @@ img {
 img[style*="display: none"] {
     display: none !important;
 }
+
+/* Ensure logo images have transparent backgrounds and proper sizing */
+img[alt*="Logo"], img[alt*="UCLA"] {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
+img[alt=""] {
+  display: none;
+}

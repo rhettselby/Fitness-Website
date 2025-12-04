@@ -12,15 +12,20 @@ module.exports = {
         "gray-20": "#F8F4EB",
         "gray-50": "#EFE6E6",
         "gray-100": "#DFCCCC",
-        "gray-500": "#5E0000",
-        "primary-100": "#FFE1E0",
-        "primary-300": "#FFA6A3",
-        "primary-500": "#FF6B66",
-        "secondary-400": "#FFCD58",
-        "secondary-500": "#FFC132",
+        "gray-500": "#1F2937",
+        "primary-100": "#DBEAFE", // Light blue
+        "primary-300": "#60A5FA", // Medium blue
+        "primary-500": "#2563EB", // Strong blue
+        "secondary-400": "#FCD34D", // Light yellow
+        "secondary-500": "#F59E0B", // Strong yellow
+        "accent-400": "#34D399", // Light green
+        "accent-500": "#10B981", // Medium green
+        "accent-600": "#059669", // Dark green
       },
       backgroundImage: (theme) => ({
-        "gradient-yellowred": "linear-gradient(90deg, #FF616A 0%, #FFC837)",
+        "gradient-blueyellow": "linear-gradient(90deg, #2563EB 0%, #F59E0B)",
+        "gradient-bluegreen": "linear-gradient(90deg, #2563EB 0%, #10B981)",
+        "gradient-yellowgreen": "linear-gradient(90deg, #F59E0B 0%, #10B981)",
         "mobile-home": "url('./assests/HomePageGraphic.png')",
       }),
       fontFamily: {

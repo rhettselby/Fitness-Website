@@ -3,8 +3,9 @@ import React from "react";
 export enum SelectedPage {
   Home = "home",
   Benefits = "benefits",
-  OurClasses = "ourclasses",
+  Leaderboard = "leaderboard",
   ContactUs = "contactus",
+  AddWorkout = "addworkout",
 }
 
 export interface BenefitType {

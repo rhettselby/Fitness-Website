@@ -9,14 +9,20 @@ const Footer = (props: Props) => {
             <div className = "justify-between mx-auto w-5/6 gap-16 md:flex">
                 <div className = "mt-16 basis-1/2 md:mt-0">
                     {/* <img alt='logo' src={Logo} /> */}
-                    <div className="font-bold text-xl">LOGO</div>
+                    <div className="font-bold text-xl">About</div>
+                    <div>
+                       <div>
+                        Community.
+                        </div>
+                        <div>
+                        Growth.
+                        </div>
+                        <div>
+                        Fun.
+                        </div>
+                    </div>
                     <p>
-                        Three
-                        Lines of 
-                        text
-                    </p>
-                    <p>
-                        Copy Right FitnessTracker All Rights Reserved
+                        Copy Right Rhett's Fitness Community All Rights Reserved
                     </p>
 
                 </div>
@@ -27,7 +33,7 @@ const Footer = (props: Props) => {
                 </div>
                 <div className = "mt-16 basis-1/4 md:mt-0">
                     <h4 className="font-bold">Contact Us</h4>
-                    <p className="mt-5">Random Text Yet Again</p>
+                    <p className="mt-5">rhettselby10@gmail.com</p>
                     <p>805-245-6513</p>
 
                 </div>

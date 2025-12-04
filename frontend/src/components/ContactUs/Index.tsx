@@ -4,7 +4,11 @@ import { motion } from "framer-motion"
 import ContactUsPageGraphic from "@/assets/ContactUsPageGraphic.png"
 import HText from "@/shared/HText";
 
-
+type FormValues = {
+    username: string;
+    email: string;
+    password: string;
+};
 
 type Props = {
     setSelectedPage: (value: SelectedPage) => void;
@@ -15,21 +19,47 @@ const ContactUs = ({setSelectedPage}: Props) => {
 
     const {
         register,
-        trigger,
-        formState: { errors }
-    } = useForm();
+        handleSubmit,
+        formState: { errors },
+        reset,
+    } = useForm<FormValues>();
 
-    const onSubmit = async (e: any) => {
-        const isValid = await trigger();
-        if (!isValid) {
-            e.preventDefault();
+    const onSubmit = async (data: FormValues) => {
+        try {
+            const response = await fetch("/users/api/register/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    username: data.username,
+                    password: data.password,
+                    email: data.email || "",
+                }),
+            });
+
+            const result = await response.json();
+            console.log("Server response:", result);
+
+            if (result.success) {
+                alert("User registered successfully! You are now logged in.");
+                reset();
+                // Reload page to update navbar with login status
+                window.location.reload();
+            } else {
+                alert(result.error || "Registration failed");
+            }
+        } catch (err) {
+            console.error("Error submitting form:", err);
+            alert("Network error. Please try again.");
         }
-    }
+    };
 
     return (
        <section id="contactus" className = "mx-auto w-5/6 pt-24 pb-32">
             <motion.div onViewportEnter = {() => setSelectedPage(SelectedPage.ContactUs)}>
-                {/* Header */ }
+                {/* Header */}
                 <motion.div
                     className = "md:w-3/5"
                     initial="hidden"
@@ -44,15 +74,16 @@ const ContactUs = ({setSelectedPage}: Props) => {
                     <HText>
                         <span className = "text-primary-500">
                             Join Now
+                            {" "}
                         </span>
-                        To Get in Shape
+                        To Start Tracking Workouts
                     </HText>
                     <p className = "my-5">
-                        Put some relevant information here
+                        Create an account to compete with your Friends!
                     </p>
                 </motion.div>
 
-                {/* Form and Image */ }
+                {/* Form and Image */}
                 <div className = "mt-10 items-center justify-between gap-8 md:flex">
                     <motion.div 
                         className = "mt-10 basis-3/5"
@@ -65,74 +96,61 @@ const ContactUs = ({setSelectedPage}: Props) => {
                             visible: { opacity: 1, y: 0 },
                         }}
                     >
-                        <form 
-                            target = "_blank"
-                            onSubmit={onSubmit}
-                            action="https://formsubmit.co/c2a377ba8c8e3d2d35a7b63a29fb4760"
-                            method="POST"
-                        >
+                        <form onSubmit={handleSubmit(onSubmit)}>
                             <input
                                 className={inputStyles}
                                 type = "text"
-                                placeholder = "name"
-                                {...register("name", {
+                                placeholder = "Username"
+                                {...register("username", {
                                     required: true,
-                                    maxLength: 100,
-
+                                    minLength: 3,
+                                    maxLength: 150,
                                 })}
                             />
-                            {errors.name && (
-                                <p
-                                className = "mt-1 text-primary-500">
-                                {errors.name.type === "required" && "This field is required."}
-                                {errors.name.type === "maxLength" && "Max length is 100 characters"}
-                                    
+                            {errors.username && (
+                                <p className = "mt-1 text-primary-500">
+                                    {errors.username.type === "required" && "Username is required."}
+                                    {errors.username.type === "minLength" && "Username must be at least 3 characters."}
+                                    {errors.username.type === "maxLength" && "Max length is 150 characters"}
                                 </p>
                             )}
 
                             <input
                                 className={inputStyles}
                                 type = "email"
-                                placeholder = "EMAIL"
+                                placeholder = "Email"
                                 {...register("email", {
                                     required: true,
-                                    pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.0]+\.[A-Z]{2,}$/i,
-
+                                    pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                                 })}
                             />
                             {errors.email && (
-                                <p
-                                className = "mt-1 text-primary-500">
-                                {errors.email.type === "required" && "This field is required."}
-                                {errors.email.type === "pattern" && "Invalid email adress"}
-                                    
+                                <p className = "mt-1 text-primary-500">
+                                    {errors.email.type === "required" && "Email is required."}
+                                    {errors.email.type === "pattern" && "Invalid email address"}
                                 </p>
                             )}
 
-                            <textarea
+                            <input
                                 className={inputStyles}
-                                rows={4}
-                                cols = {50}
-                                placeholder = "MESSAGE"
-                                {...register("message", {
+                                type = "password"
+                                placeholder = "Password"
+                                {...register("password", {
                                     required: true,
-                                    maxLength: 2000,
-
+                                    minLength: 8,
                                 })}
                             />
-                            {errors.message && (
-                                <p
-                                className = "mt-1 text-primary-500">
-                                {errors.message.type === "required" && "This field is required."}
-                                {errors.message.type === "maxLength" && "Max length is 100 characters"}
-                                    
+                            {errors.password && (
+                                <p className = "mt-1 text-primary-500">
+                                    {errors.password.type === "required" && "Password is required."}
+                                    {errors.password.type === "minLength" && "Password must be at least 8 characters."}
                                 </p>
                             )}
 
                             <button 
                                 type = "submit"
                                 className = "mt-5 rounded-lg bg-secondary-500 px-20 py-3 transition duration-500 hover:text-white">
-                                Submit
+                                Register
                             </button>
 
                         </form>
@@ -159,7 +177,6 @@ const ContactUs = ({setSelectedPage}: Props) => {
                 </div>
             </motion.div>
        </section>
-            
     )
 }
 

@@ -55,7 +55,7 @@ const Home = ({ setSelectedPage }: Props) => {
             </div>
           </div>
           <p className="mt-8 text-sm">
-            Welcome to Rhett's Fitness Tracker Website. Log your workouts every day!
+            Welcome to Rhett's Fitness Community. Log your workouts every day!
           </p>
           </motion.div>
 
