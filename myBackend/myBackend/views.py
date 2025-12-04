@@ -6,6 +6,27 @@ from django.contrib.auth import get_user_model
 
 from fitness.models import Cardio, Gym  # import the CONCRETE models, not Workout
 
+#JSON Is User Authenticated Check
+
+def me_api(request):
+    if request.user.is_authenticated:
+        user = request.user
+        data = {
+            "isAuthenticated": True,
+            "user": {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+            }
+        }
+    else:
+        data = {"isAuthenticated": False}
+
+    return JsonResponse(data)
+
+
+
+
 
 def now_utc():
     # timezone-aware "now"
@@ -131,8 +152,20 @@ def leaderboard(request):
     return render(request, "leaderboard.html", context)
 
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from profile_page.models import Profile
 
+@csrf_exempt
 def leaderboard_api(request):
+    # Handle CORS preflight requests
+    if request.method == 'OPTIONS':
+        response = JsonResponse({})
+        response['Access-Control-Allow-Origin'] = 'http://localhost:5173'
+        response['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+        response['Access-Control-Allow-Headers'] = 'Content-Type'
+        response['Access-Control-Allow-Credentials'] = 'true'
+        return response
+    
     current_time = now_utc()
     week_start = beginning_of_week(current_time)
 
@@ -170,9 +203,32 @@ def leaderboard_api(request):
             user_obj = User.objects.get(id=user_id)
         except User.DoesNotExist:
             continue
+        
+        # Get profile data if it exists
+        profile_data = {}
+        try:
+            profile = Profile.objects.get(user=user_obj)
+            profile_data = {
+                "bio": profile.bio if profile.bio else None,
+                "location": profile.location if profile.location else None,
+            }
+        except Profile.DoesNotExist:
+            profile_data = {
+                "bio": None,
+                "location": None,
+            }
+        
         data.append({
-            "user": user_obj.username,  # or whichever field you want to expose
-            "count": workout_count
+            "username": user_obj.username,  # Changed from "user" to "username"
+            "count": workout_count,
+            "bio": profile_data.get("bio"),
+            "location": profile_data.get("location"),
         })
 
-    return JsonResponse({"leaderboard": data})
+    # Sort by count (descending) - highest count first
+    data.sort(key=lambda x: x["count"], reverse=True)
+    
+    response = JsonResponse({"leaderboard": data})
+    response['Access-Control-Allow-Origin'] = 'http://localhost:5173'
+    response['Access-Control-Allow-Credentials'] = 'true'
+    return response

@@ -20,7 +20,7 @@ class Workout(models.Model):
 #cardio class, contains date, type, and duration members
 class Cardio(Workout):
     activity = models.CharField(max_length = 75)
-    duration = models.PositiveIntegerField()
+    duration = models.FloatField(default = 60)
     
     @property
     def model_name(self):

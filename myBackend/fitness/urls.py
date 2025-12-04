@@ -16,4 +16,7 @@ urlpatterns = [
           #(view recieves extra arguements to 'request'
     path('<str:workout_type>/<int:workout_id>/like/', views.add_like, name='toggle_like'),
   # or name='add_like' if you used that name
+  path('api/', views.workout_log_api, name = "workout_log"),
+  path('api/add/gym/', views.add_gym_api, name = "add_gym_api"),
+  path('api/add/cardio/', views.add_cardio_api, name = "add_cardio_api"),
 ]
