@@ -1,1 +1,1 @@
-export const VITE_API_URL = https://fitness-website-2u3t5mk8o-rhettselbys-projects.vercel.app
+export const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
