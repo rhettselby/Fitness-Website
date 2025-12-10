@@ -21,10 +21,10 @@ const AddWorkoutPage = () => {
         const formData = new URLSearchParams();
         formData.append("activity", activity.trim());
         if (type === "gym") {
-            url = "${API_URL}/api/fitness/add/gym/";
+            url = `${API_URL}/api/fitness/add/gym/`;
         }
         else if (type === "cardio") {
-            url = "${API_URL}/api/fitness/add/cardio/";
+            url = `${API_URL}/api/fitness/add/cardio/`;
             if (duration === "" || duration === null || duration === undefined || Number(duration) <= 0) {
                 setError("Please enter a valid duration (greater than 0) for cardio workouts.");
                 return;

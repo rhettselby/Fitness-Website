@@ -8,6 +8,7 @@ import Link from "./link";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import ActionButton from "@/shared/ActionButton";
 import Login from "@/components/Login";
+import { API_URL } from "@/lib/config";
 
 type Props = {
   isTopOfPage: boolean;
@@ -32,7 +33,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
 
   const checkAuth = async () => {
     try {
-      const response = await fetch("/users/api/check-auth/", {
+      const response = await fetch(`${API_URL}/users/api/check-auth/`, {
         credentials: 'include',
       });
       if (!response.ok) {
@@ -69,7 +70,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
 
   const handleLogout = async () => {
     try {
-      await fetch("/users/api/logout/", {
+      await fetch(`${API_URL}/users/api/logout/`, {
         method: "POST",
         credentials: 'include',
       });
