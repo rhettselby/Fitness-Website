@@ -4,3 +4,9 @@
     "jsx": "react-jsx"
   }
 }
+
+{
+  "compilerOptions": {
+    "types": ["vite/client"]
+  }
+}
