@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/navbar";
 import { SelectedPage } from "@/shared/types";
+import { API_URL } from "@/lib/config";
 
 type Workout = {
   id: number;
@@ -39,7 +40,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     // Check if user is authenticated
-    fetch("/users/api/check-auth/", {
+    fetch(`${API_URL}/users/api/check-auth/`, {
       credentials: "include",
     })
       .then((res) => res.json())

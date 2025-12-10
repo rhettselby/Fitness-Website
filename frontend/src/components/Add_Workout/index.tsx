@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/navbar";
 import { SelectedPage } from "@/shared/types";
+import { API_URL } from "@/lib/config";
 
 type WorkoutType = "cardio" | "gym";
 
@@ -22,15 +23,15 @@ const AddWorkoutPage = () => {
       return;
     }
 
-    let url = "";
+    let url = `${API_URL}`;
     const formData = new URLSearchParams();
     
     formData.append("activity", activity.trim());
 
     if (type === "gym") {
-      url = "/api/fitness/api/add/gym/";
+      url = `${API_URL}/api/fitness/add/gym/`;
     } else if (type === "cardio") {
-      url = "/api/fitness/api/add/cardio/";
+      url = `/${API_URL}/api/fitness/add/cardio/`;
       if (duration === "" || duration === null || duration === undefined || Number(duration) <= 0) {
         setError("Please enter a valid duration (greater than 0) for cardio workouts.");
         return;

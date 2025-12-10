@@ -13,7 +13,7 @@ const ProfilePage = () => {
     const navigate = useNavigate();
     useEffect(() => {
         // Check if user is authenticated
-        fetch("/users/api/check-auth/", {
+        fetch(`${API_URL}/users/api/check-auth/`, {
             credentials: "include",
         })
             .then((res) => res.json())

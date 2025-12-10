@@ -8,7 +8,7 @@ const Login = ({ onLoginSuccess, onClose }) => {
     const onSubmit = async (data) => {
         setError("");
         try {
-            const response = await fetch("/users/api/login/", {
+            const response = await fetch(`${API_URL}/users/api/login/` , {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
