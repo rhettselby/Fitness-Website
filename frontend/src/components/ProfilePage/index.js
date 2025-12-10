@@ -33,7 +33,7 @@ const ProfilePage = () => {
     }, [navigate]);
     const fetchProfileData = async () => {
         try {
-            const response = await fetch("/profile/api/", {
+            const response = await fetch(`${API_URL}/profile/api/`, {
                 credentials: "include",
             });
             if (!response.ok) {

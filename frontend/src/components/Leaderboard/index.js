@@ -9,7 +9,7 @@ const Leaderboard = ({ setSelectedPage }) => {
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         setLoading(true);
-        fetch("/api/leaderboard/", {
+        fetch(`${API_URL}/api/leaderboard/`, {
             credentials: "include",
             method: "GET",
             headers: {

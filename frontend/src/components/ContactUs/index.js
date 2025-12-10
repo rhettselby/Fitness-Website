@@ -9,7 +9,7 @@ const ContactUs = ({ setSelectedPage }) => {
     const { register, handleSubmit, formState: { errors }, reset, } = useForm();
     const onSubmit = async (data) => {
         try {
-            const response = await fetch("/users/api/register/", {
+            const response = await fetch(`${API_URL}/users/api/register/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

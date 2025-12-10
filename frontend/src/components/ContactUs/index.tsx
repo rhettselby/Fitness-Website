@@ -3,6 +3,7 @@ import {useForm} from "react-hook-form"
 import { motion } from "framer-motion"
 import ContactUsPageGraphic from "@/assets/ContactUsPageGraphic.png"
 import HText from "@/shared/HText";
+import { API_URL } from "@/lib/config";
 
 type FormValues = {
     username: string;
@@ -26,7 +27,7 @@ const ContactUs = ({setSelectedPage}: Props) => {
 
     const onSubmit = async (data: FormValues) => {
         try {
-            const response = await fetch("/users/api/register/", {
+            const response = await fetch(`${API_URL}/users/api/register/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

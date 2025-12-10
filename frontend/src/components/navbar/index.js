@@ -23,7 +23,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }) => {
     const isProfilePage = location.pathname === "/profile";
     const checkAuth = async () => {
         try {
-            const response = await fetch("/users/api/check-auth/", {
+            const response = await fetch(`${API_URL}/users/api/login/`/users/api/check-auth/``, {
                 credentials: 'include',
             });
             if (!response.ok) {
@@ -59,7 +59,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }) => {
     };
     const handleLogout = async () => {
         try {
-            await fetch("/users/api/logout/", {
+            await fetch(`${API_URL}/users/api/logout/`, {
                 method: "POST",
                 credentials: 'include',
             });

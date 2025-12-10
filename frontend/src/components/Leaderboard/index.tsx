@@ -3,6 +3,7 @@ import HText from "@/shared/HText";
 import { motion } from "framer-motion";
 import Class from "./Class";
 import { useEffect, useState } from "react";
+import { API_URL } from "@/lib/config";
 
 type LeaderboardUser = {
   username: string;
@@ -21,7 +22,7 @@ const Leaderboard = ({ setSelectedPage }: Props) => {
 
   useEffect(() => {
     setLoading(true);
-    fetch("/api/leaderboard/", {
+    fetch(`${API_URL}/api/leaderboard/`, {
       credentials: "include",
       method: "GET",
       headers: {

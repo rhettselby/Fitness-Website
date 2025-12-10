@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { API_URL } from "@/lib/config";
 
 type LoginFormValues = {
     username: string;
@@ -24,7 +25,7 @@ const Login = ({ onLoginSuccess, onClose }: Props) => {
     const onSubmit = async (data: LoginFormValues) => {
         setError("");
         try {
-            const response = await fetch("/users/api/login/", {
+            const response = await fetch(`${API_URL}/users/api/login/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
