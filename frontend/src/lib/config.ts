@@ -6,12 +6,10 @@ const getApiUrl = () => {
     if (envUrl) return envUrl;
   }
   
-  // Fallback to localhost
-  return "http://localhost:8000";
-};
+  console.log(import.meta.env.VITE_API_URL);
+}
 
 export const API_URL = getApiUrl();
 
-console.log("API_URL:", API_URL);
 
-console.log(import.meta.env.VITE_API_URL);
+
