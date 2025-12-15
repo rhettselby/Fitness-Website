@@ -36,6 +36,6 @@ const Benefits = ({ setSelectedPage }) => {
                                             }, children: _jsxs(HText, { children: ["A strong community of members getting ", " ", _jsx("span", { className: "text-primary-500", children: "Fit" })] }) }) }) }), _jsxs(motion.div, { initial: "hidden", whileInView: "visible", viewport: { once: true, amount: 0.5 }, transition: { duration: 2 }, variants: {
                                         hidden: { opacity: 0, x: -50 },
                                         visible: { opacity: 1, x: 0 },
-                                    }, children: [_jsx("p", { className: "my-5", children: "Fill this with something useful" }), _jsx("p", { className: "mb-5", children: "Fill this with something useful" })] }), _jsx("div", { className: "relative mt-16", children: _jsx("div", { className: "before:absolute before:-bottom-20 before:right-40 before:z-[-1] before:content-sparkles", children: _jsx(ActionButton, { setSelectedPage: setSelectedPage, children: "Join Now" }) }) })] })] })] }) });
+                                    }, children: [_jsx("p", { className: "my-5", children: "Fill this with something useful" }), _jsx("p", { className: "mb-5", children: "Fill this with something useful" })] }), _jsx("div", { className: "relative mt-16", children: _jsx("div", { className: "before:absolute before:-bottom-20 before:right-40 before:z-[-1]", children: _jsx(ActionButton, { setSelectedPage: setSelectedPage, children: "Join Now" }) }) })] })] })] }) });
 };
 export default Benefits;

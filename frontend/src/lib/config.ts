@@ -13,3 +13,5 @@ const getApiUrl = () => {
 export const API_URL = getApiUrl();
 
 console.log("API_URL:", API_URL);
+
+console.log(import.meta.env.VITE_API_URL);
