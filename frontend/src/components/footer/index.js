@@ -1,5 +1,0 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-const Footer = (props) => {
-    return (_jsx("footer", { className: "bg-primary-100 py-16", children: _jsxs("div", { className: "justify-between mx-auto w-5/6 gap-16 md:flex", children: [_jsxs("div", { className: "mt-16 basis-1/2 md:mt-0", children: [_jsx("div", { className: "font-bold text-xl", children: "About" }), _jsxs("div", { children: [_jsx("div", { children: "Community." }), _jsx("div", { children: "Growth." }), _jsx("div", { children: "Fun." })] }), _jsx("p", { children: "Copy Right Rhett's Fitness Community All Rights Reserved" })] }), _jsxs("div", { className: "mt-16 basis-1/4 md:mt-0", children: [_jsx("h4", { className: "font-bold", children: "Links" }), _jsx("p", { className: "mt-5", children: "Random Text" }), _jsx("p", { className: "mt-5", children: " Random Text v2" })] }), _jsxs("div", { className: "mt-16 basis-1/4 md:mt-0", children: [_jsx("h4", { className: "font-bold", children: "Contact Us" }), _jsx("p", { className: "mt-5", children: "rhettselby10@gmail.com" }), _jsx("p", { children: "805-245-6513" })] })] }) }));
-};
-export default Footer;
