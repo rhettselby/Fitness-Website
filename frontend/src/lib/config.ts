@@ -1,5 +1,5 @@
-export const API_URL =
-  import.meta.env.VITE_API_URL ??
-  "https://fitnesswebsitebackend-production.up.railway.app";
+if (!import.meta.env.VITE_API_URL) {
+  throw new Error("VITE_API_URL IS NOT DEFINED AT BUILD TIME");
+}
 
-console.log("API_URL RESOLVED TO:", API_URL);
+export const API_URL = import.meta.env.VITE_API_URL;
