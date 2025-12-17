@@ -9,6 +9,8 @@ import SponsorForbes from "@/assets/SponsorForbes.png";
 import SponsorFortune from "@/assets/SponsorFortune.png";
 import AnchorLink from "react-anchor-link-smooth-scroll";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
+import { API_URL } from "@/lib/config";
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
@@ -17,6 +19,12 @@ type Props = {
 
 const Home = ({ setSelectedPage }: Props) => {
   const isAboveMediumScreen = useMediaQuery("(min-width:1060px)");
+
+  useEffect(() => {
+    fetch(`${API_URL}/users/api/csrf/`, {
+      credentials: "include",
+    });
+  }, []);
 
   return (
     <section
