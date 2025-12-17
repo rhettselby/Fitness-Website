@@ -61,7 +61,7 @@ const ProfilePage = () => {
 
   const fetchProfileData = async () => {
     try {
-      const response = await fetch(`${API_URL}/profile/api/`, {
+      const response = await fetch(`${API_URL}/api/profile/api/`, {
         credentials: "include",
       });
 
