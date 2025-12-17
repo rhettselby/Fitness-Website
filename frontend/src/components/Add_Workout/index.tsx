@@ -5,7 +5,7 @@ import { SelectedPage } from "@/shared/types";
 import { API_URL } from "@/lib/config";
 import { getCookie } from "@/lib/csrf";
 
-const csrfToken = getCookie("csrftoken");
+
 
 type WorkoutType = "cardio" | "gym";
 
@@ -18,6 +18,9 @@ const AddWorkoutPage = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
+
+    const csrfToken = getCookie("csrftoken");
+    
     e.preventDefault();
     setError(null);
 
