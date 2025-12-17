@@ -14,7 +14,6 @@ type Props = {
   setSelectedPage: (value: SelectedPage) => void;
 };
 
-export const API_URL = import.meta.env.VITE_API_URL;
 const Home = ({ setSelectedPage }: Props) => {
   const isAboveMediumScreen = useMediaQuery("(min-width:1060px)");
 
