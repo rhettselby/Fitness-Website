@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/navbar";
 import { SelectedPage } from "@/shared/types";
 import { API_URL } from "@/lib/config";
+import { getCookie } from "@/lib/csrf";
+
+const csrfToken = getCookie("csrftoken");
 
 type WorkoutType = "cardio" | "gym";
 
@@ -48,6 +51,7 @@ const AddWorkoutPage = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": csrfToken ?? "",
         },
         credentials: "include",
         body: formData.toString(),
