@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import ContactUsPageGraphic from "@/assets/ContactUsPageGraphic.png"
 import HText from "@/shared/HText";
 import { API_URL } from "@/lib/config";
+import { TokenService } from "@/utils/auth";
 
 type FormValues = {
     username: string;
@@ -27,12 +28,11 @@ const ContactUs = ({setSelectedPage}: Props) => {
 
     const onSubmit = async (data: FormValues) => {
         try {
-            const response = await fetch(`${API_URL}/users/api/register/`, {
+            const response = await fetch(`${API_URL}/users/api/register-jwt/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                credentials: 'include',
                 body: JSON.stringify({
                     username: data.username,
                     password: data.password,
@@ -44,8 +44,8 @@ const ContactUs = ({setSelectedPage}: Props) => {
             console.log("Server response:", result);
 
             if (result.success) {
-                alert("User registered successfully! You are now logged in.");
-                reset();
+                TokenService.setTokens(result.access, result.refresh);
+                TokenService.setUser(result.user);
                 // Reload page to update navbar with login status
                 window.location.reload();
             } else {
