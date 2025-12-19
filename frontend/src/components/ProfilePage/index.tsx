@@ -39,7 +39,16 @@ const ProfilePage = () => {
   const [selectedPage, setSelectedPage] = useState<SelectedPage>(SelectedPage.Home);
   const navigate = useNavigate();
 
-
+  const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
   
   useEffect(() => {
 
@@ -73,48 +82,45 @@ const ProfilePage = () => {
   }, [navigate]);
 
   const fetchProfileData = async () => {
-    
+  try {
     const token = TokenService.getAccessToken();
 
-    try {
-      const response = await fetch(`${API_URL}/api/profile/api/`, { 
+    if (!token) {
+      navigate("/");
+      return;
+    }
+
+    const response = await fetch(
+      `${API_URL}/api/profile/profile-jwt/`,
+      {
         headers: {
           "Content-Type": "application/json",
-          ...(token && { "Authorization": `Bearer ${token}`}),
+          "Authorization": `Bearer ${token}`,
         },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          TokenService.removeTokens();
-          navigate("/");
-          return;
-        }
-        throw new Error(`HTTP error! status: ${response.status}`);
       }
+    );
 
-      const data: ProfileResponse = await response.json();
-      setWorkouts(data.workouts || []);
-      setUser(data.user);
-      setProfile(data.profile);
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching profile data:", err);
-      setError("Failed to load profile data");
-      setLoading(false);
+    if (!response.ok) {
+      if (response.status === 401) {
+        TokenService.removeTokens();
+        navigate("/");
+        return;
+      }
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-  };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
+    const data: ProfileResponse = await response.json();
+
+    setWorkouts(data.workouts || []);
+    setUser(data.user);
+    setProfile(data.profile);
+    setLoading(false);
+  } catch (err) {
+    console.error("Error fetching profile data:", err);
+    setError("Failed to load profile data");
+    setLoading(false);
+  }
+};
 
   if (loading) {
     return (
