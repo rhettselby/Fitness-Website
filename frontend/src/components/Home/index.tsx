@@ -20,11 +20,6 @@ type Props = {
 const Home = ({ setSelectedPage }: Props) => {
   const isAboveMediumScreen = useMediaQuery("(min-width:1060px)");
 
-  useEffect(() => {
-    fetch(`${API_URL}/users/api/csrf/`, {
-      credentials: "include",
-    });
-  }, []);
 
   return (
     <section
