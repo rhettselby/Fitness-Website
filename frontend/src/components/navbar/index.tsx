@@ -9,6 +9,7 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import ActionButton from "@/shared/ActionButton";
 import Login from "@/components/Login";
 import { API_URL } from "@/lib/config";
+import { TokenService } from "@/utils/auth";
 
 type Props = {
   isTopOfPage: boolean;
@@ -32,31 +33,52 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
   const isProfilePage = location.pathname === "/profile";
 
   const checkAuth = async () => {
-    try {
-      const response = await fetch(`${API_URL}/users/api/check-auth/`, {
-        credentials: 'include',
-      });
-      if (!response.ok) {
-        console.error("Auth check failed:", response.status);
-        setIsAuthenticated(false);
-        setUsername("");
-        return;
-      }
-      const data = await response.json();
-      console.log("Auth check response:", data); // Debug log
-      if (data.authenticated) {
-        setIsAuthenticated(true);
-        setUsername(data.user.username);
-      } else {
-        setIsAuthenticated(false);
-        setUsername("");
-      }
-    } catch (error) {
-      console.error("Error checking auth:", error);
+    const token = TokenService.getAccessToken();
+
+    if (!token) {
       setIsAuthenticated(false);
       setUsername("");
+      return;
     }
-  };
+
+    try {
+    const response = await fetch(`${API_URL}/users/api/check-auth-jwt/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      console.error("Auth check failed:", response.status);
+      setIsAuthenticated(false);
+      setUsername("");
+      TokenService.removeTokens();
+      return;
+    }
+
+    const data = await response.json();
+    console.log("Auth check response:", data);
+    
+    if (data.authenticated && data.user) {
+      setIsAuthenticated(true);
+      setUsername(data.user.username);
+      TokenService.setUser(data.user);
+    } else {
+      setIsAuthenticated(false);
+      setUsername("");
+      TokenService.removeTokens();
+    }
+  } catch (error) {
+    console.error("Error checking auth:", error);
+    setIsAuthenticated(false);
+    setUsername("");
+    TokenService.removeTokens();
+  }
+};
+
+
 
   // Check authentication status on mount
   useEffect(() => {
@@ -68,17 +90,11 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
     checkAuth(); // Refresh auth status
   };
 
-  const handleLogout = async () => {
-    try {
-      await fetch(`${API_URL}/users/api/logout/`, {
-        method: "POST",
-        credentials: 'include',
-      });
-      setIsAuthenticated(false);
-      setUsername("");
-    } catch (error) {
-      console.error("Error logging out:", error);
-    }
+  const handleLogout = () => {
+    TokenService.removeTokens();
+    setIsAuthenticated(false);
+    setUsername("");
+    navigate("/");
   };
 
   return (

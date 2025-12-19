@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { API_URL } from "@/lib/config";
+import { TokenService } from "@/utils/auth";
+
 
 type LoginFormValues = {
     username: string;
@@ -20,17 +22,17 @@ const Login = ({ onLoginSuccess, onClose }: Props) => {
         register,
         handleSubmit,
         formState: { errors },
+        reset,
     } = useForm<LoginFormValues>();
 
     const onSubmit = async (data: LoginFormValues) => {
         setError("");
         try {
-            const response = await fetch(`${API_URL}/users/api/login/`, {
+            const response = await fetch(`${API_URL}/users/api/login-jwt/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                credentials: 'include',
                 body: JSON.stringify({
                     username: data.username,
                     password: data.password,
@@ -50,15 +52,24 @@ const Login = ({ onLoginSuccess, onClose }: Props) => {
             }
 
             const result = await response.json();
+
+            console.log("Server response:", result);
+
             if (result.success) {
-                onLoginSuccess();
-                onClose();
+               
+                TokenService.setTokens(result.access, result.refresh);
+                TokenService.setUser(result.user);
+
+                alert("Login Successful");
+                reset();
+                window.location.reload();
+
             } else {
-                setError(result.error || "Login failed");
+                alert(result.error || "Login failed");
             }
         } catch (err) {
             console.error("Error logging in:", err);
-            setError("Network error. Please check your connection.");
+            alert("Network error. Please check your connection.");
         }
     };
 

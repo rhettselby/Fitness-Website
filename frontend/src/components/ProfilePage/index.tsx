@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/navbar";
 import { SelectedPage } from "@/shared/types";
 import { API_URL } from "@/lib/config";
+import { TokenService } from "@/utils/auth";
 
 type Workout = {
   id: number;
@@ -38,10 +39,22 @@ const ProfilePage = () => {
   const [selectedPage, setSelectedPage] = useState<SelectedPage>(SelectedPage.Home);
   const navigate = useNavigate();
 
+
+  
   useEffect(() => {
+
+      const token = TokenService.getAccessToken();
+
+      if (!token) {
+        navigate("/");
+        return;
+      }
     // Check if user is authenticated
-    fetch(`${API_URL}/users/api/check-auth/`, {
-      credentials: "include",
+    fetch(`${API_URL}/users/api/check-auth-jwt/`, {
+      headers: {
+        "Content-Type" : "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
     })
       .then((res) => res.json())
       .then((data) => {
@@ -60,13 +73,20 @@ const ProfilePage = () => {
   }, [navigate]);
 
   const fetchProfileData = async () => {
+    
+    const token = TokenService.getAccessToken();
+
     try {
-      const response = await fetch(`${API_URL}/api/profile/api/`, {
-        credentials: "include",
+      const response = await fetch(`${API_URL}/api/profile/api/`, { 
+        headers: {
+          "Content-Type": "application/json",
+          ...(token && { "Authorization": `Bearer ${token}`}),
+        },
       });
 
       if (!response.ok) {
         if (response.status === 401) {
+          TokenService.removeTokens();
           navigate("/");
           return;
         }

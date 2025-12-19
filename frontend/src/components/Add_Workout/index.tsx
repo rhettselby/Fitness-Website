@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/navbar";
 import { SelectedPage } from "@/shared/types";
 import { API_URL } from "@/lib/config";
-import { getCookie } from "@/lib/csrf";
+import { TokenService } from "@/utils/auth";
 
 
 
@@ -18,8 +18,6 @@ const AddWorkoutPage = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
-
-    const csrfToken = getCookie("csrftoken");
     
     e.preventDefault();
     setError(null);
@@ -49,14 +47,14 @@ const AddWorkoutPage = () => {
       return;
     }
 
+    const token = TokenService.getAccessToken();
     try {
       const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
-          "X-CSRFToken": csrfToken ?? "",
+          ...(token && {"Authorization": `Bearer ${token}`}),
         },
-        credentials: "include",
         body: formData.toString(),
       });
 

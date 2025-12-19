@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Class from "./Class";
 import { useEffect, useState } from "react";
 import { API_URL } from "@/lib/config";
+import { TokenService } from "@/utils/auth";
 
 type LeaderboardUser = {
   username: string;
@@ -22,11 +23,13 @@ const Leaderboard = ({ setSelectedPage }: Props) => {
 
   useEffect(() => {
     setLoading(true);
+    const token = TokenService.getAccessToken();
+
     fetch(`${API_URL}/api/leaderboard/`, {
-      credentials: "include",
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        ...(token && { "Authorization": `Bearer ${token} `}),
       },
     })
       .then((res) => {
@@ -36,11 +39,8 @@ const Leaderboard = ({ setSelectedPage }: Props) => {
         return res.json();
       })
       .then((data) => {
-        console.log("Leaderboard data received:", data); // Debug log
         if (data.leaderboard && Array.isArray(data.leaderboard)) {
-          console.log("Leaderboard items:", data.leaderboard); // Debug log
           const sortedLeaders = data.leaderboard.slice(0, 5);
-          console.log("Top 5 leaders:", sortedLeaders); // Debug log
           setLeaders(sortedLeaders);
         } else {
           console.error("Unexpected data format:", data);
