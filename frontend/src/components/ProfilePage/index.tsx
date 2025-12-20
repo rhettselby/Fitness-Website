@@ -91,7 +91,7 @@ const ProfilePage = () => {
     }
 
     const response = await fetch(
-      `${API_URL}/api/profile/api/profile-jwt/`,
+      `${API_URL}/api/profile/profile-jwt/`,
       {
         headers: {
           "Content-Type": "application/json",
