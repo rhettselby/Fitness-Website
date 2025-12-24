@@ -4,6 +4,7 @@ import Navbar from "@/components/navbar";
 import { SelectedPage } from "@/shared/types";
 import { API_URL } from "@/lib/config";
 import { TokenService } from "@/utils/auth";
+import WearablesSettings from "@/components/WearablesSettings/WearablesSettings";
 
 type Workout = {
   id: number;
@@ -122,6 +123,7 @@ const ProfilePage = () => {
   }
 };
 
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -181,6 +183,10 @@ const ProfilePage = () => {
               </div>
             )}
           </div>
+
+          {/* wearable settings here */}
+          <WearablesSettings />
+
 
           {/* Workouts Section with Scrollable Container */}
           <div className="bg-white rounded-lg shadow-md p-8">
