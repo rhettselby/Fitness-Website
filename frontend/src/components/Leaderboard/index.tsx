@@ -72,7 +72,7 @@ const Leaderboard = ({ setSelectedPage }: Props) => {
               visible: { opacity: 1, x: 0 },
             }}
           >
-            <div className="md:w-3/5">
+            <div className="w-full flex flex-col items-center text-center">
               <HText>Weekly Leaderboard 🏆</HText>
               <p className="py-5">
                 The top 5 members with the most workouts this week!
