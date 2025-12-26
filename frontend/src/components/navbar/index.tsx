@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 //import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useNavigate, useLocation } from "react-router-dom";
-import UCLA_Logo from "@/assets/UCLA_Logo.svg";
+import NewLogo from "@/assets/NewLogo.png";
 import Logo_Placeholder from "@/assets/Logo.png";
 import { SelectedPage } from "@/shared/types";
 import Link from "./link";
@@ -122,12 +122,12 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                 />
               ) : (
                 <img 
-                  alt="UCLA Logo" 
-                  src={UCLA_Logo} 
+                  alt="Logo" 
+                  src={NewLogo} 
                   className="cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ 
                     height: '50px',
-                    width: 'auto',
+                    width: '150px',
                     minWidth: '160px',
                     backgroundColor: 'transparent',
                     display: 'block',
