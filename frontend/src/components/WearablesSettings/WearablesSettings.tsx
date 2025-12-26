@@ -3,7 +3,6 @@ import { API_URL } from "@/lib/config";
 import { TokenService } from "@/utils/auth";
 
 const WearablesSettings = () => {
-  console.log("WearablesSettings with Strava loaded");
   const [loading, setLoading] = useState(false);
 
   const connectOura = async () => {
@@ -77,7 +76,9 @@ const WearablesSettings = () => {
       <h2 className="text-3xl font-bold text-primary-500 mb-6">
         Wearable Devices
       </h2>
-      
+      <h1 style={{ color: "red" }}>
+      WEARABLES SETTINGS RENDERED
+    </h1>
       {/* Oura Section */}
       <div className="border-2 border-gray-200 rounded-lg p-6">
         <div className="flex items-center justify-between">
