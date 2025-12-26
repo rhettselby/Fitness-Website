@@ -48,7 +48,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
   };
 
   return (
-    <section id="recentworkouts" className="mx-auto min-h-full w-5/6 py-20">
+    <section id="recentworkouts" className="mx-auto w-5/6 py-10">
       <motion.div
         onViewportEnter={() => setSelectedPage(SelectedPage.Home)}
       >
