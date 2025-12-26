@@ -55,8 +55,8 @@ const HomePage = () => {
         setSelectedPage={setSelectedPage}
       />
       <Home setSelectedPage={setSelectedPage}/>
-      <Benefits setSelectedPage={setSelectedPage}/>
       <Leaderboard setSelectedPage={setSelectedPage}/>
+      <Benefits setSelectedPage={setSelectedPage}/>
       <ContactUs setSelectedPage={setSelectedPage} />
       <Footer />
     </div>
