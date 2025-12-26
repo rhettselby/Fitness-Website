@@ -4,7 +4,7 @@ import Navbar from "@/components/navbar";
 import { SelectedPage } from "@/shared/types";
 import { API_URL } from "@/lib/config";
 import { TokenService } from "@/utils/auth";
-import WearablesSettings from "@/components/WearablesSettings";
+import WearablesSettings from "@/components/WearablesSettings/WearablesSettings";
 
 type Workout = {
   id: number;
