@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
+//import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useNavigate, useLocation } from "react-router-dom";
 import UCLA_Logo from "@/assets/UCLA_Logo.svg";
 import Logo_Placeholder from "@/assets/Logo.png";
@@ -220,7 +220,6 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                 className="rounded-full bg-secondary-500 p-2"
                 onClick={() => setIsMenuToggled(!isMenuToggled)}
               >
-                <Bars3Icon className="h-6 w-6 text-white" />
               </button>
             )}
           </div>
@@ -233,7 +232,6 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
           {/*Close Icon */}
           <div className="flex justify-end p-12">
             <button onClick={() => setIsMenuToggled(!isMenuToggled)}>
-              <XMarkIcon className="h-6 w-6 text-gray-400" />
             </button>
           </div>
 
