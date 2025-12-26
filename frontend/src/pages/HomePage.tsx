@@ -7,6 +7,7 @@ import Leaderboard from "@/components/Leaderboard";
 import ContactUs from "@/components/ContactUs";
 import Footer from "@/components/footer";
 import "@/app/App.css";
+import RecentWorkouts from "@/components/RecentWorkouts";
 
 const HomePage = () => {
   const [selectedPage, setSelectedPage] = useState<SelectedPage>(SelectedPage.Home);
@@ -56,6 +57,7 @@ const HomePage = () => {
       />
       <Home setSelectedPage={setSelectedPage}/>
       <Leaderboard setSelectedPage={setSelectedPage}/>
+      <RecentWorkouts setSelectedPage={setSelectedPage}/>
       <Benefits setSelectedPage={setSelectedPage}/>
       <ContactUs setSelectedPage={setSelectedPage} />
       <Footer />

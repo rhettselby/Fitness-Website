@@ -6,6 +6,7 @@ export enum SelectedPage {
   Leaderboard = "leaderboard",
   ContactUs = "contactus",
   AddWorkout = "addworkout",
+  RecentWorkouts = "recentworkouts"
 }
 
 export interface BenefitType {
