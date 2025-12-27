@@ -141,17 +141,20 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                   <Link
                     page="Home"
                     selectedPage={selectedPage}
+                    isTopOfPage={isTopOfPage}
                     setSelectedPage={setSelectedPage}
                   />
                   <Link
                     page="Leaderboard"
                     selectedPage={selectedPage}
+                    isTopOfPage={isTopOfPage}
                     setSelectedPage={setSelectedPage}
                   />
                   {!isAuthenticated && (
                     <Link
                       page="Contact Us"
                       selectedPage={selectedPage}
+                      isTopOfPage={isTopOfPage}
                       setSelectedPage={setSelectedPage}
                     />
                   )}
@@ -160,7 +163,9 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                     <button
                       onClick={() => navigate("/add-workout")}
                       className={`font-bold transition duration-500 hover:text-primary-300 ${
-                        location.pathname === "/add-workout" ? "text-primary-500" : ""
+                        location.pathname === "/add-workout" 
+                          ? "text-primary-500" 
+                          : (isTopOfPage ? "text-white" : "text-gray-900")
                       }`}
                     >
                       Add Workout
@@ -171,6 +176,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                     <Link
                       page="Connect"
                       selectedPage={selectedPage}
+                      isTopOfPage={isTopOfPage}
                       setSelectedPage={setSelectedPage}
                     />
                   )}
@@ -179,16 +185,22 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                 <div className={`${flexBetween} gap-8`}>
                   {isAuthenticated ? (
                     <>
-                      <span className="text-sm font-bold">Hello, {username}</span>
+                      <span className={`text-sm font-bold ${isTopOfPage ? "text-white" : "text-gray-900"}`}>
+                        Hello, {username}
+                      </span>
                       <button
                         onClick={() => navigate("/profile")}
-                        className="text-sm font-bold hover:text-primary-500 transition duration-500 cursor-pointer"
+                        className={`text-sm font-bold transition duration-500 cursor-pointer ${
+                          isTopOfPage ? "text-white hover:text-primary-300" : "text-gray-900 hover:text-primary-500"
+                        }`}
                       >
                         Profile
                       </button>
                       <button
                         onClick={handleLogout}
-                        className="text-sm font-bold hover:text-primary-500 transition duration-500 cursor-pointer"
+                        className={`text-sm font-bold transition duration-500 cursor-pointer ${
+                          isTopOfPage ? "text-white hover:text-primary-300" : "text-gray-900 hover:text-primary-500"
+                        }`}
                       >
                         Sign out
                       </button>
@@ -197,7 +209,9 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                     <>
                       <button
                         onClick={() => setShowLogin(true)}
-                        className="text-sm font-bold hover:text-primary-500 transition duration-500 cursor-pointer"
+                        className={`text-sm font-bold transition duration-500 cursor-pointer ${
+                          isTopOfPage ? "text-white hover:text-primary-300" : "text-gray-900 hover:text-primary-500"
+                        }`}
                       >
                         Sign in
                       </button>
@@ -238,17 +252,20 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
               page="Home"
               selectedPage={selectedPage}
               setSelectedPage={setSelectedPage}
+              isTopOfPage={isTopOfPage}
             />
             <Link
               page="Leaderboard"
               selectedPage={selectedPage}
               setSelectedPage={setSelectedPage}
+              isTopOfPage={isTopOfPage}
             />
             {!isAuthenticated && (
               <Link
                 page="Contact Us"
                 selectedPage={selectedPage}
                 setSelectedPage={setSelectedPage}
+                isTopOfPage={isTopOfPage}
               />
             )}
             {isAuthenticated && (
@@ -267,6 +284,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                 page="Connect"
                 selectedPage={selectedPage}
                 setSelectedPage={setSelectedPage}
+                isTopOfPage={isTopOfPage}
               />
             )}
             {isAuthenticated && (
