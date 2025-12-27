@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 //import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useNavigate, useLocation } from "react-router-dom";
-import NewLogo from "@/assets/NewLogo.png";
+import RhettLogo from "@/assets/RhettLogo.png";
 import Logo_Placeholder from "@/assets/Logo.png";
 import { SelectedPage } from "@/shared/types";
 import Link from "./link";
@@ -118,7 +118,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
               ) : (
                 <img 
                   alt="Logo" 
-                  src={NewLogo} 
+                  src={RhettLogo} 
                   className="cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ 
                     height: '50px',
