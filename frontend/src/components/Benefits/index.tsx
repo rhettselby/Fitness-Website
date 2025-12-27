@@ -38,120 +38,120 @@ type Props = {
 const Benefits = ({setSelectedPage }: Props) => {
     
     return  <section id = "benefits"
-    className="mx-auto min-h-full py-20 bg-gray-20">
-        <motion.div
-        onViewportEnter={() => setSelectedPage(SelectedPage.Home)}
-        >
-            { /* Header */ }
-            <motion.div 
-            className="md:my-5 md:w-3/5"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 2 }}
-            variants={{
-              hidden: { opacity: 0, x: -50 },
-              visible: { opacity: 1, x: 0 },
-            }}
+    className="w-full min-h-full py-20 bg-gray-20">
+        <div className="mx-auto w-5/6">
+            <motion.div
+            onViewportEnter={() => setSelectedPage(SelectedPage.Home)}
             >
-               <HText>About</HText>
-               <p className="my-5 text-sm text-white">
-                Why join the Fitness Community?
-               </p>
-            </motion.div>
-
-            {/* Benefits */ }
-            <motion.div className="mt-5 md:flex items-center justify-between gap-8"
-                initial = "hidden"
-                whileInView = "visible"
+                { /* Header */ }
+                <motion.div 
+                className="md:my-5 md:w-3/5"
+                initial="hidden"
+                whileInView="visible"
                 viewport={{ once: true, amount: 0.5 }}
-                variants={container}
+                transition={{ duration: 2 }}
+                variants={{
+                  hidden: { opacity: 0, x: -50 },
+                  visible: { opacity: 1, x: 0 },
+                }}
                 >
-    
-                {benefits.map((benefit: BenefitType) => (
-                    <Benefit
-                    key = {benefit.title}
-                    icon={benefit.icon}
-                    title ={benefit.title}
-                    description={benefit.description}
-                    setSelectedPage={setSelectedPage}
-                    />
-                ))}
+                   <HText>About</HText>
+                   <p className="my-5 text-sm text-white">
+                    Why join the Fitness Community?
+                   </p>
                 </motion.div>
 
-                {/* Graphics and Description */}
-                <div className="mt-16 items-center justify-between gap-20 md:mt-28 md:flex">
-                    {/* Graphic */}
-                    <div className="flex justify-center md:basis-3/5">
-                        <img 
-                            className="w-full max-w-md"
-                            alt="benefits-page-graphic"
-                            src={BenefitsPageGraphic}
-                            onError={(e) => {
-                                console.error("Failed to load BenefitsPageGraphic:", BenefitsPageGraphic);
-                                e.currentTarget.style.display = 'none';
-                            }}
+                {/* Benefits */ }
+                <motion.div className="mt-5 md:flex items-center justify-between gap-8"
+                    initial = "hidden"
+                    whileInView = "visible"
+                    viewport={{ once: true, amount: 0.5 }}
+                    variants={container}
+                    >
+        
+                    {benefits.map((benefit: BenefitType) => (
+                        <Benefit
+                        key = {benefit.title}
+                        icon={benefit.icon}
+                        title ={benefit.title}
+                        description={benefit.description}
+                        setSelectedPage={setSelectedPage}
                         />
-                    </div>
-                    
-                    {/* Description */}
-                    <div className="md:basis-2/5">
-                        {/* Title */ }
-                        <div className="relative">
-                             <div className="before:absolute before:-top-20 before:-left-20 before:z-[-1] md:w-3/5">
-                                <motion.div 
-                                    initial="hidden"
-                                    whileInView="visible"
-                                    viewport={{ once: true, amount: 0.5 }}
-                                    transition={{ duration: 2 }}
-                                    variants={{
-                                        hidden: { opacity: 0, x: 50 },
-                                        visible: { opacity: 1, x: 0 }
-                                    }}
-                                >
-                                    <HText>
-                                        A strong community of members getting { " "}
-                                        <span className="text-primary-500">Fit</span>
-                                    </HText>
-                                </motion.div>
-                            </div>
+                    ))}
+                    </motion.div>
 
+                    {/* Graphics and Description */}
+                    <div className="mt-16 items-center justify-between gap-20 md:mt-28 md:flex">
+                        {/* Graphic */}
+                        <div className="flex justify-center md:basis-3/5">
+                            <img 
+                                className="w-full max-w-md"
+                                alt="benefits-page-graphic"
+                                src={BenefitsPageGraphic}
+                                onError={(e) => {
+                                    console.error("Failed to load BenefitsPageGraphic:", BenefitsPageGraphic);
+                                    e.currentTarget.style.display = 'none';
+                                }}
+                            />
                         </div>
-
-                        {/* Description */ }
-                        <motion.div
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true, amount: 0.5 }}
-                            transition={{ duration: 2 }}
-                            variants={{
-                                hidden: { opacity: 0, x: -50 },
-                                visible: { opacity: 1, x: 0 },
-                            }}
-                        >
-                            <p className="my-5 text-white">
-                                Fill this with something useful
-                            </p>
-                             <p className="mb-5 text-white">
-                                 Fill this with something useful
-                             </p>
-                        </motion.div>
-
-                        {/* Button */}
-                        <div className="relative mt-16">
-                            <div className="before:absolute before:-bottom-20 before:right-40 before:z-[-1]">
-                                <ActionButton setSelectedPage = {setSelectedPage}>
-                                    Join Now
-                                </ActionButton>
+                        
+                        {/* Description */}
+                        <div className="md:basis-2/5">
+                            {/* Title */ }
+                            <div className="relative">
+                                 <div className="before:absolute before:-top-20 before:-left-20 before:z-[-1] md:w-3/5">
+                                    <motion.div 
+                                        initial="hidden"
+                                        whileInView="visible"
+                                        viewport={{ once: true, amount: 0.5 }}
+                                        transition={{ duration: 2 }}
+                                        variants={{
+                                            hidden: { opacity: 0, x: 50 },
+                                            visible: { opacity: 1, x: 0 }
+                                        }}
+                                    >
+                                        <HText>
+                                            A strong community of members getting { " "}
+                                            <span className="text-primary-500">Fit</span>
+                                        </HText>
+                                    </motion.div>
+                                </div>
 
                             </div>
 
+                            {/* Description */ }
+                            <motion.div
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true, amount: 0.5 }}
+                                transition={{ duration: 2 }}
+                                variants={{
+                                    hidden: { opacity: 0, x: -50 },
+                                    visible: { opacity: 1, x: 0 },
+                                }}
+                            >
+                                <p className="my-5 text-white">
+                                    Fill this with something useful
+                                </p>
+                                 <p className="mb-5 text-white">
+                                     Fill this with something useful
+                                 </p>
+                            </motion.div>
+
+                            {/* Button */}
+                            <div className="relative mt-16">
+                                <div className="before:absolute before:-bottom-20 before:right-40 before:z-[-1]">
+                                    <ActionButton setSelectedPage = {setSelectedPage}>
+                                        Join Now
+                                    </ActionButton>
+
+                                </div>
+
+                            </div>
                         </div>
                     </div>
-                </div>
-        </motion.div>
-
-
+            </motion.div>
+        </div>
     </section>
 };
 
