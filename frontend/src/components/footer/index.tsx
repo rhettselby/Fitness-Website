@@ -9,7 +9,7 @@ const Footer = (props: Props) => {
             <div className = "justify-between mx-auto w-5/6 gap-16 md:flex">
                 <div className = "mt-16 basis-1/2 md:mt-0">
                     {/* <img alt='logo' src={Logo} /> */}
-                    <div className="font-bold text-xl">About</div>
+                    <div className="font-bold text-xl text-gray-900">About</div>
                     <div>
                        <div>
                         Community.
