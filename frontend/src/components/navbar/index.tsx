@@ -29,8 +29,9 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  // Check if we're on the profile page
+  // Check if we're on the profile or connect page
   const isProfilePage = location.pathname === "/profile";
+  const isConnectPage = location.pathname === "/connect";
 
   const checkAuth = async () => {
     const token = TokenService.getAccessToken();
@@ -42,43 +43,41 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
     }
 
     try {
-    const response = await fetch(`${API_URL}/users/api/check-auth-jwt/`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-    });
+      const response = await fetch(`${API_URL}/users/api/check-auth-jwt/`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      });
 
-    if (!response.ok) {
-      console.error("Auth check failed:", response.status);
+      if (!response.ok) {
+        console.error("Auth check failed:", response.status);
+        setIsAuthenticated(false);
+        setUsername("");
+        TokenService.removeTokens();
+        return;
+      }
+
+      const data = await response.json();
+      console.log("Auth check response:", data);
+      
+      if (data.authenticated && data.user) {
+        setIsAuthenticated(true);
+        setUsername(data.user.username);
+        TokenService.setUser(data.user);
+      } else {
+        setIsAuthenticated(false);
+        setUsername("");
+        TokenService.removeTokens();
+      }
+    } catch (error) {
+      console.error("Error checking auth:", error);
       setIsAuthenticated(false);
       setUsername("");
       TokenService.removeTokens();
-      return;
     }
-
-    const data = await response.json();
-    console.log("Auth check response:", data);
-    
-    if (data.authenticated && data.user) {
-      setIsAuthenticated(true);
-      setUsername(data.user.username);
-      TokenService.setUser(data.user);
-    } else {
-      setIsAuthenticated(false);
-      setUsername("");
-      TokenService.removeTokens();
-    }
-  } catch (error) {
-    console.error("Error checking auth:", error);
-    setIsAuthenticated(false);
-    setUsername("");
-    TokenService.removeTokens();
-  }
-};
-
-
+  };
 
   // Check authentication status on mount
   useEffect(() => {
@@ -101,10 +100,6 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
     <nav>
       <div
         className={`${flexBetween} fixed top-0 z-30 w-full py-6`}
-        /* Fixed makes the navbar stay at the top when scrolling,
-           z-30 ensures it sits above other content,
-           w-full gives full width,
-           py-6 gives padding on top & bottom */
       >
         <div className={`${navbarBackground} ${flexBetween} mx-auto w-5/6`}>
           <div className={`${flexBetween} w-full gap-16`}>
@@ -143,7 +138,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
             {isAboveMediumScreens ? (
               <div className={`${flexBetween} w-full`}>
                 <div className={`${flexBetween} gap-8 text-sm`}>
-                  {!isProfilePage && (
+                  {!isProfilePage && !isConnectPage && (
                     <>
                       <Link
                         page="Home"
@@ -181,14 +176,25 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
 
                       {isAuthenticated && (
                         <Link
-                        page="Connect"
-                        selectedPage={selectedPage}
-                        setSelectedPage={setSelectedPage}
+                          page="Connect"
+                          selectedPage={selectedPage}
+                          setSelectedPage={setSelectedPage}
                         />
                       )}
                     </>
                   )}
+
+                  {/* Show Home button on Profile/Connect pages */}
+                  {isAuthenticated && (isProfilePage || isConnectPage) && (
+                    <button
+                      onClick={() => navigate("/")}
+                      className="text-sm hover:text-primary-500 transition duration-500 cursor-pointer"
+                    >
+                      Home
+                    </button>
+                  )}
                 </div>
+
                 <div className={`${flexBetween} gap-8`}>
                   {isAuthenticated ? (
                     <>
@@ -214,7 +220,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                       >
                         Sign in
                       </button>
-                      {!isProfilePage && (
+                      {!isProfilePage && !isConnectPage && (
                         <ActionButton setSelectedPage={setSelectedPage}>
                           Become a Member
                         </ActionButton>
@@ -247,7 +253,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
 
           {/* Menu Items */}
           <div className="ml-[33%] flex flex-col gap-10 text-2xl">
-            {!isProfilePage ? (
+            {!isProfilePage && !isConnectPage ? (
               <>
                 <Link
                   page="Home"
@@ -291,10 +297,26 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                 )}
               </>
             ) : (
-              <button onClick={() => navigate("/")} className="text-left">Home</button>
+              <button 
+                onClick={() => {
+                  navigate("/");
+                  setIsMenuToggled(false);
+                }} 
+                className="text-left"
+              >
+                Home
+              </button>
             )}
             {isAuthenticated && (
-              <button onClick={() => navigate("/profile")} className="text-left">Profile</button>
+              <button 
+                onClick={() => {
+                  navigate("/profile");
+                  setIsMenuToggled(false);
+                }} 
+                className="text-left"
+              >
+                Profile
+              </button>
             )}
             {isAuthenticated ? (
               <button onClick={handleLogout} className="text-left">Sign out</button>
