@@ -57,8 +57,8 @@ const HomePage = () => {
       />
       <Home setSelectedPage={setSelectedPage}/>
       <Leaderboard setSelectedPage={setSelectedPage}/>
-      <RecentWorkouts setSelectedPage={setSelectedPage}/>
       <Benefits setSelectedPage={setSelectedPage}/>
+      <RecentWorkouts setSelectedPage={setSelectedPage}/>
       <ContactUs setSelectedPage={setSelectedPage} />
       <Footer />
     </div>
