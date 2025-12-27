@@ -74,7 +74,7 @@ const Leaderboard = ({ setSelectedPage }: Props) => {
           >
             <div className="w-full flex flex-col items-center text-center">
               <HText>Weekly Leaderboard 🏆</HText>
-              <p className="py-5">
+              <p className="py-5 text-gray-900 font-semibold">
                 The top 5 members with the most workouts this week!
               </p>
             </div>
