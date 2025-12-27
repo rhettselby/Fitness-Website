@@ -131,10 +131,10 @@ const Benefits = ({setSelectedPage }: Props) => {
                                 }}
                             >
                                 <p className="my-5 text-white">
-                                    Fill this with something useful
+                                    
                                 </p>
                                  <p className="mb-5 text-white">
-                                     Fill this with something useful
+                                     
                                  </p>
                             </motion.div>
 
