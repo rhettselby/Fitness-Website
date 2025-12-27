@@ -144,11 +144,6 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                     setSelectedPage={setSelectedPage}
                   />
                   <Link
-                    page="Benefits"
-                    selectedPage={selectedPage}
-                    setSelectedPage={setSelectedPage}
-                  />
-                  <Link
                     page="Leaderboard"
                     selectedPage={selectedPage}
                     setSelectedPage={setSelectedPage}
@@ -241,11 +236,6 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
           <div className="ml-[33%] flex flex-col gap-10 text-2xl">
             <Link
               page="Home"
-              selectedPage={selectedPage}
-              setSelectedPage={setSelectedPage}
-            />
-            <Link
-              page="Benefits"
               selectedPage={selectedPage}
               setSelectedPage={setSelectedPage}
             />
