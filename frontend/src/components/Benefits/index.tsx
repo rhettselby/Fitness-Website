@@ -11,16 +11,16 @@ import BenefitsPageGraphic from "@/assets/BenefitsPageGraphic.png";
 
 const benefits: Array<BenefitType> = [
     { icon: <HomeModernIcon className="h-6 w-6" />,
-    title: "State of the Art Facilities",
-    description: "We got some awesome facilities",
+    title: "Connect your devices",
+    description: "Pair your Whoop, Oura, or Strava using 'Connect'",
     },
     { icon: <UserGroupIcon className="h-6 w-6" />,
-    title: "Many diverse classes offered",
-    description: "We got some awesome classes",
+    title: "Track each workout",
+    description: "View your workouts under 'Profile'",
     },
     { icon: <AcademicCapIcon className="h-6 w-6" />,
-    title: "Expert and Pro Trainers",
-    description: "We got some awesome trainers",
+    title: "Join the community",
+    description: "Check out 'Leaderboard' for friendly competition",
     },
 ]
 
