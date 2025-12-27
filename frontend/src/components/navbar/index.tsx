@@ -138,60 +138,46 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
             {isAboveMediumScreens ? (
               <div className={`${flexBetween} w-full`}>
                 <div className={`${flexBetween} gap-8 text-sm`}>
-                  {!isProfilePage && !isConnectPage && (
-                    <>
-                      <Link
-                        page="Home"
-                        selectedPage={selectedPage}
-                        setSelectedPage={setSelectedPage}
-                      />
-                      <Link
-                        page="Benefits"
-                        selectedPage={selectedPage}
-                        setSelectedPage={setSelectedPage}
-                      />
-                      <Link
-                        page="Leaderboard"
-                        selectedPage={selectedPage}
-                        setSelectedPage={setSelectedPage}
-                      />
-                      {!isAuthenticated && (
-                        <Link
-                          page="Contact Us"
-                          selectedPage={selectedPage}
-                          setSelectedPage={setSelectedPage}
-                        />
-                      )}
-                      
-                      {isAuthenticated && (
-                        <button
-                          onClick={() => navigate("/add-workout")}
-                          className={`font-bold transition duration-500 hover:text-primary-300 ${
-                            location.pathname === "/add-workout" ? "text-primary-500" : ""
-                          }`}
-                        >
-                          Add Workout
-                        </button>
-                      )}
-
-                      {isAuthenticated && (
-                        <Link
-                          page="Connect"
-                          selectedPage={selectedPage}
-                          setSelectedPage={setSelectedPage}
-                        />
-                      )}
-                    </>
+                  <Link
+                    page="Home"
+                    selectedPage={selectedPage}
+                    setSelectedPage={setSelectedPage}
+                  />
+                  <Link
+                    page="Benefits"
+                    selectedPage={selectedPage}
+                    setSelectedPage={setSelectedPage}
+                  />
+                  <Link
+                    page="Leaderboard"
+                    selectedPage={selectedPage}
+                    setSelectedPage={setSelectedPage}
+                  />
+                  {!isAuthenticated && (
+                    <Link
+                      page="Contact Us"
+                      selectedPage={selectedPage}
+                      setSelectedPage={setSelectedPage}
+                    />
+                  )}
+                  
+                  {isAuthenticated && (
+                    <button
+                      onClick={() => navigate("/add-workout")}
+                      className={`font-bold transition duration-500 hover:text-primary-300 ${
+                        location.pathname === "/add-workout" ? "text-primary-500" : ""
+                      }`}
+                    >
+                      Add Workout
+                    </button>
                   )}
 
-                  {/* Show Home button on Profile/Connect pages */}
-                  {isAuthenticated && (isProfilePage || isConnectPage) && (
-                    <button
-                      onClick={() => navigate("/")}
-                      className="text-sm hover:text-primary-500 transition duration-500 cursor-pointer"
-                    >
-                      Home
-                    </button>
+                  {isAuthenticated && (
+                    <Link
+                      page="Connect"
+                      selectedPage={selectedPage}
+                      setSelectedPage={setSelectedPage}
+                    />
                   )}
                 </div>
 
@@ -253,59 +239,45 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
 
           {/* Menu Items */}
           <div className="ml-[33%] flex flex-col gap-10 text-2xl">
-            {!isProfilePage && !isConnectPage ? (
-              <>
-                <Link
-                  page="Home"
-                  selectedPage={selectedPage}
-                  setSelectedPage={setSelectedPage}
-                />
-                <Link
-                  page="Benefits"
-                  selectedPage={selectedPage}
-                  setSelectedPage={setSelectedPage}
-                />
-                <Link
-                  page="Leaderboard"
-                  selectedPage={selectedPage}
-                  setSelectedPage={setSelectedPage}
-                />
-                {!isAuthenticated && (
-                  <Link
-                    page="Contact Us"
-                    selectedPage={selectedPage}
-                    setSelectedPage={setSelectedPage}
-                  />
-                )}
-                {isAuthenticated && (
-                  <button 
-                    onClick={() => {
-                      navigate("/add-workout");
-                      setIsMenuToggled(false);
-                    }} 
-                    className="text-left font-bold"
-                  >
-                    Add Workout
-                  </button>
-                )}
-                {isAuthenticated && (
-                  <Link
-                    page="Connect"
-                    selectedPage={selectedPage}
-                    setSelectedPage={setSelectedPage}
-                  />
-                )}
-              </>
-            ) : (
+            <Link
+              page="Home"
+              selectedPage={selectedPage}
+              setSelectedPage={setSelectedPage}
+            />
+            <Link
+              page="Benefits"
+              selectedPage={selectedPage}
+              setSelectedPage={setSelectedPage}
+            />
+            <Link
+              page="Leaderboard"
+              selectedPage={selectedPage}
+              setSelectedPage={setSelectedPage}
+            />
+            {!isAuthenticated && (
+              <Link
+                page="Contact Us"
+                selectedPage={selectedPage}
+                setSelectedPage={setSelectedPage}
+              />
+            )}
+            {isAuthenticated && (
               <button 
                 onClick={() => {
-                  navigate("/");
+                  navigate("/add-workout");
                   setIsMenuToggled(false);
                 }} 
-                className="text-left"
+                className="text-left font-bold"
               >
-                Home
+                Add Workout
               </button>
+            )}
+            {isAuthenticated && (
+              <Link
+                page="Connect"
+                selectedPage={selectedPage}
+                setSelectedPage={setSelectedPage}
+              />
             )}
             {isAuthenticated && (
               <button 
