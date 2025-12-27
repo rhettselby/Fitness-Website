@@ -181,26 +181,26 @@ const ProfilePage = () => {
           </div>
 
           {!isEditing && profile && (
-            <div className="space-y-2">
-              {profile.bio && (
-                <p className="text-gray-700">
-                  <span className="font-semibold">Bio:</span> {profile.bio}
-                </p>
-              )}
-              {profile.location && (
-                <p className="text-gray-700">
-                  <span className="font-semibold">Location:</span> {profile.location}
-                </p>
-              )}
-              {profile.birthday && (
-                <p className="text-gray-700">
-                  <span className="font-semibold">Birthday:</span>{" "}
-                  {new Date(profile.birthday).toLocaleDateString()}
-                </p>
-              )}
-            </div>
-          )}
+  <div className="space-y-2">
+    <p className="text-gray-700">
+      <span className="font-semibold">Bio:</span>{" "}
+      {profile.bio || <span className="text-gray-400 italic">Not set</span>}
+    </p>
 
+    <p className="text-gray-700">
+      <span className="font-semibold">Location:</span>{" "}
+      {profile.location || <span className="text-gray-400 italic">Not set</span>}
+    </p>
+
+    <p className="text-gray-700">
+      <span className="font-semibold">Birthday:</span>{" "}
+      {profile.birthday
+        ? new Date(profile.birthday).toLocaleDateString()
+        : <span className="text-gray-400 italic">Not set</span>}
+    </p>
+  </div>
+)}
+          
           {isEditing && (
             <form onSubmit={handleProfileUpdate} className="space-y-4">
               <div>
