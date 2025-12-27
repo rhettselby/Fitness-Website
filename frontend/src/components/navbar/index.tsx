@@ -179,16 +179,16 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                 <div className={`${flexBetween} gap-8`}>
                   {isAuthenticated ? (
                     <>
-                      <span className="text-sm">Hello, {username}</span>
+                      <span className="text-sm font-bold">Hello, {username}</span>
                       <button
                         onClick={() => navigate("/profile")}
-                        className="text-sm hover:text-primary-500 transition duration-500 cursor-pointer"
+                        className="text-sm font-bold hover:text-primary-500 transition duration-500 cursor-pointer"
                       >
                         Profile
                       </button>
                       <button
                         onClick={handleLogout}
-                        className="text-sm hover:text-primary-500 transition duration-500 cursor-pointer"
+                        className="text-sm font-bold hover:text-primary-500 transition duration-500 cursor-pointer"
                       >
                         Sign out
                       </button>
@@ -197,7 +197,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                     <>
                       <button
                         onClick={() => setShowLogin(true)}
-                        className="text-sm hover:text-primary-500 transition duration-500 cursor-pointer"
+                        className="text-sm font-bold hover:text-primary-500 transition duration-500 cursor-pointer"
                       >
                         Sign in
                       </button>
@@ -275,15 +275,15 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                   navigate("/profile");
                   setIsMenuToggled(false);
                 }} 
-                className="text-left"
+                className="text-left font-bold"
               >
                 Profile
               </button>
             )}
             {isAuthenticated ? (
-              <button onClick={handleLogout} className="text-left">Sign out</button>
+              <button onClick={handleLogout} className="text-left font-bold">Sign out</button>
             ) : (
-              <button onClick={() => setShowLogin(true)} className="text-left">Sign in</button>
+              <button onClick={() => setShowLogin(true)} className="text-left font-bold">Sign in</button>
             )}
           </div>
         </div>
