@@ -1,4 +1,3 @@
-
 import AnchorLink from "react-anchor-link-smooth-scroll";
 import { useNavigate, useLocation } from "react-router-dom";
 import { SelectedPage } from "@/shared/types";
@@ -10,10 +9,27 @@ type Props = {
 };
 
 const Link = ({ page, selectedPage, setSelectedPage }: Props) => {
-  const lowerCasePage = page.toLowerCase().replace(/ /g, "") as SelectedPage; //converts to lowercase, removes spaces, treated as SelectedPage enum
+  const lowerCasePage = page.toLowerCase().replace(/ /g, "") as SelectedPage;
   const navigate = useNavigate();
   const location = useLocation();
   const isHomePage = location.pathname === "/";
+
+  // Special handling for "Connect" page - it's a route, not an anchor
+  if (lowerCasePage === SelectedPage.Connect) {
+    return (
+      <button
+        className={`${
+          selectedPage === lowerCasePage ? "text-primary-500" : ""
+        } transition duration-500 hover:text-primary-300 cursor-pointer`}
+        onClick={() => {
+          setSelectedPage(lowerCasePage);
+          navigate("/connect");
+        }}
+      >
+        {page}
+      </button>
+    );
+  }
 
   const handleClick = (e: React.MouseEvent) => {
     setSelectedPage(lowerCasePage);

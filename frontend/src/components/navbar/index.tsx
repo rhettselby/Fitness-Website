@@ -274,6 +274,13 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                     Add Workout
                   </button>
                 )}
+                {isAuthenticated && (
+                  <Link
+                    page="Connect"
+                    selectedPage={selectedPage}
+                    setSelectedPage={setSelectedPage}
+                  />
+                )}
               </>
             ) : (
               <button onClick={() => navigate("/")} className="text-left">Home</button>
