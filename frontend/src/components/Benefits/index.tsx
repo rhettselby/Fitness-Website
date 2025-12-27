@@ -9,8 +9,6 @@ import Benefit from "./Benefit";
 import ActionButton from "@/shared/ActionButton";
 import BenefitsPageGraphic from "@/assets/BenefitsPageGraphic.png";
 
-
-
 const benefits: Array<BenefitType> = [
     { icon: <HomeModernIcon className="h-6 w-6" />,
     title: "State of the Art Facilities",
@@ -24,7 +22,6 @@ const benefits: Array<BenefitType> = [
     title: "Expert and Pro Trainers",
     description: "We got some awesome trainers",
     },
-
 ]
 
 const container = {
@@ -38,11 +35,10 @@ type Props = {
     setSelectedPage: (value: SelectedPage) => void;
 };
 
-
 const Benefits = ({setSelectedPage }: Props) => {
     
     return  <section id = "benefits"
-    className="mx-auto min-h-full w-5/6 py-20">
+    className="mx-auto min-h-full w-5/6 py-20 bg-gray-20">
         <motion.div
         onViewportEnter={() => setSelectedPage(SelectedPage.Home)}
         >
@@ -59,7 +55,7 @@ const Benefits = ({setSelectedPage }: Props) => {
             }}
             >
                <HText>About</HText>
-               <p className="my-5 text-sm">
+               <p className="my-5 text-sm text-white">
                 Why join the Fitness Community?
                </p>
             </motion.div>
@@ -133,10 +129,10 @@ const Benefits = ({setSelectedPage }: Props) => {
                                 visible: { opacity: 1, x: 0 },
                             }}
                         >
-                            <p className="my-5">
+                            <p className="my-5 text-white">
                                 Fill this with something useful
                             </p>
-                             <p className="mb-5">
+                             <p className="mb-5 text-white">
                                  Fill this with something useful
                              </p>
                         </motion.div>
