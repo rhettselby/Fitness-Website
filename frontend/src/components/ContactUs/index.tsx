@@ -149,11 +149,11 @@ const ContactUs = ({setSelectedPage}: Props) => {
                             )}
 
                             <button 
-                                type = "submit"
-                                className = "mt-5 rounded-lg bg-secondary-500 px-20 py-3 transition duration-500 hover:text-white">
+                                type="submit"
+                                className="mt-5 rounded-lg bg-accent-500 text-white px-20 py-3 font-bold transition duration-300 hover:bg-accent-600"
+                            >
                                 Register
-                            </button>
-
+                        </button>
                         </form>
                     </motion.div>
 
