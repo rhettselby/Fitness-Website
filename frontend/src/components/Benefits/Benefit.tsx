@@ -1,6 +1,7 @@
 import { SelectedPage } from "@/shared";
 import {motion} from "framer-motion"
 import { useNavigate } from "react-router-dom";
+import { TokenService } from "@/utils/auth";
 
 type Props = {
     icon: React.ReactNode;
@@ -17,10 +18,22 @@ const childVariant = {
 
 const Benefit = ({icon, title, description, setSelectedPage, linkTo}: Props) => {
     const navigate = useNavigate();
+    const isAuthenticated = !!TokenService.getAccessToken();
     
     const handleClick = (e: React.MouseEvent) => {
         e.preventDefault();
         
+        // If not authenticated and trying to go to Connect/Profile, go to Contact Us instead
+        if (!isAuthenticated && (linkTo === "/connect" || linkTo === "/profile")) {
+            setSelectedPage(SelectedPage.ContactUs);
+            const element = document.getElementById("contactus");
+            if (element) {
+                element.scrollIntoView({ behavior: "smooth" });
+            }
+            return;
+        }
+        
+        // Otherwise, proceed with normal navigation
         if (linkTo === "/connect") {
             navigate("/connect");
         } else if (linkTo === "/profile") {
