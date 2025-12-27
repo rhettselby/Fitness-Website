@@ -23,7 +23,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
   useEffect(() => {
     const fetchRecentWorkouts = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/posts/api/recent-workouts/`);
+        const response = await fetch(`${API_URL}/api/posts/recent-workouts/`);
         const data = await response.json();
         setWorkouts(data.workouts || []);
       } catch (error) {
