@@ -68,7 +68,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
             <h1 className="text-4xl font-bold text-primary-500">
               RECENT ACTIVITY
             </h1>
-            <p className="my-5 text-sm">
+            <p className="my-5 text-sm text-gray-900">
               See what the community has been up to lately
             </p>
           </motion.div>
