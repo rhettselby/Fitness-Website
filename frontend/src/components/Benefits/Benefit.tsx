@@ -20,11 +20,18 @@ const Benefit = ({icon, title, description, setSelectedPage, linkTo}: Props) => 
     const navigate = useNavigate();
     const isAuthenticated = !!TokenService.getAccessToken();
     
+    // TEMPORARY TEST - hardcode linkTo based on title
+    const actualLinkTo = title === "Connect your devices" ? "/connect" 
+                       : title === "Track each workout" ? "/profile"
+                       : title === "Join the community" ? SelectedPage.Leaderboard
+                       : linkTo;
+    
     const handleClick = (e: React.MouseEvent) => {
         e.preventDefault();
+        console.log("Link clicked - actualLinkTo:", actualLinkTo, "isAuthenticated:", isAuthenticated);
         
         // If not authenticated and trying to go to Connect/Profile, go to Contact Us instead
-        if (!isAuthenticated && (linkTo === "/connect" || linkTo === "/profile")) {
+        if (!isAuthenticated && (actualLinkTo === "/connect" || actualLinkTo === "/profile")) {
             setSelectedPage(SelectedPage.ContactUs);
             const element = document.getElementById("contactus");
             if (element) {
@@ -34,11 +41,11 @@ const Benefit = ({icon, title, description, setSelectedPage, linkTo}: Props) => 
         }
         
         // Otherwise, proceed with normal navigation
-        if (linkTo === "/connect") {
+        if (actualLinkTo === "/connect") {
             navigate("/connect");
-        } else if (linkTo === "/profile") {
+        } else if (actualLinkTo === "/profile") {
             navigate("/profile");
-        } else if (linkTo === SelectedPage.Leaderboard) {
+        } else if (actualLinkTo === SelectedPage.Leaderboard) {
             setSelectedPage(SelectedPage.Leaderboard);
             const element = document.getElementById("leaderboard");
             if (element) {
