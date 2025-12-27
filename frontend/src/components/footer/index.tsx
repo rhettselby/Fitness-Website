@@ -11,17 +11,20 @@ const Footer = (props: Props) => {
                     {/* <img alt='logo' src={Logo} /> */}
                     <div className="font-bold text-xl text-gray-900">About</div>
                     <div>
-                       <div>
+                       <div className="text-gray-900">
                         Community.
                         </div>
-                        <div>
+                        <div className="text-gray-900">
                         Growth.
                         </div>
-                        <div>
+                        <div className="text-gray-900">
                         Fun.
                         </div>
                     </div>
                     <p>
+                        
+                    </p>
+                    <p className="text-gray-900">
                         Copy Right Rhett's Fitness Community All Rights Reserved
                     </p>
 
