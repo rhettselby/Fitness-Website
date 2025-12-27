@@ -184,10 +184,6 @@ const ProfilePage = () => {
             )}
           </div>
 
-          {/* wearable settings here */}
-          <WearablesSettings />
-
-
           {/* Workouts Section with Scrollable Container */}
           <div className="bg-white rounded-lg shadow-md p-8">
             <h2 className="text-3xl font-bold text-primary-500 mb-6">Your Workouts</h2>
