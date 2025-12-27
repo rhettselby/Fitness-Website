@@ -28,12 +28,12 @@ const Footer = (props: Props) => {
                 </div>
                 <div className="mt-16 basis-1/4 md:mt-0">
                     <h4 className="font-bold">Links</h4>
-                    <p className="mt-5">Random Text</p>
-                    <p className="mt-5"> Random Text v2</p>
+                    <p className="mt-5">https://fitness-website-git-main-rhettselbys-projects.vercel.app</p>
+                    <p className="mt-5">https://github.com/rhettselby</p>
                 </div>
                 <div className = "mt-16 basis-1/4 md:mt-0">
                     <h4 className="font-bold">Contact Us</h4>
-                    <p className="mt-5">rhettselby10@gmail.com</p>
+                    <p className="mt-5">rhettselby6@g.ucla.edu</p>
                     <p>805-245-6513</p>
 
                 </div>
