@@ -7,36 +7,31 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Neutral backgrounds - darker for athletic feel
-        "gray-20": "#F5F5F5",
-        "gray-50": "#E5E5E5",
-        "gray-100": "#D4D4D4",
-        "gray-500": "#737373",
+        // Neutral backgrounds
+        "gray-20": "#FFF5F0",      // Warm off-white
+        "gray-50": "#FFE8DC",      // Light peach
+        "gray-100": "#FFD6C8",     // Soft peach
+        "gray-500": "#6B5B4F",     // Warm gray
         
-        // Primary - Black/Dark (main brand color)
-        "primary-100": "#404040",  // Light dark gray
-        "primary-300": "#262626",  // Medium dark gray
-        "primary-500": "#0A0A0A",  // Near black (main color)
+        // Primary - Deep Coral/Red (energetic, motivating)
+        "primary-100": "#FFB5A7",  // Light coral
+        "primary-300": "#FF8C7A",  // Medium coral
+        "primary-500": "#FF6B54",  // Vibrant coral-red (main action color)
         
-        // Secondary - Electric Neon (your choice between these)
-        "secondary-400": "#4ADE80",  // Lighter neon green
-        "secondary-500": "#22C55E",  // Neon/Lime green
-        "secondary-600": "#16A34A",  // Darker green
+        // Secondary - Burnt Orange/Terracotta (warm, athletic)
+        "secondary-400": "#FF9E6D",  // Light orange
+        "secondary-500": "#FF7A3D",  // Burnt orange
+        "secondary-600": "#E8590C",  // Deep orange
         
-        // OR use Electric Blue instead - uncomment these and comment out green above
-        // "secondary-400": "#38BDF8",  // Light electric blue
-        // "secondary-500": "#0EA5E9",  // Electric blue
-        // "secondary-600": "#0284C7",  // Dark electric blue
-        
-        // Accent - Vibrant highlights (bright cyan from your logo as accent)
-        "accent-400": "#67E8F9",    // Light cyan
-        "accent-500": "#06B6D4",    // Vibrant cyan (from logo)
-        "accent-600": "#0891B2",    // Deep cyan
+        // Accent - Gold/Amber (achievement, energy)
+        "accent-400": "#FFC857",    // Light gold
+        "accent-500": "#FFB020",    // Bright amber
+        "accent-600": "#F59E0B",    // Deep amber
       },
       backgroundImage: (theme) => ({
-        "gradient-athletic": "linear-gradient(135deg, #0A0A0A 0%, #262626 100%)",
-        "gradient-neon": "linear-gradient(135deg, #22C55E 0%, #06B6D4 100%)",
-        "gradient-dark": "linear-gradient(180deg, #0A0A0A 0%, #1A1A1A 100%)",
+        "gradient-sunset": "linear-gradient(135deg, #FF6B54 0%, #FFB020 100%)",
+        "gradient-fire": "linear-gradient(135deg, #FF7A3D 0%, #E8590C 100%)",
+        "gradient-warm": "linear-gradient(180deg, #FFF5F0 0%, #FFE8DC 100%)",
       }),
       fontFamily: {
         dmsans: ["DM Sans", "sans-serif"],
