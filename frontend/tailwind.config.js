@@ -7,11 +7,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Neutral backgrounds
-        "gray-20": "#FFF5F0",      // Warm off-white
-        "gray-50": "#FFE8DC",      // Light peach
-        "gray-100": "#FFD6C8",     // Soft peach
-        "gray-500": "#6B5B4F",     // Warm gray
+        "gray-20": "#1A1A1A",      // Dark background (was warm off-white)
+        "gray-50": "#262626",      // Slightly lighter dark (was light peach)
+        "gray-100": "#404040",     // Medium dark (was soft peach)
+        "gray-500": "#A8A8A8",
         
         // Primary - Deep Coral/Red (energetic, motivating)
         "primary-100": "#FFB5A7",  // Light coral
