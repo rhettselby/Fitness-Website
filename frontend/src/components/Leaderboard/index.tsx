@@ -80,7 +80,7 @@ const Leaderboard = ({ setSelectedPage }: Props) => {
             </div>
           </motion.div>
 
-          <div className="mt-10 h-[320] overflow-x-auto overflow-y-hidden">
+          <div className="mt-10 h-[240] overflow-x-auto overflow-y-hidden">
             <div className="flex justify-center">
               {loading ? (
                 <div className="flex items-center justify-center h-full">
