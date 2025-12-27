@@ -14,6 +14,7 @@ export interface BenefitType {
   icon: React.ReactNode;
   title: string;
   description: string;
+  linkTo?: SelectedPage | string;
 }
 
 export interface ClassType {
