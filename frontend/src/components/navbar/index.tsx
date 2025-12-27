@@ -122,8 +122,8 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                   className="cursor-pointer hover:opacity-90 transition-opacity"
                   style={{ 
                     height: '50px',
-                    width: '150px',
-                    minWidth: '160px',
+                    width: '130px',
+                    minWidth: '130px',
                     backgroundColor: 'transparent',
                     display: 'block',
                     border: 'none',
