@@ -13,24 +13,25 @@ module.exports = {
         "gray-100": "#E9ECEF",
         "gray-500": "#495057",
         
-        // Primary - Teal (from logo)
-        "primary-100": "#C8DDE4",  // Light teal
-        "primary-300": "#7AACBA",  // Medium teal
-        "primary-500": "#4A7C8C",  // Main teal (logo background)
+        // Primary - Cyan/Turquoise (from logo right side - bright)
+        "primary-100": "#D4F1F4",  // Very light cyan
+        "primary-300": "#75E6DA",  // Light cyan
+        "primary-500": "#189AB4",  // Main cyan (logo bright side)
         
-        // Secondary - Gold (from logo)
-        "secondary-400": "#F9D67A",  // Light gold
-        "secondary-500": "#F5B93D",  // Main gold (logo trophy)
-        "secondary-600": "#E09F1A",  // Dark gold
+        // Secondary - Deep Teal/Blue (from logo left side - dark)
+        "secondary-400": "#3D5A80",  // Medium blue-teal
+        "secondary-500": "#05445E",  // Main dark teal (logo dark side)
+        "secondary-600": "#003147",  // Darkest teal
         
-        // Accent - Complementary coral/orange for CTAs
-        "accent-400": "#FF9B7F",    // Light coral
-        "accent-500": "#FF7A59",    // Main coral
-        "accent-600": "#E65A3A",    // Dark coral
+        // Accent - Vibrant cyan for CTAs and highlights
+        "accent-400": "#67E8F9",    // Light bright cyan
+        "accent-500": "#22D3EE",    // Vibrant cyan
+        "accent-600": "#0891B2",    // Deep cyan
       },
       backgroundImage: (theme) => ({
-        "gradient-tealgold": "linear-gradient(90deg, #4A7C8C 0%, #F5B93D 100%)",
-        "gradient-tealcoral": "linear-gradient(90deg, #4A7C8C 0%, #FF7A59 100%)",
+        "gradient-logomatch": "linear-gradient(90deg, #05445E 0%, #189AB4 100%)",  // Matches logo gradient
+        "gradient-reverse": "linear-gradient(90deg, #189AB4 0%, #05445E 100%)",
+        "gradient-cyan": "linear-gradient(135deg, #75E6DA 0%, #189AB4 100%)",
       }),
       fontFamily: {
         dmsans: ["DM Sans", "sans-serif"],
