@@ -80,6 +80,7 @@ const Benefits = ({setSelectedPage }: Props) => {
                         title ={benefit.title}
                         description={benefit.description}
                         setSelectedPage={setSelectedPage}
+                        linkTo={benefit.linkTo}
                         />
                     ))}
                     </motion.div>

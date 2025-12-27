@@ -180,6 +180,32 @@ const ProfilePage = () => {
                     <span className="font-semibold">Location:</span> {profile.location}
                   </p>
                 )}
+                {profile && (
+  <div className="space-y-2">
+    {profile.bio && (
+      <p className="text-gray-700">
+        <span className="font-semibold">Bio:</span> {profile.bio}
+      </p>
+    )}
+
+    {profile.location && (
+      <p className="text-gray-700">
+        <span className="font-semibold">Location:</span> {profile.location}
+      </p>
+    )}
+
+    {profile.birthday && (
+      <p className="text-gray-700">
+        <span className="font-semibold">Birthday:</span>{" "}
+        {new Date(profile.birthday).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })}
+      </p>
+    )}
+  </div>
+)}
               </div>
             )}
           </div>
