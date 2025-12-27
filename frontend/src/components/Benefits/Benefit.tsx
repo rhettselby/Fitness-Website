@@ -21,31 +21,33 @@ const Benefit = ({icon, title, description, setSelectedPage, linkTo}: Props) => 
     const isAuthenticated = !!TokenService.getAccessToken();
     
     const handleClick = (e: React.MouseEvent) => {
-        e.preventDefault();
-        
-        // If not authenticated and trying to go to Connect/Profile, go to Contact Us instead
-        if (!isAuthenticated && (linkTo === "/connect" || linkTo === "/profile")) {
-            setSelectedPage(SelectedPage.ContactUs);
-            const element = document.getElementById("contactus");
-            if (element) {
-                element.scrollIntoView({ behavior: "smooth" });
-            }
-            return;
+    e.preventDefault();
+    console.log("Link clicked - linkTo:", linkTo, "isAuthenticated:", isAuthenticated);
+    
+    // If not authenticated and trying to go to Connect/Profile, go to Contact Us instead
+    if (!isAuthenticated && (linkTo === "/connect" || linkTo === "/profile")) {
+        setSelectedPage(SelectedPage.ContactUs);
+        const element = document.getElementById("contactus");
+        if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
         }
-        
-        // Otherwise, proceed with normal navigation
-        if (linkTo === "/connect") {
-            navigate("/connect");
-        } else if (linkTo === "/profile") {
-            navigate("/profile");
-        } else if (linkTo === SelectedPage.Leaderboard) {
-            setSelectedPage(SelectedPage.Leaderboard);
-            const element = document.getElementById("leaderboard");
-            if (element) {
-                element.scrollIntoView({ behavior: "smooth" });
-            }
+        return;
+    }
+    
+    // Otherwise, proceed with normal navigation
+    if (linkTo === "/connect") {
+        navigate("/connect");
+    } else if (linkTo === "/profile") {
+        navigate("/profile");
+    } else if (linkTo === SelectedPage.Leaderboard) {
+        setSelectedPage(SelectedPage.Leaderboard);
+        const element = document.getElementById("leaderboard");
+        if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
         }
-    };
+    }
+};
+    
 
     return (
         <motion.div 
