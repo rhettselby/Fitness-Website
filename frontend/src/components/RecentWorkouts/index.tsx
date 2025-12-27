@@ -48,86 +48,88 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
   };
 
   return (
-    <section id="recentworkouts" className="mx-auto w-5/6 py-12">
-      <motion.div
-        onViewportEnter={() => setSelectedPage(SelectedPage.Home)}
-      >
-        {/* Header */}
+    <section id="recentworkouts" className="w-full bg-primary-100 py-20">
+      <div className="max-w-7xl mx-auto px-4">
         <motion.div
-          className="md:my-5 md:w-3/5"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.5 }}
-          variants={{
-            hidden: { opacity: 0, x: -50 },
-            visible: { opacity: 1, x: 0 },
-          }}
+          onViewportEnter={() => setSelectedPage(SelectedPage.Home)}
         >
-          <h1 className="text-4xl font-bold text-primary-500">
-            RECENT ACTIVITY
-          </h1>
-          <p className="my-5 text-sm">
-            See what the community has been up to lately
-          </p>
-        </motion.div>
+          {/* Header */}
+          <motion.div
+            className="w-full flex flex-col items-center text-center mb-10"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.5 }}
+            variants={{
+              hidden: { opacity: 0, x: 50 },
+              visible: { opacity: 1, x: 0 },
+            }}
+          >
+            <h1 className="text-4xl font-bold text-primary-500">
+              RECENT ACTIVITY
+            </h1>
+            <p className="my-5 text-sm">
+              See what the community has been up to lately
+            </p>
+          </motion.div>
 
-        {/* Workouts List */}
-        <div className="mt-10 items-center justify-between gap-8">
-          {loading ? (
-            <p className="text-center">Loading recent workouts...</p>
-          ) : workouts.length === 0 ? (
-            <p className="text-center text-gray-500">No recent workouts yet</p>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {workouts.map((workout, index) => (
-                <motion.div
-                  key={workout.id}
-                  className="border-2 border-gray-200 rounded-lg p-6 hover:border-primary-300 transition-colors"
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.5 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  variants={{
-                    hidden: { opacity: 0, y: 50 },
-                    visible: { opacity: 1, y: 0 },
-                  }}
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            workout.type === "cardio"
-                              ? "bg-accent-500 text-white"
-                              : "bg-secondary-500 text-white"
-                          }`}
-                        >
-                          {workout.type.toUpperCase()}
-                        </span>
-                        <span className="text-sm font-bold text-primary-500">
-                          @{workout.username}
-                        </span>
-                      </div>
-                      <h3 className="text-lg font-bold text-gray-800">
-                        {workout.activity}
-                      </h3>
-                      <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
-                        {workout.duration && (
-                          <span>{workout.duration} min</span>
-                        )}
-                        <span>{formatDate(workout.date)}</span>
+          {/* Horizontal Scrolling Workouts */}
+          <div className="overflow-x-auto overflow-y-hidden pb-4">
+            {loading ? (
+              <p className="text-center">Loading recent workouts...</p>
+            ) : workouts.length === 0 ? (
+              <p className="text-center text-gray-500">No recent workouts yet</p>
+            ) : (
+              <div className="flex gap-4 min-w-min">
+                {workouts.map((workout, index) => (
+                  <motion.div
+                    key={workout.id}
+                    className="flex-shrink-0 w-[350px] border-2 border-gray-200 rounded-lg p-6 bg-white hover:border-primary-300 transition-colors"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.5 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    variants={{
+                      hidden: { opacity: 0, y: 50 },
+                      visible: { opacity: 1, y: 0 },
+                    }}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                              workout.type === "cardio"
+                                ? "bg-accent-500 text-white"
+                                : "bg-secondary-500 text-white"
+                            }`}
+                          >
+                            {workout.type.toUpperCase()}
+                          </span>
+                          <span className="text-sm font-bold text-primary-500">
+                            @{workout.username}
+                          </span>
+                        </div>
+                        <h3 className="text-lg font-bold text-gray-800">
+                          {workout.activity}
+                        </h3>
+                        <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                          {workout.duration && (
+                            <span>{workout.duration} min</span>
+                          )}
+                          <span>{formatDate(workout.date)}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </div>
-      </motion.div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </div>
+        </motion.div>
+      </div>
     </section>
   );
 };
 
-export default RecentWorkouts;
+export default RecentWorkouts
