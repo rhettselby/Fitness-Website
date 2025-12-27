@@ -20,7 +20,7 @@ const Link = ({ page, selectedPage, setSelectedPage }: Props) => {
       <button
         className={`${
           selectedPage === lowerCasePage ? "text-primary-500" : ""
-        } transition duration-500 hover:text-primary-300 cursor-pointer`}
+        } font-bold transition duration-500 hover:text-primary-300 cursor-pointer`}
         onClick={() => {
           setSelectedPage(lowerCasePage);
           navigate("/connect");
@@ -54,7 +54,7 @@ const Link = ({ page, selectedPage, setSelectedPage }: Props) => {
       <AnchorLink
         className={`${
           selectedPage === lowerCasePage ? "text-primary-500" : ""
-        } transition duration-500 hover:text-primary-300`}
+        } font-bold transition duration-500 hover:text-primary-300`}
         href={`#${lowerCasePage}`}
         onClick={() => setSelectedPage(lowerCasePage)}
       >
@@ -68,7 +68,7 @@ const Link = ({ page, selectedPage, setSelectedPage }: Props) => {
     <button
       className={`${
         selectedPage === lowerCasePage ? "text-primary-500" : ""
-      } transition duration-500 hover:text-primary-300 cursor-pointer`}
+      } font-bold transition duration-500 hover:text-primary-300 cursor-pointer`}
       onClick={handleClick}
     >
       {page}
