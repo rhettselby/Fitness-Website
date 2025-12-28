@@ -90,7 +90,7 @@ const Home = ({ setSelectedPage }: Props) => {
           <img
             alt="home-page-graphic"
             src={SoccerPic}
-            className="w-full max-w-2xl object-contain"
+            className="w-full max-w-3xl object-contain"
             onError={(e) => {
               console.error("Failed to load HomePageGraphic:", SoccerPic);
               e.currentTarget.style.display = 'none';
