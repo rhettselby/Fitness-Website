@@ -86,7 +86,7 @@ const Home = ({ setSelectedPage }: Props) => {
         </div>
 
         {/* Image */}
-        <div className="flex basis-3/5 justify-center md:z-10 md:ml-40 md:mt-16 md:justify-items-end w-2/3 h-2/3">
+        <div className="flex basis-3/5 justify-center md:z-10 md:ml-40 md:mt-16 md:justify-items-end">
           <img
             alt="home-page-graphic"
             src={SoccerPic}
