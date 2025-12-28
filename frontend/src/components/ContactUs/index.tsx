@@ -58,7 +58,8 @@ const ContactUs = ({setSelectedPage}: Props) => {
     };
 
     return (
-       <section id="contactus" className = "mx-auto w-5/6 pt-24 pb-32">
+       <section id="contactus" className = "w-full bg-gray-20 py-24">
+            <div className="mx-auto w-5/6"></div>
             <motion.div onViewportEnter = {() => setSelectedPage(SelectedPage.ContactUs)}>
                 {/* Header */}
                 <motion.div
@@ -77,7 +78,7 @@ const ContactUs = ({setSelectedPage}: Props) => {
                             Join Now
                             {" "}
                         </span>
-                        <span className="text-black">
+                        <span className="text-white">
                             To Start Tracking Workouts
                         </span>
                     </h1>
