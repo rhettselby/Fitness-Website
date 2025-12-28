@@ -3,7 +3,6 @@ import { useState } from "react";
 import { API_URL } from "@/lib/config";
 import { TokenService } from "@/utils/auth";
 
-
 type LoginFormValues = {
     username: string;
     password: string;
@@ -15,7 +14,7 @@ type Props = {
 };
 
 const Login = ({ onLoginSuccess, onClose }: Props) => {
-    const inputStyles = `mb-5 w-full rounded-lg bg-primary-300 px-5 py-3 placeholder-white`;
+    const inputStyles = `mb-5 w-full rounded-lg bg-primary-300 px-5 py-3 placeholder-white text-black`;
     const [error, setError] = useState<string>("");
 
     const {
@@ -77,7 +76,7 @@ const Login = ({ onLoginSuccess, onClose }: Props) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full mx-4">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-2xl font-bold text-white">Sign In</h2>
+                    <h2 className="text-2xl font-bold text-gray-900">Sign In</h2>
                     <button
                         onClick={onClose}
                         className="text-black hover:text-gray-700 text-2xl"
@@ -127,7 +126,7 @@ const Login = ({ onLoginSuccess, onClose }: Props) => {
 
                     <button
                         type="submit"
-                        className="mt-5 w-full rounded-lg bg-secondary-500 px-20 py-3 transition duration-500 hover:text-white"
+                        className="mt-5 w-full rounded-lg bg-secondary-500 text-white px-20 py-3 font-bold transition duration-300 hover:bg-secondary-600"
                     >
                         Sign In
                     </button>
@@ -138,4 +137,3 @@ const Login = ({ onLoginSuccess, onClose }: Props) => {
 };
 
 export default Login;
-
