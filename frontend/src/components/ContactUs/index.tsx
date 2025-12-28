@@ -59,7 +59,7 @@ const ContactUs = ({setSelectedPage}: Props) => {
 
     return (
        <section id="contactus" className = "w-full bg-gray-20 py-24">
-            <div className="mx-auto w-5/6"></div>
+            <div className="mx-auto w-5/6">
             <motion.div onViewportEnter = {() => setSelectedPage(SelectedPage.ContactUs)}>
                 {/* Header */}
                 <motion.div
@@ -181,6 +181,7 @@ const ContactUs = ({setSelectedPage}: Props) => {
 
                 </div>
             </motion.div>
+            </div>
        </section>
     )
 }
