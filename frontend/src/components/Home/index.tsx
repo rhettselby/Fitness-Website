@@ -10,7 +10,7 @@ import AnchorLink from "react-anchor-link-smooth-scroll";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { API_URL } from "@/lib/config";
-import SoccerPic from "@/assets/SoccerPic.png"
+import SoccerPic from "@/assets/SoccerImage.png"
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
@@ -92,7 +92,7 @@ const Home = ({ setSelectedPage }: Props) => {
             src={SoccerPic}
             className="w-full max-w-md"
             onError={(e) => {
-              console.error("Failed to load HomePageGraphic:", HomePageGraphic);
+              console.error("Failed to load HomePageGraphic:", SoccerPic);
               e.currentTarget.style.display = 'none';
             }}
           />
