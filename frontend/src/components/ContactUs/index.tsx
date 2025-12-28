@@ -72,13 +72,16 @@ const ContactUs = ({setSelectedPage}: Props) => {
                         visible: { opacity: 1, x: 0 },
                     }}
                 >
-                    <HText>
-                        <span className = "text-primary-500">
+                    <h1 className="basis-3/5 font-montserrat text-3xl font-bold">
+                        <span className="text-primary-500">
                             Join Now
                             {" "}
                         </span>
-                        To Start Tracking Workouts
-                    </HText>
+                        <span className="text-black">
+                            To Start Tracking Workouts
+                        </span>
+                    </h1>
+                    
                     <p className = "my-5">
                         Create an account to compete with your Friends!
                     </p>
