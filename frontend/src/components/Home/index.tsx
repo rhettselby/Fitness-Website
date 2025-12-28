@@ -30,7 +30,7 @@ const Home = ({ setSelectedPage }: Props) => {
         onViewportEnter={() => setSelectedPage(SelectedPage.Home)}
       >
         {/* Main Header */}
-        <div className="z-10 mt-32 md:basis-3/5">
+        <div className="z-10 mt-32 md:basis-2/5">
           {/* Headings */}
           <motion.div
             className="md:-mt-20"
@@ -56,7 +56,7 @@ const Home = ({ setSelectedPage }: Props) => {
                 />
               </div>
             </div>
-            <p className="mt-8 text-sm">
+            <p className="mt-8 text-sm text-white">
               Welcome to Rhett's Fitness Community. Log your workouts every day!
             </p>
           </motion.div>
@@ -86,13 +86,14 @@ const Home = ({ setSelectedPage }: Props) => {
         </div>
 
         {/* Image */}
-        <div className="flex basis-3/5 justify-center md:z-10 md:ml-40 md:mt-16 md:justify-items-end">
+        <div className="flex basis-3/5 justify-center md:z-10 md:ml-20 md:mt-16">
           <img
             alt="home-page-graphic"
             src={SoccerPic}
-            className="w-full max-w-3xl object-contain"
+            className="w-full h-auto"
+            style={{ maxWidth: '800px' }}
             onError={(e) => {
-              console.error("Failed to load HomePageGraphic:", SoccerPic);
+              console.error("Failed to load SoccerPic:", SoccerPic);
               e.currentTarget.style.display = 'none';
             }}
           />
