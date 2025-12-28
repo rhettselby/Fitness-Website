@@ -13,25 +13,25 @@ module.exports = {
         "gray-100": "#404040",     // Medium dark
         "gray-500": "#A8A8A8",     // Light gray for text on dark
         
-        // Primary - Teal/Blue-Green (calming, professional)
-        "primary-100": "#C8E6E6",  // Very light teal
-        "primary-300": "#7AACBA",  // Medium teal (input fields)
-        "primary-500": "#5D9CAC",  // Main teal
+        // Primary - Fresh Green (energetic, growth, health)
+        "primary-100": "#D4EDDA",  // Very light green
+        "primary-300": "#7BC96F",  // Light fresh green
+        "primary-500": "#4CAF50",  // Main green (Material Design green)
         
-        // Secondary - Deeper Teal (for variety)
-        "secondary-400": "#6B9FAE",  // Light deeper teal
-        "secondary-500": "#4A7C8C",  // Medium teal
-        "secondary-600": "#3B6370",  // Dark teal
+        // Secondary - Lime/Yellow-Green (vibrant, energetic)
+        "secondary-400": "#9CCC65",  // Light lime green
+        "secondary-500": "#8BC34A",  // Lime green
+        "secondary-600": "#7CB342",  // Deep lime green
         
-        // Accent - Golden Yellow/Amber (for CTAs)
-        "accent-400": "#F5C563",    // Light gold
-        "accent-500": "#E6B047",    // Golden yellow (Register button)
-        "accent-600": "#D4A03A",    // Deep gold
+        // Accent - Golden Yellow (warm complement)
+        "accent-400": "#FFD54F",    // Light golden yellow
+        "accent-500": "#FFC107",    // Amber/golden yellow
+        "accent-600": "#FFA000",    // Deep amber
       },
       backgroundImage: (theme) => ({
-        "gradient-teal": "linear-gradient(135deg, #5D9CAC 0%, #7AACBA 100%)",
-        "gradient-tealgold": "linear-gradient(135deg, #5D9CAC 0%, #E6B047 100%)",
-        "gradient-ocean": "linear-gradient(180deg, #C8E6E6 0%, #7AACBA 100%)",
+        "gradient-green": "linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%)",
+        "gradient-fresh": "linear-gradient(135deg, #7BC96F 0%, #FFC107 100%)",
+        "gradient-nature": "linear-gradient(180deg, #D4EDDA 0%, #7BC96F 100%)",
       }),
       fontFamily: {
         dmsans: ["DM Sans", "sans-serif"],
