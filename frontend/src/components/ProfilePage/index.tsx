@@ -181,32 +181,32 @@ const ProfilePage = () => {
           </div>
 
           {!isEditing && profile && (
-  <div className="space-y-2">
-    <p className="text-gray-700">
-      <span className="font-semibold">Bio:</span>{" "}
-      {profile.bio || <span className="text-gray-400 italic">Not set</span>}
-    </p>
+            <div className="space-y-2">
+              <p className="text-gray-700">
+                <span className="font-semibold">Bio:</span>{" "}
+                {profile.bio || <span className="text-gray-400 italic">Not set</span>}
+              </p>
 
-    <p className="text-gray-700">
-      <span className="font-semibold">Location:</span>{" "}
-      {profile.location || <span className="text-gray-400 italic">Not set</span>}
-    </p>
+              <p className="text-gray-700">
+                <span className="font-semibold">Location:</span>{" "}
+                {profile.location || <span className="text-gray-400 italic">Not set</span>}
+              </p>
 
-    <p className="text-gray-700">
-      <span className="font-semibold">Birthday:</span>{" "}
-      {profile.birthday
-        ? new Date(profile.birthday).toLocaleDateString()
-        : <span className="text-gray-400 italic">Not set</span>}
-    </p>
-  </div>
-)}
+              <p className="text-gray-700">
+                <span className="font-semibold">Birthday:</span>{" "}
+                {profile.birthday
+                  ? new Date(profile.birthday).toLocaleDateString()
+                  : <span className="text-gray-400 italic">Not set</span>}
+              </p>
+            </div>
+          )}
           
           {isEditing && (
             <form onSubmit={handleProfileUpdate} className="space-y-4">
               <div>
                 <label className="block font-semibold mb-1">Bio</label>
                 <textarea
-                  className="w-full border rounded-md p-2"
+                  className="w-full border rounded-md p-2 text-black"
                   rows={3}
                   value={formData.bio ?? ""}
                   onChange={(e) =>
@@ -219,7 +219,7 @@ const ProfilePage = () => {
                 <label className="block font-semibold mb-1">Location</label>
                 <input
                   type="text"
-                  className="w-full border rounded-md p-2"
+                  className="w-full border rounded-md p-2 text-black"
                   value={formData.location ?? ""}
                   onChange={(e) =>
                     setFormData({ ...formData, location: e.target.value })
@@ -231,7 +231,7 @@ const ProfilePage = () => {
                 <label className="block font-semibold mb-1">Birthday</label>
                 <input
                   type="date"
-                  className="w-full border rounded-md p-2"
+                  className="w-full border rounded-md p-2 text-black"
                   value={formData.birthday ?? ""}
                   onChange={(e) =>
                     setFormData({ ...formData, birthday: e.target.value })

@@ -5,8 +5,6 @@ import { SelectedPage } from "@/shared/types";
 import { API_URL } from "@/lib/config";
 import { TokenService } from "@/utils/auth";
 
-
-
 type WorkoutType = "cardio" | "gym";
 
 const AddWorkoutPage = () => {
@@ -154,7 +152,7 @@ const AddWorkoutPage = () => {
                   value={activity}
                   onChange={(e) => setActivity(e.target.value)}
                   required
-                  className="w-full border rounded-lg px-4 py-2"
+                  className="w-full border rounded-lg px-4 py-2 text-black"
                   placeholder="E.g. Bench Press, Running, Squats"
                 />
               </div>
@@ -170,7 +168,7 @@ const AddWorkoutPage = () => {
                     value={duration}
                     onChange={(e) => setDuration(Number(e.target.value))}
                     required
-                    className="w-full border rounded-lg px-4 py-2"
+                    className="w-full border rounded-lg px-4 py-2 text-black"
                     placeholder="E.g. 30"
                   />
                 </div>
