@@ -13,25 +13,25 @@ module.exports = {
         "gray-100": "#404040",     // Medium dark
         "gray-500": "#A8A8A8",     // Light gray for text on dark
         
-        // Primary - Deep Orange-Red (main brand color - energetic, motivating)
-        "primary-100": "#F5F5F5",  // Light gray (no more peach!)
-        "primary-300": "#FF6B3D",  // Medium orange-red
-        "primary-500": "#E8590C",  // Deep orange-red (MAIN ACTION COLOR)
+        // Primary - Teal/Blue-Green (calming, professional)
+        "primary-100": "#C8E6E6",  // Very light teal
+        "primary-300": "#7AACBA",  // Medium teal (input fields)
+        "primary-500": "#5D9CAC",  // Main teal
         
-        // Secondary - Warm Red (complement to orange)
-        "secondary-400": "#FF6B6B",  // Light warm red
-        "secondary-500": "#E63946",  // Vibrant red
-        "secondary-600": "#C1121F",  // Deep red
+        // Secondary - Deeper Teal (for variety)
+        "secondary-400": "#6B9FAE",  // Light deeper teal
+        "secondary-500": "#4A7C8C",  // Medium teal
+        "secondary-600": "#3B6370",  // Dark teal
         
-        // Accent - Golden Yellow (warm complement)
-        "accent-400": "#FFD166",    // Light golden yellow
-        "accent-500": "#FFB020",    // Bright golden yellow
-        "accent-600": "#F59E0B",    // Deep amber/gold
+        // Accent - Golden Yellow/Amber (for CTAs)
+        "accent-400": "#F5C563",    // Light gold
+        "accent-500": "#E6B047",    // Golden yellow (Register button)
+        "accent-600": "#D4A03A",    // Deep gold
       },
       backgroundImage: (theme) => ({
-        "gradient-sunset": "linear-gradient(135deg, #E8590C 0%, #FFB020 100%)",
-        "gradient-fire": "linear-gradient(135deg, #E63946 0%, #E8590C 100%)",
-        "gradient-warm": "linear-gradient(135deg, #E8590C 0%, #FFD166 100%)",
+        "gradient-teal": "linear-gradient(135deg, #5D9CAC 0%, #7AACBA 100%)",
+        "gradient-tealgold": "linear-gradient(135deg, #5D9CAC 0%, #E6B047 100%)",
+        "gradient-ocean": "linear-gradient(180deg, #C8E6E6 0%, #7AACBA 100%)",
       }),
       fontFamily: {
         dmsans: ["DM Sans", "sans-serif"],
