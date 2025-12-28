@@ -86,12 +86,12 @@ const Home = ({ setSelectedPage }: Props) => {
         </div>
 
         {/* Image */}
-        <div className="flex basis-3/5 justify-center md:z-10 md:ml-20 md:mt-16">
+        <div className="flex basis-3/5 justify-center md:z-10 md:ml-10 md:mt-16">
           <img
             alt="home-page-graphic"
             src={SoccerPic}
             className="w-full h-auto"
-            style={{ maxWidth: '800px' }}
+            style={{ maxWidth: '1000px' }}
             onError={(e) => {
               console.error("Failed to load SoccerPic:", SoccerPic);
               e.currentTarget.style.display = 'none';
