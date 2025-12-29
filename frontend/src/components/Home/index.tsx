@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { API_URL } from "@/lib/config";
 import SoccerPic from "@/assets/SoccerImage.png"
+import imsoccer from "@/assets/IMSOCCER.png"
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
@@ -89,7 +90,7 @@ const Home = ({ setSelectedPage }: Props) => {
         <div className="flex basis-3/5 justify-center md:z-10 md:ml-10 md:mt-16">
           <img
             alt="home-page-graphic"
-            src={SoccerPic}
+            src={imsoccer}
             className="w-full h-auto"
             style={{ maxWidth: '1000px' }}
             onError={(e) => {
