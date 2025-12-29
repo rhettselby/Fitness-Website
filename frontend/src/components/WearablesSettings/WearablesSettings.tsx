@@ -108,7 +108,7 @@ const WearablesSettings = () => {
       </h2>
 
       {/* Oura Section */}
-      <div className="border-2 border-gray-200 rounded-lg p-6">
+      <div className="border-2 border-gray-200 text- bg-accent-500 rounded-lg p-6">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-2xl font-semibold mb-2">Oura Ring</h3>
@@ -135,7 +135,7 @@ const WearablesSettings = () => {
       </div>
 
       {/* Strava Section */}
-      <div className="border-2 border-gray-200 text-yellow-600 rounded-lg p-6 mt-4">
+      <div className="border-2 border-gray-200 text- bg-accent-500 rounded-lg p-6 mt-4">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-2xl font-semibold mb-2">Strava</h3>
@@ -162,7 +162,7 @@ const WearablesSettings = () => {
       </div>
 
       {/* Whoop Section */}
-      <div className="border-2 border-gray-200 rounded-lg p-6 mt-4">
+      <div className="border-2 border-gray-200 text- bg-accent-500 rounded-lg p-6 mt-4">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-2xl font-semibold mb-2">Whoop</h3>
