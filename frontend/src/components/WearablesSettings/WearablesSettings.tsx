@@ -167,7 +167,7 @@ const WearablesSettings = () => {
           <div>
             <h3 className="text-2xl font-semibold mb-2">Whoop</h3>
             <p className="text-gray-600">
-              Connect your Whoop to automatically sync workouts and recovery
+              Connect your Whoop to automatically sync workouts
             </p>
           </div>
           <div className="flex gap-3">
