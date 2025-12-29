@@ -1,6 +1,6 @@
 import { type BenefitType, SelectedPage } from "@/shared/types";
 import {
-     HomeModernIcon , UserGroupIcon, AcademicCapIcon
+     LinkIcon, UserGroupIcon, ChartBarIcon
     }
       from "@heroicons/react/24/solid";
 import {motion } from "framer-motion"
@@ -10,18 +10,18 @@ import ActionButton from "@/shared/ActionButton";
 import BenefitsPageGraphic from "@/assets/BenefitsPageGraphic.png";
 
 const benefits: Array<BenefitType> = [
-    { icon: <HomeModernIcon className="h-6 w-6" />,
+    { icon: <LinkIcon className="h-6 w-6" />,
     title: "Connect your devices",
     description: "Pair your Whoop, Oura, or Strava using 'Connect'",
     linkTo: "/connect"
     },
-    { icon: <UserGroupIcon className="h-6 w-6" />,
+    { icon: <ChartBarIcon className="h-6 w-6" />,
     title: "Track each workout",
     description: "View all of your workouts and more under 'Profile'",
     linkTo: "/profile"
 
     },
-    { icon: <AcademicCapIcon className="h-6 w-6" />,
+    { icon: <UserGroupIcon className="h-6 w-6" />,
     title: "Join the community",
     description: "Check out 'Leaderboard' for friendly competition",
     linkTo: SelectedPage.Leaderboard
