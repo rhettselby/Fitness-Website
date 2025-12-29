@@ -48,7 +48,7 @@ const Home = ({ setSelectedPage }: Props) => {
               <div className="before:absolute before:-top-20 before:-left-20 before:z-[-1]">
                 <img
                   alt="home-page-text"
-                  src={HomePageText}
+                  src={imsoccer}
                   className="w-full max-w-md"
                   onError={(e) => {
                     console.error("Failed to load HomePageText:", HomePageText);
@@ -90,7 +90,7 @@ const Home = ({ setSelectedPage }: Props) => {
         <div className="flex basis-3/5 justify-center md:z-10 md:ml-10 md:mt-16">
           <img
             alt="home-page-graphic"
-            src={imsoccer}
+            src={SoccerPic}
             className="w-full h-auto"
             style={{ maxWidth: '1000px' }}
             onError={(e) => {
