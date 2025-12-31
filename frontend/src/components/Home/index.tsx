@@ -17,9 +17,9 @@ type Props = {
 const Home = ({ setSelectedPage }: Props) => {
   const isAboveMediumScreen = useMediaQuery("(min-width:1060px)");
 
-  // 🔒 Single source of truth for BOTH images
-  const HERO_IMAGE_WIDTH = 760;
-  const HERO_IMAGE_HEIGHT = 600;
+  // 🔥 BIG, MATCHED HERO SIZE
+  const HERO_WIDTH = 900;
+  const HERO_HEIGHT = 700;
 
   return (
     <section
@@ -91,44 +91,43 @@ const Home = ({ setSelectedPage }: Props) => {
         {isAboveMediumScreen && (
           <div
             className="
-              absolute right-0 top-1/2 
+              absolute right-0 top-1/2
               flex items-center justify-center
               -translate-y-1/2
-              w-1/2
+              w-3/5
               pr-12
-              gap-4
             "
           >
-            {/* Rhett — slides LEFT toward Kate */}
+            {/* Rhett — START LEFT → MOVE RIGHT */}
             <motion.img
               src={RhettSoccer}
               alt="Rhett playing soccer"
-              className="relative z-10"
+              className="absolute z-10"
               style={{
-                width: HERO_IMAGE_WIDTH,
-                height: HERO_IMAGE_HEIGHT,
+                width: HERO_WIDTH,
+                height: HERO_HEIGHT,
                 objectFit: "contain",
               }}
-              initial={{ opacity: 0, x: 180, y: 80 }}
-              whileInView={{ opacity: 1, x: 20, y: 0 }}
+              initial={{ opacity: 0, x: -500, y: 120 }}
+              whileInView={{ opacity: 1, x: -40, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
+              transition={{ duration: 1.6, ease: "easeOut" }}
             />
 
-            {/* Kate — slides RIGHT toward Rhett */}
+            {/* Kate — START RIGHT → MOVE LEFT */}
             <motion.img
               src={KateTennis}
               alt="Kate playing tennis"
-              className="relative z-10"
+              className="absolute z-10"
               style={{
-                width: HERO_IMAGE_WIDTH,
-                height: HERO_IMAGE_HEIGHT,
+                width: HERO_WIDTH,
+                height: HERO_HEIGHT,
                 objectFit: "contain",
               }}
-              initial={{ opacity: 0, x: -180, y: 80 }}
-              whileInView={{ opacity: 1, x: -20, y: 0 }}
+              initial={{ opacity: 0, x: 500, y: 120 }}
+              whileInView={{ opacity: 1, x: 40, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 1.5, ease: "easeOut", delay: 0.15 }}
+              transition={{ duration: 1.6, ease: "easeOut", delay: 0.15 }}
             />
           </div>
         )}
