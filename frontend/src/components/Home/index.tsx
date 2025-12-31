@@ -90,7 +90,7 @@ const Home = ({ setSelectedPage }: Props) => {
               absolute right-[-5rem] top-1/2 
               flex justify-center items-center 
               -translate-y-1/2
-              space-x-[-15rem]
+              space-x-[-5rem]
               w-3/5
             "
           >
@@ -100,8 +100,8 @@ const Home = ({ setSelectedPage }: Props) => {
               alt="Rhett playing soccer"
               className="relative z-10"
               style={{
-                width: "900px",
-                maxHeight: "700px",
+                width: "850px",
+                maxHeight: "650px",
                 objectFit: "contain"
               }}
               initial={{ opacity: 0, y: 60 }}
@@ -116,8 +116,8 @@ const Home = ({ setSelectedPage }: Props) => {
               alt="Kate playing tennis"
               className="relative"
               style={{
-                width: "800px",
-                maxHeight: "600px",
+                width: "850px",
+                maxHeight: "650px",
                 objectFit: "contain"
               }}
               initial={{ opacity: 0, y: 90 }}
