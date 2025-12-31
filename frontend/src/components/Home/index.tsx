@@ -20,10 +20,10 @@ const Home = ({ setSelectedPage }: Props) => {
   return (
     <section
       id="home"
-      className="bg-gray-20 py-10 md:h-full md:pb-0"
+      className="relative bg-gray-20 py-10 md:h-full md:pb-0"
     >
       <motion.div
-        className="md:flex mx-auto w-11/12 items-center justify-center md:h-5/6"
+        className="relative mx-auto w-11/12 md:flex md:h-5/6"
         onViewportEnter={() => setSelectedPage(SelectedPage.Home)}
       >
         {/* ================= LEFT SIDE ================= */}
@@ -52,6 +52,7 @@ const Home = ({ setSelectedPage }: Props) => {
                 />
               </div>
             </div>
+
             <p className="mt-8 text-sm text-white">
               Welcome to Rhett's Fitness Community. Log your workouts every day!
             </p>
@@ -82,47 +83,41 @@ const Home = ({ setSelectedPage }: Props) => {
           </motion.div>
         </div>
 
-        {/* ================= RIGHT SIDE — ATHLETIC HERO ================= */}
-        <div className="relative flex flex-col items-center justify-end md:flex-row md:gap-6 md:ml-auto md:mt-16 md:basis-3/5">
-          
-          {/* PRIMARY — Rhett (Soccer) */}
-          <motion.img
-            src={RhettSoccer}
-            alt="Rhett playing soccer"
-            className="w-full h-auto"
-            style={{
-              maxWidth: "1800px",
-              transform: "scale(1.4)",
-            }}
-            initial={{ opacity: 0, y: 80 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            onError={(e) => {
-              console.error("Failed to load RhettSoccer:", RhettSoccer);
-              e.currentTarget.style.display = "none";
-            }}
-          />
+        {/* ================= RIGHT SIDE — ABSOLUTE HERO ================= */}
+        {isAboveMediumScreen && (
+          <div className="absolute right-0 top-1/2 z-0 flex -translate-y-1/2 items-center gap-8 pr-8">
+            
+            {/* Rhett — PRIMARY */}
+            <motion.img
+              src={RhettSoccer}
+              alt="Rhett playing soccer"
+              className="h-auto"
+              style={{
+                maxWidth: "1800px",
+                transform: "scale(1.4)",
+              }}
+              initial={{ opacity: 0, y: 80 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
+            />
 
-          {/* SECONDARY — Kate (Tennis, OVERLAPPING) */}
-          <motion.img
-            src={KateTennis}
-            alt="Kate playing tennis"
-            className="w-full h-auto md:-ml-24"
-            style={{
-              maxWidth: "1600px",
-              transform: "scale(1.3)",
-            }}
-            initial={{ opacity: 0, y: 120 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 1.7, ease: "easeOut", delay: 0.25 }}
-            onError={(e) => {
-              console.error("Failed to load KateTennis:", KateTennis);
-              e.currentTarget.style.display = "none";
-            }}
-          />
-        </div>
+            {/* Kate — SECONDARY (OVERLAP) */}
+            <motion.img
+              src={KateTennis}
+              alt="Kate playing tennis"
+              className="-ml-24 h-auto"
+              style={{
+                maxWidth: "1600px",
+                transform: "scale(1.3)",
+              }}
+              initial={{ opacity: 0, y: 120 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.7, ease: "easeOut", delay: 0.25 }}
+            />
+          </div>
+        )}
       </motion.div>
     </section>
   );
