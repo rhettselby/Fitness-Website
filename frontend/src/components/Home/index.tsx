@@ -82,10 +82,10 @@ const Home = ({ setSelectedPage }: Props) => {
           </motion.div>
         </div>
 
-        {/* ================= RIGHT SIDE — MASSIVE ATHLETIC HERO ================= */}
-        <div className="relative flex flex-col items-center justify-center md:flex-row md:gap-24 md:ml-16 md:mt-16 md:basis-3/5">
+        {/* ================= RIGHT SIDE — ATHLETIC HERO ================= */}
+        <div className="relative flex flex-col items-center justify-end md:flex-row md:gap-6 md:ml-auto md:mt-16 md:basis-3/5">
           
-          {/* Rhett — PRIMARY (VERY LARGE) */}
+          {/* PRIMARY — Rhett (Soccer) */}
           <motion.img
             src={RhettSoccer}
             alt="Rhett playing soccer"
@@ -104,11 +104,11 @@ const Home = ({ setSelectedPage }: Props) => {
             }}
           />
 
-          {/* Kate — SECONDARY (ALSO LARGE, OFFSET) */}
+          {/* SECONDARY — Kate (Tennis, OVERLAPPING) */}
           <motion.img
             src={KateTennis}
             alt="Kate playing tennis"
-            className="w-full h-auto"
+            className="w-full h-auto md:-ml-24"
             style={{
               maxWidth: "1600px",
               transform: "scale(1.3)",
