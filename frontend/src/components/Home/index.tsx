@@ -87,12 +87,11 @@ const Home = ({ setSelectedPage }: Props) => {
         {isAboveMediumScreen && (
           <div
             className="
-              absolute right-0 top-1/2 
-              flex justify-end items-center 
+              absolute right-[-5rem] top-1/2 
+              flex justify-center items-center 
               -translate-y-1/2
-              pr-12
-              space-x-[-10rem]
-              w-1/2
+              space-x-[-15rem]
+              w-3/5
             "
           >
             {/* Rhett — PRIMARY */}
@@ -101,8 +100,8 @@ const Home = ({ setSelectedPage }: Props) => {
               alt="Rhett playing soccer"
               className="relative z-10"
               style={{
-                width: "700px",
-                maxHeight: "600px",
+                width: "900px",
+                maxHeight: "700px",
                 objectFit: "contain"
               }}
               initial={{ opacity: 0, y: 60 }}
@@ -117,8 +116,8 @@ const Home = ({ setSelectedPage }: Props) => {
               alt="Kate playing tennis"
               className="relative"
               style={{
-                width: "600px",
-                maxHeight: "500px",
+                width: "800px",
+                maxHeight: "600px",
                 objectFit: "contain"
               }}
               initial={{ opacity: 0, y: 90 }}
