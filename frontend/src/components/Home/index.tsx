@@ -17,18 +17,17 @@ type Props = {
 const Home = ({ setSelectedPage }: Props) => {
   const isAboveMediumScreen = useMediaQuery("(min-width:1060px)");
 
-  // 🔥 Optical sizing (intentional imbalance)
-  const RHETT_WIDTH = 1040;
-  const RHETT_HEIGHT = 800;
+  /* ================= SIZE TUNING ================= */
+  const RHETT_WIDTH = 1120;
+  const RHETT_HEIGHT = 860;
 
-  const KATE_WIDTH = 820;
-  const KATE_HEIGHT = 660;
+  const KATE_WIDTH = 760;
+  const KATE_HEIGHT = 620;
 
-  // 🎯 Final spacing + equal motion distance
-  const FINAL_RHETT_X = -60;
-  const FINAL_KATE_X = 140;
-
-  const MOTION_DISTANCE = 260; // both travel exactly this amount
+  /* ================= MOTION CALIBRATION ================= */
+  const FINAL_KATE_X = -220;  // LEFT
+  const FINAL_RHETT_X = 220;  // RIGHT
+  const MOTION_DISTANCE = 260; // equal travel
 
   return (
     <section
@@ -39,7 +38,7 @@ const Home = ({ setSelectedPage }: Props) => {
         className="relative mx-auto w-11/12 md:flex md:h-5/6"
         onViewportEnter={() => setSelectedPage(SelectedPage.Home)}
       >
-        {/* ================= LEFT SIDE ================= */}
+        {/* ================= LEFT CONTENT ================= */}
         <div className="z-10 mt-32 md:basis-2/5">
           <motion.div
             className="md:-mt-20"
@@ -96,7 +95,7 @@ const Home = ({ setSelectedPage }: Props) => {
           </motion.div>
         </div>
 
-        {/* ================= RIGHT SIDE — HERO ================= */}
+        {/* ================= HERO ATHLETES ================= */}
         {isAboveMediumScreen && (
           <div
             className="
@@ -107,31 +106,7 @@ const Home = ({ setSelectedPage }: Props) => {
               pr-12
             "
           >
-            {/* Rhett — larger, equal travel */}
-            <motion.img
-              src={RhettSoccer}
-              alt="Rhett playing soccer"
-              className="absolute z-10"
-              style={{
-                width: RHETT_WIDTH,
-                height: RHETT_HEIGHT,
-                objectFit: "contain",
-              }}
-              initial={{
-                opacity: 0,
-                x: FINAL_RHETT_X - MOTION_DISTANCE,
-                y: 140,
-              }}
-              whileInView={{
-                opacity: 1,
-                x: FINAL_RHETT_X,
-                y: 0,
-              }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.6, ease: "easeOut" }}
-            />
-
-            {/* Kate — smaller, equal travel */}
+            {/* Kate — LEFT, smaller */}
             <motion.img
               src={KateTennis}
               alt="Kate playing tennis"
@@ -143,12 +118,36 @@ const Home = ({ setSelectedPage }: Props) => {
               }}
               initial={{
                 opacity: 0,
-                x: FINAL_KATE_X + MOTION_DISTANCE,
+                x: FINAL_KATE_X - MOTION_DISTANCE,
                 y: 120,
               }}
               whileInView={{
                 opacity: 1,
                 x: FINAL_KATE_X,
+                y: 0,
+              }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.6, ease: "easeOut" }}
+            />
+
+            {/* Rhett — RIGHT, larger (hero) */}
+            <motion.img
+              src={RhettSoccer}
+              alt="Rhett playing soccer"
+              className="absolute z-20"
+              style={{
+                width: RHETT_WIDTH,
+                height: RHETT_HEIGHT,
+                objectFit: "contain",
+              }}
+              initial={{
+                opacity: 0,
+                x: FINAL_RHETT_X + MOTION_DISTANCE,
+                y: 140,
+              }}
+              whileInView={{
+                opacity: 1,
+                x: FINAL_RHETT_X,
                 y: 0,
               }}
               viewport={{ once: true }}
