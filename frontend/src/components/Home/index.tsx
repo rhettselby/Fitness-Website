@@ -88,9 +88,9 @@ const Home = ({ setSelectedPage }: Props) => {
           <div
             className="
               absolute right-[-5rem] top-1/2 
-              flex justify-center items-center 
+              flex items-center 
               -translate-y-1/2
-              space-x-[-5rem]
+              space-x-[-20rem]
               w-3/5
             "
           >
@@ -101,8 +101,9 @@ const Home = ({ setSelectedPage }: Props) => {
               className="relative z-10"
               style={{
                 width: "850px",
-                maxHeight: "650px",
-                objectFit: "contain"
+                height: "650px",
+                objectFit: "contain",
+                marginRight: "-10rem"
               }}
               initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -117,7 +118,7 @@ const Home = ({ setSelectedPage }: Props) => {
               className="relative"
               style={{
                 width: "850px",
-                maxHeight: "650px",
+                height: "650px",
                 objectFit: "contain"
               }}
               initial={{ opacity: 0, y: 90 }}
