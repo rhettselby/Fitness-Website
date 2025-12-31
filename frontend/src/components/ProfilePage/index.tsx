@@ -41,6 +41,13 @@ const ProfilePage = () => {
     birthday: "",
   });
 
+  // New state for separate birthday inputs
+  const [birthdayInputs, setBirthdayInputs] = useState({
+    month: "",
+    day: "",
+    year: ""
+  });
+
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -107,6 +114,16 @@ const ProfilePage = () => {
         birthday: data.profile?.birthday ?? "",
       });
 
+      // Populate birthday inputs if birthday exists
+      if (data.profile?.birthday) {
+        const birthdayDate = new Date(data.profile.birthday);
+        setBirthdayInputs({
+          month: String(birthdayDate.getMonth() + 1).padStart(2, '0'),
+          day: String(birthdayDate.getDate()).padStart(2, '0'),
+          year: String(birthdayDate.getFullYear())
+        });
+      }
+
       setLoading(false);
     } catch {
       setError("Failed to load profile");
@@ -117,6 +134,12 @@ const ProfilePage = () => {
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Combine birthday inputs
+    const { month, day, year } = birthdayInputs;
+    const formattedBirthday = month && day && year 
+      ? `${year}-${month}-${day}` 
+      : null;
+
     try {
       const token = TokenService.getAccessToken();
       const res = await fetch(`${API_URL}/api/profile/editprofile-jwt/`, {
@@ -125,7 +148,10 @@ const ProfilePage = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          birthday: formattedBirthday
+        }),
       });
 
       const data = await res.json();
@@ -229,14 +255,55 @@ const ProfilePage = () => {
 
               <div>
                 <label className="block font-semibold mb-1">Birthday</label>
-                <input
-                  type="date"
-                  className="w-full border rounded-md p-2 text-black"
-                  value={formData.birthday ?? ""}
-                  onChange={(e) =>
-                    setFormData({ ...formData, birthday: e.target.value })
-                  }
-                />
+                <div className="flex space-x-2">
+                  <select
+                    className="w-1/3 border rounded-md p-2 text-black"
+                    value={birthdayInputs.month}
+                    onChange={(e) => 
+                      setBirthdayInputs(prev => ({ ...prev, month: e.target.value }))
+                    }
+                  >
+                    <option value="">Month</option>
+                    {[...Array(12)].map((_, i) => (
+                      <option key={i} value={String(i + 1).padStart(2, '0')}>
+                        {new Date(2000, i, 1).toLocaleString('default', { month: 'long' })}
+                      </option>
+                    ))}
+                  </select>
+                  
+                  <select
+                    className="w-1/3 border rounded-md p-2 text-black"
+                    value={birthdayInputs.day}
+                    onChange={(e) => 
+                      setBirthdayInputs(prev => ({ ...prev, day: e.target.value }))
+                    }
+                  >
+                    <option value="">Day</option>
+                    {[...Array(31)].map((_, i) => (
+                      <option key={i} value={String(i + 1).padStart(2, '0')}>
+                        {i + 1}
+                      </option>
+                    ))}
+                  </select>
+                  
+                  <select
+                    className="w-1/3 border rounded-md p-2 text-black"
+                    value={birthdayInputs.year}
+                    onChange={(e) => 
+                      setBirthdayInputs(prev => ({ ...prev, year: e.target.value }))
+                    }
+                  >
+                    <option value="">Year</option>
+                    {[...Array(100)].map((_, i) => {
+                      const year = new Date().getFullYear() - i;
+                      return (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
               </div>
 
               <button
@@ -249,7 +316,7 @@ const ProfilePage = () => {
           )}
         </div>
 
-        {/* Workouts Section */}
+        {/* Workouts Section - remains unchanged */}
         <div className="bg-white rounded-lg shadow-md p-8">
           <h2 className="text-3xl font-bold text-primary-500 mb-6">
             Your Workouts
