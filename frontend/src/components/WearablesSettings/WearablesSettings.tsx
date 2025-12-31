@@ -37,6 +37,27 @@ const WearablesSettings = () => {
     }
   };
 
+  const disconnectOura = async () => {
+    if (!confirm("Are you sure you want to disconnect your Oura Ring?")) return;
+    
+    setLoading(true);
+    const token = TokenService.getAccessToken();
+    try {
+      const response = await fetch(`${API_URL}/api/wearables/oura/disconnect/`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      alert(data.message || "Oura disconnected successfully!");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error disconnecting Oura:", error);
+      alert("Failed to disconnect Oura");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const connectStrava = async () => {
     const token = TokenService.getAccessToken();
     try {
@@ -64,6 +85,27 @@ const WearablesSettings = () => {
     } catch (error) {
       console.error("Error syncing Strava:", error);
       alert("Failed to sync Strava workouts");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const disconnectStrava = async () => {
+    if (!confirm("Are you sure you want to disconnect Strava?")) return;
+    
+    setLoading(true);
+    const token = TokenService.getAccessToken();
+    try {
+      const response = await fetch(`${API_URL}/api/wearables/strava/disconnect/`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      alert(data.message || "Strava disconnected successfully!");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error disconnecting Strava:", error);
+      alert("Failed to disconnect Strava");
     } finally {
       setLoading(false);
     }
@@ -101,6 +143,27 @@ const WearablesSettings = () => {
     }
   };
 
+  const disconnectWhoop = async () => {
+    if (!confirm("Are you sure you want to disconnect Whoop?")) return;
+    
+    setLoading(true);
+    const token = TokenService.getAccessToken();
+    try {
+      const response = await fetch(`${API_URL}/api/wearables/whoop/disconnect/`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      alert(data.message || "Whoop disconnected successfully!");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error disconnecting Whoop:", error);
+      alert("Failed to disconnect Whoop");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md p-8 mb-8">
       <h2 className="text-3xl font-bold text-primary-500 mb-6">
@@ -130,6 +193,13 @@ const WearablesSettings = () => {
             >
               {loading ? "Syncing..." : "Sync Now"}
             </button>
+            <button
+              onClick={disconnectOura}
+              disabled={loading}
+              className="px-6 py-3 bg-white text-red-600 border-2 border-red-600 rounded-lg hover:bg-red-50 font-semibold disabled:bg-gray-400 disabled:text-white disabled:border-gray-400"
+            >
+              Disconnect
+            </button>
           </div>
         </div>
       </div>
@@ -157,6 +227,13 @@ const WearablesSettings = () => {
             >
               {loading ? "Syncing..." : "Sync Now"}
             </button>
+            <button
+              onClick={disconnectStrava}
+              disabled={loading}
+              className="px-6 py-3 bg-white text-red-600 border-2 border-red-600 rounded-lg hover:bg-red-50 font-semibold disabled:bg-gray-400 disabled:text-white disabled:border-gray-400"
+            >
+              Disconnect
+            </button>
           </div>
         </div>
       </div>
@@ -183,6 +260,13 @@ const WearablesSettings = () => {
               className="px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 font-semibold disabled:bg-gray-400"
             >
               {loading ? "Syncing..." : "Sync Now"}
+            </button>
+            <button
+              onClick={disconnectWhoop}
+              disabled={loading}
+              className="px-6 py-3 bg-white text-red-600 border-2 border-red-600 rounded-lg hover:bg-red-50 font-semibold disabled:bg-gray-400 disabled:text-white disabled:border-gray-400"
+            >
+              Disconnect
             </button>
           </div>
         </div>
