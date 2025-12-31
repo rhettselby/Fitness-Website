@@ -195,7 +195,7 @@ const ProfilePage = () => {
               <p className="text-gray-700">
                 <span className="font-semibold">Birthday:</span>{" "}
                 {profile.birthday
-                  ? new Date(profile.birthday).toLocaleDateString()
+                  ? new Date(profile.birthday + 'T00:00:00').toLocaleDateString()
                   : <span className="text-gray-400 italic">Not set</span>}
               </p>
             </div>
