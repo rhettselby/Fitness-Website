@@ -20,13 +20,13 @@ const Home = ({ setSelectedPage }: Props) => {
   return (
     <section
       id="home"
-      className="gap-16 bg-gray-20 py-10 md:h-full md:pb-0"
+      className="bg-gray-20 py-10 md:h-full md:pb-0"
     >
       <motion.div
-        className="md:flex mx-auto w-5/6 items-center justify-center md:h-5/6"
+        className="md:flex mx-auto w-11/12 items-center justify-center md:h-5/6"
         onViewportEnter={() => setSelectedPage(SelectedPage.Home)}
       >
-        {/* ================= LEFT SIDE (UNCHANGED) ================= */}
+        {/* ================= LEFT SIDE ================= */}
         <div className="z-10 mt-32 md:basis-2/5">
           <motion.div
             className="md:-mt-20"
@@ -82,35 +82,41 @@ const Home = ({ setSelectedPage }: Props) => {
           </motion.div>
         </div>
 
-        {/* ================= RIGHT SIDE (ATHLETIC HERO) ================= */}
-        <div className="relative flex basis-3/5 flex-col items-center justify-center md:flex-row md:gap-10 md:z-10 md:ml-10 md:mt-16">
+        {/* ================= RIGHT SIDE — MASSIVE ATHLETIC HERO ================= */}
+        <div className="relative flex flex-col items-center justify-center md:flex-row md:gap-24 md:ml-16 md:mt-16 md:basis-3/5">
           
-          {/* Primary Image — Rhett (Soccer) */}
+          {/* Rhett — PRIMARY (VERY LARGE) */}
           <motion.img
             src={RhettSoccer}
             alt="Rhett playing soccer"
-            className="w-full h-auto md:w-[55%]"
-            style={{ maxWidth: "1150px" }}
-            initial={{ opacity: 0, y: 40 }}
+            className="w-full h-auto"
+            style={{
+              maxWidth: "1800px",
+              transform: "scale(1.4)",
+            }}
+            initial={{ opacity: 0, y: 80 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 1.4, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
             onError={(e) => {
               console.error("Failed to load RhettSoccer:", RhettSoccer);
               e.currentTarget.style.display = "none";
             }}
           />
 
-          {/* Secondary Image — Kate (Tennis) */}
+          {/* Kate — SECONDARY (ALSO LARGE, OFFSET) */}
           <motion.img
             src={KateTennis}
             alt="Kate playing tennis"
-            className="w-full h-auto md:w-[45%] md:mt-20"
-            style={{ maxWidth: "1000px" }}
-            initial={{ opacity: 0, y: 60 }}
+            className="w-full h-auto"
+            style={{
+              maxWidth: "1600px",
+              transform: "scale(1.3)",
+            }}
+            initial={{ opacity: 0, y: 120 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 1.6, ease: "easeOut", delay: 0.2 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 1.7, ease: "easeOut", delay: 0.25 }}
             onError={(e) => {
               console.error("Failed to load KateTennis:", KateTennis);
               e.currentTarget.style.display = "none";
