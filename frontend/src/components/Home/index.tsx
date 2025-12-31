@@ -1,17 +1,11 @@
 import useMediaQuery from "@/hooks/useMediaQuery";
 import ActionButton from "@/shared/ActionButton";
 import { SelectedPage } from "@/shared/types";
-import HomePageText from "@/assets/HomePageText.png";
-import HomePageGraphic from "@/assets/HomePageGraphic.png";
-import SponsorRedBull from "@/assets/SponsorRedBull.png";
-import SponsorForbes from "@/assets/SponsorForbes.png";
-import SponsorFortune from "@/assets/SponsorFortune.png";
 import AnchorLink from "react-anchor-link-smooth-scroll";
 import { motion } from "framer-motion";
-import { useEffect } from "react";
-import { API_URL } from "@/lib/config";
 import SoccerPic from "@/assets/SoccerImage.png"
 import imsoccer from "@/assets/IMSOCCER.png"
+import RhettLogo from "@/assets/RhettLogo.png"
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
@@ -51,7 +45,7 @@ const Home = ({ setSelectedPage }: Props) => {
                   src={imsoccer}
                   className="w-full max-w-md"
                   onError={(e) => {
-                    console.error("Failed to load HomePageText:", HomePageText);
+                    console.error("Failed to load HomePageText:", RhettLogo);
                     e.currentTarget.style.display = 'none';
                   }}
                 />
