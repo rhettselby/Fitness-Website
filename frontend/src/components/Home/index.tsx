@@ -20,7 +20,7 @@ const Home = ({ setSelectedPage }: Props) => {
   return (
     <section
       id="home"
-      className="relative bg-gray-20 py-10 md:h-full md:pb-0"
+      className="relative bg-gray-20 py-10 md:h-full md:pb-0 overflow-hidden"
     >
       <motion.div
         className="relative mx-auto w-11/12 md:flex md:h-5/6"
@@ -83,38 +83,44 @@ const Home = ({ setSelectedPage }: Props) => {
           </motion.div>
         </div>
 
-        {/* ================= RIGHT SIDE — ABSOLUTE HERO ================= */}
+        {/* ================= RIGHT SIDE — FIXED HERO ================= */}
         {isAboveMediumScreen && (
-          <div className="absolute right-0 top-1/2 z-0 flex -translate-y-1/2 items-center gap-8 pr-8">
-            
+          <div
+            className="
+              absolute right-0 top-1/2 
+              flex items-center 
+              -translate-y-1/2
+              pr-12
+              pointer-events-none
+            "
+            style={{ width: "1200px" }} // 👈 controls overall hero width
+          >
             {/* Rhett — PRIMARY */}
             <motion.img
               src={RhettSoccer}
               alt="Rhett playing soccer"
-              className="h-auto"
+              className="relative z-10"
               style={{
-                maxWidth: "1800px",
-                transform: "scale(1.4)",
+                width: "650px",
               }}
-              initial={{ opacity: 0, y: 80 }}
+              initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
+              transition={{ duration: 1.4, ease: "easeOut" }}
             />
 
-            {/* Kate — SECONDARY (OVERLAP) */}
+            {/* Kate — SECONDARY */}
             <motion.img
               src={KateTennis}
               alt="Kate playing tennis"
-              className="-ml-24 h-auto"
+              className="relative -ml-32"
               style={{
-                maxWidth: "1600px",
-                transform: "scale(1.3)",
+                width: "520px",
               }}
-              initial={{ opacity: 0, y: 120 }}
+              initial={{ opacity: 0, y: 90 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 1.7, ease: "easeOut", delay: 0.25 }}
+              transition={{ duration: 1.6, ease: "easeOut", delay: 0.2 }}
             />
           </div>
         )}
