@@ -5,6 +5,7 @@ import ContactUsPageGraphic from "@/assets/ContactUsPageGraphic.png"
 import HText from "@/shared/HText";
 import { API_URL } from "@/lib/config";
 import { TokenService } from "@/utils/auth";
+import { useNavigate } from "react-router-dom";
 
 type FormValues = {
     username: string;
@@ -18,6 +19,7 @@ type Props = {
 
 const ContactUs = ({setSelectedPage}: Props) => {
     const inputStyles = `mb-5 w-full rounded-lg bg-primary-300 px-5 py-3 placeholder-white text-black`;
+    const navigate = useNavigate();
 
     const {
         register,
@@ -46,8 +48,8 @@ const ContactUs = ({setSelectedPage}: Props) => {
             if (result.success) {
                 TokenService.setTokens(result.access, result.refresh);
                 TokenService.setUser(result.user);
-                // Reload page to update navbar with login status
-                window.location.reload();
+                //redirect to profile page
+                navigate("/profile")
             } else {
                 alert(result.error || "Registration failed");
             }
