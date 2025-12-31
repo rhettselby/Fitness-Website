@@ -91,9 +91,9 @@ const Home = ({ setSelectedPage }: Props) => {
               flex items-center 
               -translate-y-1/2
               pr-12
-              pointer-events-none
+              space-x-0
             "
-            style={{ width: "1200px" }} // 👈 controls overall hero width
+            style={{ width: "100%" }} 
           >
             {/* Rhett — PRIMARY */}
             <motion.img
@@ -101,7 +101,9 @@ const Home = ({ setSelectedPage }: Props) => {
               alt="Rhett playing soccer"
               className="relative z-10"
               style={{
-                width: "650px",
+                width: "50%",
+                maxWidth: "800px",
+                marginRight: "-10%"
               }}
               initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -113,9 +115,11 @@ const Home = ({ setSelectedPage }: Props) => {
             <motion.img
               src={KateTennis}
               alt="Kate playing tennis"
-              className="relative -ml-32"
+              className="relative"
               style={{
-                width: "520px",
+                width: "50%",
+                maxWidth: "650px",
+                marginLeft: "-10%"
               }}
               initial={{ opacity: 0, y: 90 }}
               whileInView={{ opacity: 1, y: 0 }}
