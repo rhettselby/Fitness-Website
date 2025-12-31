@@ -7,7 +7,7 @@ import {motion } from "framer-motion"
 import {HText} from "@/shared/HText"
 import Benefit from "./Benefit";
 import ActionButton from "@/shared/ActionButton";
-import BenefitsPageGraphic from "@/assets/BenefitsPageGraphic.png";
+import ImSoccer from "@/assets/IMSOCCER.png";
 
 const benefits: Array<BenefitType> = [
     { icon: <LinkIcon className="h-6 w-6" />,
@@ -92,9 +92,9 @@ const Benefits = ({setSelectedPage }: Props) => {
                             <img 
                                 className="w-full max-w-md"
                                 alt="benefits-page-graphic"
-                                src={BenefitsPageGraphic}
+                                src={ImSoccer}
                                 onError={(e) => {
-                                    console.error("Failed to load BenefitsPageGraphic:", BenefitsPageGraphic);
+                                    console.error("Failed to load BenefitsPageGraphic:", ImSoccer);
                                     e.currentTarget.style.display = 'none';
                                 }}
                             />
