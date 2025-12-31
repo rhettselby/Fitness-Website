@@ -17,18 +17,6 @@ type Props = {
 const Home = ({ setSelectedPage }: Props) => {
   const isAboveMediumScreen = useMediaQuery("(min-width:1060px)");
 
-  /* ================= SIZE TUNING ================= */
-  const RHETT_WIDTH = 1120;
-  const RHETT_HEIGHT = 860;
-
-  const KATE_WIDTH = 760;
-  const KATE_HEIGHT = 620;
-
-  /* ================= MOTION CALIBRATION ================= */
-  const FINAL_KATE_X = -220;  // LEFT
-  const FINAL_RHETT_X = 220;  // RIGHT
-  const MOTION_DISTANCE = 260; // equal travel
-
   return (
     <section
       id="home"
@@ -38,7 +26,7 @@ const Home = ({ setSelectedPage }: Props) => {
         className="relative mx-auto w-11/12 md:flex md:h-5/6"
         onViewportEnter={() => setSelectedPage(SelectedPage.Home)}
       >
-        {/* ================= LEFT CONTENT ================= */}
+        {/* ================= LEFT SIDE ================= */}
         <div className="z-10 mt-32 md:basis-2/5">
           <motion.div
             className="md:-mt-20"
@@ -58,7 +46,6 @@ const Home = ({ setSelectedPage }: Props) => {
                   src={imsoccer}
                   className="w-full max-w-md"
                   onError={(e) => {
-                    console.error("Failed to load HomePageText:", RhettLogo);
                     e.currentTarget.style.display = "none";
                   }}
                 />
@@ -106,56 +93,28 @@ const Home = ({ setSelectedPage }: Props) => {
               pr-12
             "
           >
-            {/* Kate — LEFT, smaller */}
+            {/* Kate — LEFT, SMALLER */}
             <motion.img
               src={KateTennis}
               alt="Kate playing tennis"
               className="absolute z-10"
-              style={{
-                width: KATE_WIDTH,
-                height: KATE_HEIGHT,
-                objectFit: "contain",
-              }}
-              initial={{
-                opacity: 0,
-                x: FINAL_KATE_X - MOTION_DISTANCE,
-                y: 120,
-              }}
-              whileInView={{
-                opacity: 1,
-                x: FINAL_KATE_X,
-                y: 0,
-              }}
+              style={{ objectFit: "contain" }}
+              initial={{ opacity: 0, x: -140, y: 120, scale: 0.78 }}
+              whileInView={{ opacity: 1, x: -90, y: 0, scale: 0.78 }}
               viewport={{ once: true }}
-              transition={{ duration: 1.6, ease: "easeOut" }}
+              transition={{ duration: 1.4, ease: "easeOut" }}
             />
 
-            {/* Rhett — RIGHT, larger (hero) */}
+            {/* Rhett — RIGHT, LARGER (TRUE HERO) */}
             <motion.img
               src={RhettSoccer}
               alt="Rhett playing soccer"
               className="absolute z-20"
-              style={{
-                width: RHETT_WIDTH,
-                height: RHETT_HEIGHT,
-                objectFit: "contain",
-              }}
-              initial={{
-                opacity: 0,
-                x: FINAL_RHETT_X + MOTION_DISTANCE,
-                y: 140,
-              }}
-              whileInView={{
-                opacity: 1,
-                x: FINAL_RHETT_X,
-                y: 0,
-              }}
+              style={{ objectFit: "contain" }}
+              initial={{ opacity: 0, x: 140, y: 140, scale: 1.15 }}
+              whileInView={{ opacity: 1, x: 90, y: 0, scale: 1.15 }}
               viewport={{ once: true }}
-              transition={{
-                duration: 1.6,
-                ease: "easeOut",
-                delay: 0.15,
-              }}
+              transition={{ duration: 1.4, ease: "easeOut", delay: 0.1 }}
             />
           </div>
         )}
