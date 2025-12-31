@@ -88,12 +88,12 @@ const Home = ({ setSelectedPage }: Props) => {
           <div
             className="
               absolute right-0 top-1/2 
-              flex items-center 
+              flex justify-end items-center 
               -translate-y-1/2
               pr-12
-              space-x-0
+              space-x-[-10rem]
+              w-1/2
             "
-            style={{ width: "100%" }} 
           >
             {/* Rhett — PRIMARY */}
             <motion.img
@@ -101,9 +101,9 @@ const Home = ({ setSelectedPage }: Props) => {
               alt="Rhett playing soccer"
               className="relative z-10"
               style={{
-                width: "50%",
-                maxWidth: "800px",
-                marginRight: "-10%"
+                width: "700px",
+                maxHeight: "600px",
+                objectFit: "contain"
               }}
               initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -117,9 +117,9 @@ const Home = ({ setSelectedPage }: Props) => {
               alt="Kate playing tennis"
               className="relative"
               style={{
-                width: "50%",
-                maxWidth: "650px",
-                marginLeft: "-10%"
+                width: "600px",
+                maxHeight: "500px",
+                objectFit: "contain"
               }}
               initial={{ opacity: 0, y: 90 }}
               whileInView={{ opacity: 1, y: 0 }}
