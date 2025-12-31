@@ -111,7 +111,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
               {logoError ? (
                 <img 
                   alt="Logo Placeholder" 
-                  src={Logo_Placeholder} 
+                  src={RhettLogo} 
                   className="h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity"
                   style={{ backgroundColor: 'transparent' }}
                 />
