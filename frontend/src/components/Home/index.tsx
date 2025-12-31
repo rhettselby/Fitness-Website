@@ -17,12 +17,18 @@ type Props = {
 const Home = ({ setSelectedPage }: Props) => {
   const isAboveMediumScreen = useMediaQuery("(min-width:1060px)");
 
-  // 🎯 Optical size compensation
-  const RHETT_WIDTH = 980;
-  const RHETT_HEIGHT = 760;
+  // 🔥 Optical sizing (intentional imbalance)
+  const RHETT_WIDTH = 1040;
+  const RHETT_HEIGHT = 800;
 
-  const KATE_WIDTH = 880;
-  const KATE_HEIGHT = 700;
+  const KATE_WIDTH = 820;
+  const KATE_HEIGHT = 660;
+
+  // 🎯 Final spacing + equal motion distance
+  const FINAL_RHETT_X = -60;
+  const FINAL_KATE_X = 140;
+
+  const MOTION_DISTANCE = 260; // both travel exactly this amount
 
   return (
     <section
@@ -101,7 +107,7 @@ const Home = ({ setSelectedPage }: Props) => {
               pr-12
             "
           >
-            {/* Rhett — START near center-right → slide slightly LEFT */}
+            {/* Rhett — larger, equal travel */}
             <motion.img
               src={RhettSoccer}
               alt="Rhett playing soccer"
@@ -111,13 +117,21 @@ const Home = ({ setSelectedPage }: Props) => {
                 height: RHETT_HEIGHT,
                 objectFit: "contain",
               }}
-              initial={{ opacity: 0, x: -120, y: 140 }}
-              whileInView={{ opacity: 1, x: -140, y: 0 }}
+              initial={{
+                opacity: 0,
+                x: FINAL_RHETT_X - MOTION_DISTANCE,
+                y: 140,
+              }}
+              whileInView={{
+                opacity: 1,
+                x: FINAL_RHETT_X,
+                y: 0,
+              }}
               viewport={{ once: true }}
               transition={{ duration: 1.6, ease: "easeOut" }}
             />
 
-            {/* Kate — START far right → slide LEFT */}
+            {/* Kate — smaller, equal travel */}
             <motion.img
               src={KateTennis}
               alt="Kate playing tennis"
@@ -127,10 +141,22 @@ const Home = ({ setSelectedPage }: Props) => {
                 height: KATE_HEIGHT,
                 objectFit: "contain",
               }}
-              initial={{ opacity: 0, x: 520, y: 120 }}
-              whileInView={{ opacity: 1, x: 80, y: 0 }}
+              initial={{
+                opacity: 0,
+                x: FINAL_KATE_X + MOTION_DISTANCE,
+                y: 120,
+              }}
+              whileInView={{
+                opacity: 1,
+                x: FINAL_KATE_X,
+                y: 0,
+              }}
               viewport={{ once: true }}
-              transition={{ duration: 1.6, ease: "easeOut", delay: 0.15 }}
+              transition={{
+                duration: 1.6,
+                ease: "easeOut",
+                delay: 0.15,
+              }}
             />
           </div>
         )}
