@@ -4,8 +4,7 @@ import { SelectedPage } from "@/shared/types";
 import AnchorLink from "react-anchor-link-smooth-scroll";
 import { motion } from "framer-motion";
 
-import imsoccer from "@/assets/IMSOCCER.png";
-import RhettLogo from "@/assets/RhettLogo.png";
+import runner from "@/assets/runner.png";
 
 import RhettSoccer from "@/assets/RhettSoccer.png";
 import KateTennis from "@/assets/KateTennis.png";
@@ -43,7 +42,7 @@ const Home = ({ setSelectedPage }: Props) => {
               <div className="before:absolute before:-top-20 before:-left-20 before:z-[-1]">
                 <img
                   alt="home-page-text"
-                  src={imsoccer}
+                  src={runner}
                   className="w-full max-w-md"
                   onError={(e) => {
                     e.currentTarget.style.display = "none";
