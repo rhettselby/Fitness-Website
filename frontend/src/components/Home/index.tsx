@@ -20,13 +20,12 @@ const Home = ({ setSelectedPage }: Props) => {
       className="relative bg-gray-20 py-10 md:h-full md:pb-0 overflow-hidden"
     >
       <motion.div
-        className="relative mx-auto w-11/12 md:flex md:h-5/6"
+        className="relative mx-auto w-11/12 md:flex md:h-5/6 md:items-center"
         onViewportEnter={() => setSelectedPage(SelectedPage.Home)}
       >
         {/* ================= LEFT SIDE ================= */}
-        <div className="z-10 mt-32 md:basis-2/5">
+        <div className="z-10 md:basis-2/5 flex flex-col items-center justify-center text-center">
           <motion.div
-            className="md:-mt-20"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
@@ -37,7 +36,7 @@ const Home = ({ setSelectedPage }: Props) => {
             }}
           >
             {/* Main Welcome Text - Large and Prominent */}
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-relaxed mb-6">
               Welcome to<br />Rhett's Fitness<br />Community
             </h1>
 
