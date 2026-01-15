@@ -4,8 +4,6 @@ import { SelectedPage } from "@/shared/types";
 import AnchorLink from "react-anchor-link-smooth-scroll";
 import { motion } from "framer-motion";
 
-import runner from "@/assets/runner.png";
-
 import RhettSoccer from "@/assets/RhettSoccer.png";
 import KateTennis from "@/assets/KateTennis.png";
 
@@ -38,21 +36,14 @@ const Home = ({ setSelectedPage }: Props) => {
               visible: { opacity: 1, x: 0 },
             }}
           >
-            <div className="relative">
-              <div className="before:absolute before:-top-20 before:-left-20 before:z-[-1]">
-                <img
-                  alt="home-page-text"
-                  src={runner}
-                  className="w-full max-w-md"
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                  }}
-                />
-              </div>
-            </div>
+            {/* Main Welcome Text - Large and Prominent */}
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6">
+              Welcome to<br />Rhett's Fitness<br />Community
+            </h1>
 
-            <p className="mt-8 text-sm text-white">
-              Welcome to Rhett's Fitness Community. Log your workouts every day!
+            {/* Subtext - Larger but smaller than welcome */}
+            <p className="text-2xl md:text-3xl text-white font-medium">
+              Log your workouts every day!
             </p>
           </motion.div>
 
@@ -72,7 +63,7 @@ const Home = ({ setSelectedPage }: Props) => {
             </ActionButton>
 
             <AnchorLink
-              className="text-sm font-bold text-primary-500 underline"
+              className="text-base md:text-lg font-bold text-primary-500 underline hover:text-primary-300 transition"
               onClick={() => setSelectedPage(SelectedPage.ContactUs)}
               href={`#${SelectedPage.ContactUs}`}
             >
