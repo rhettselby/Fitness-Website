@@ -40,11 +40,25 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     const date = new Date(dateString);
     const now = new Date();
     const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-    
+    const timeString = date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+
     if (diffInHours < 1) return "Just now";
-    if (diffInHours < 24) return `${diffInHours}h ago`;
-    if (diffInHours < 48) return "Yesterday";
-    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    if (diffInHours < 24) return `${diffInHours}h ago • ${timeString}`;
+    
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (date.toDateString() === yesterday.toDateString()){
+      return `Yesterday • ${timeString}`
+    }
+    
+    const formatDateString = date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+    return `${formatDateString} • ${timeString}`
   };
 
   return (
