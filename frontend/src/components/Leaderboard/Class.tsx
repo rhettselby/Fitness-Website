@@ -6,16 +6,24 @@ type Props = {
     image: string;
     bio?: string | null;
     location?: string | null;
+    rank?: number;
 }
 
-const Class = ({name, description, image, bio, location}: Props ) => {
+const Class = ({name, description, image, bio, location, rank}: Props ) => {
+
+    const getEmoji = () => {
+        if (rank === 1) return "🥇"; // Gold medal
+        if (rank === 2) return "🥈"; // Silver medal
+        if (rank === 3) return "🥉"; // Bronze medal
+        return "🏋️"; // Default for 4th and 5th
+    };
 
     return (
         <li className="relative inline-block h-[220px] w-[220px]">
             {/* Main card display */}
             <div className="flex flex-col items-center justify-center h-[220px] w-[220px] bg-gray-200 border-2 border-primary-300 rounded-lg shadow-lg">
                 <div className="text-4xl font-bold text-primary-500 mb-2">
-                    🏋️
+                    {getEmoji()}
                 </div>
                 <p className="text-base font-bold text-gray-800 mb-2 px-3 text-center">
                     {name}
