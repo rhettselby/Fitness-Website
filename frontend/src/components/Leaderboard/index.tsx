@@ -56,6 +56,8 @@ const Leaderboard = ({ setSelectedPage }: Props) => {
       });
   }, []);
 
+
+  
   return (
     <section id="leaderboard" className="w-full bg-primary-100 py-20">
       <div className="max-w-7xl mx-auto px-4">
@@ -102,6 +104,7 @@ const Leaderboard = ({ setSelectedPage }: Props) => {
                       image=""
                       bio={user.bio}
                       location={user.location}
+                      rank={index + 1}
                     />
                   ))}
                 </ul>
