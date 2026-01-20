@@ -59,7 +59,6 @@ const Login = ({ onLoginSuccess, onClose }: Props) => {
                 TokenService.setTokens(result.access, result.refresh);
                 TokenService.setUser(result.user);
 
-                alert("Login Successful");
                 reset();
                 window.location.reload();
 
