@@ -14,12 +14,19 @@ const AddWorkoutPage = () => {
   const [duration, setDuration] = useState<number | "">("");
   const [error, setError] = useState<string | null>(null);
   const [showTime, setShowTime] = useState(false);
-  const [dateTime, setDateTime] = useState(
-  new Date().toISOString().slice(0, 16)
+
+  const now = new Date();
+  
+  const [date, setDate] = useState(
+  now.toISOString().slice(0, 10) // YYYY-MM-DD
 );
+  const [time, setTime] = useState(
+  now.toTimeString().slice(0, 5) // HH:MM
+);
+
   const navigate = useNavigate();
 
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     
     e.preventDefault();
@@ -34,6 +41,12 @@ const AddWorkoutPage = () => {
     const formData = new URLSearchParams();
     
     formData.append("activity", activity.trim());
+    
+    const dateTime = time
+      ? `${date}T${time}`
+      : `${date}T00:00`;
+
+    formData.append("date", dateTime);
 
     if (type === "gym") {
       url = `${API_URL}/api/fitness/api/add/gym-jwt/`;
