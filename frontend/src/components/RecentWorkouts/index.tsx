@@ -251,7 +251,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                 </h2>
                 <button 
                   onClick={() => setSelectedWorkout(null)}
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-gray-900 hover:text-gray-900"
                 >
                   <XMarkIcon className="h-6 w-6" />
                 </button>
@@ -260,13 +260,13 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
               {/* Comments List */}
               <div className="flex-grow overflow-y-auto p-4">
                 {commentLoading ? (
-                  <p className="text-center text-gray-500">Loading comments...</p>
+                  <p className="text-center text-gray-900">Loading comments...</p>
                 ) : commentError ? (
                   <div className="text-center text-red-500">
                     <p>{commentError}</p>
                   </div>
                 ) : comments.length === 0 ? (
-                  <p className="text-center text-gray-500">No comments yet</p>
+                  <p className="text-center text-gray-900">No comments yet</p>
                 ) : (
                   <div className="space-y-4">
                     {comments.map((comment) => (
@@ -278,11 +278,11 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                           <span className="font-bold text-primary-500">
                             @{comment.user.username}
                           </span>
-                          <span className="text-sm text-gray-500">
+                          <span className="text-sm text-gray-900">
                             {formatDate(comment.created_at)}
                           </span>
                         </div>
-                        <p className="text-gray-800">{comment.text}</p>
+                        <p className="text-gray-900">{comment.text}</p>
                       </div>
                     ))}
                   </div>
