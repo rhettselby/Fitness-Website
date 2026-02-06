@@ -11,6 +11,7 @@ type Props = {
 };
 
 type Workout = {
+  comment_count: number;
   id: number;
   type: "cardio" | "gym";
   activity: string;
@@ -219,6 +220,12 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                         title="View Comments"
                       >
                         <ChatBubbleBottomCenterTextIcon className="h-6 w-6" />
+                          
+                          {workout.comment_count > 0 && (
+                            <span className="absolute -top-1 -right-1 bg-primary-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                              {workout.comment_count > 9 ? "9+" : workout.comment_count}
+                            </span>
+                          )}
                       </button>
                     </div>
                   </motion.div>
