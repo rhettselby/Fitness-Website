@@ -180,29 +180,29 @@ const AddWorkoutPage = () => {
               )}
 
               <div>
-  {!showTime ? (
-    <button
-      type="button"
-      onClick={() => setShowTime(true)}
-      className="text-sm text-gray-500 hover:text-primary-500"
-    >
-      ⏱ Edit time (optional)
-    </button>
-  ) : (
-    <div className="mt-2">
-      <label className="block text-gray-600 font-medium mb-1 text-sm">
-        Date & Time
-      </label>
-      <input
-        type="datetime-local"
-        value={dateTime}
-        onChange={(e) => setDateTime(e.target.value)}
-        max={new Date().toISOString().slice(0, 16)}
-        className="w-full border rounded-lg px-4 py-2 text-black"
-      />
-    </div>
-  )}
-</div>
+                {!showTime ? (
+                <button
+                  type="button"
+                  onClick={() => setShowTime(true)}
+                  className="text-sm text-black hover:text-primary-500"
+                >
+                ⏱ Edit time (optional)
+                </button>
+                  ) : (
+                  <div className="mt-2">
+                    <label className="block text-black font-medium mb-1 text-sm">
+                      Date & Time
+                    </label>
+                    <input
+                      type="datetime-local"
+                      value={dateTime}
+                      onChange={(e) => setDateTime(e.target.value)}
+                      max={new Date().toISOString().slice(0, 16)}
+                      className="w-full border rounded-lg px-4 py-2 text-black"
+                    />
+                  </div>
+                  )}
+              </div>
 
               {error && (
                 <p className="text-red-500 text-center">{error}</p>
