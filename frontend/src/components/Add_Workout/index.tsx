@@ -13,7 +13,11 @@ const AddWorkoutPage = () => {
   const [activity, setActivity] = useState("");
   const [duration, setDuration] = useState<number | "">("");
   const [error, setError] = useState<string | null>(null);
+  const [dateTime, setDateTime] = useState(
+  new Date().toISOString().slice(0, 16)
+);
   const navigate = useNavigate();
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     
@@ -173,6 +177,23 @@ const AddWorkoutPage = () => {
                   />
                 </div>
               )}
+
+              <div>
+                <label className="block text-gray-700 font-semibold mb-1">
+                  Date & Time
+                </label>
+                <input
+                  type="datetime-local"
+                  value={dateTime}
+                  onChange={(e) => setDateTime(e.target.value)}
+                  max={new Date().toISOString().slice(0, 16)}
+                  className="w-full border rounded-lg px-4 py-2 text-black"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Defaults to now. Change if you worked out earlier.
+                </p>
+              </div>
+
 
               {error && (
                 <p className="text-red-500 text-center">{error}</p>
