@@ -216,7 +216,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                       </div>
                       <button 
                         onClick={() => handleCommentClick(workout)}
-                        className="text-primary-500 hover:text-primary-700 transition-colors"
+                        className="relative text-primary-500 hover:text-primary-700 transition-colors"
                         title="View Comments"
                       >
                         <ChatBubbleBottomCenterTextIcon className="h-6 w-6" />
