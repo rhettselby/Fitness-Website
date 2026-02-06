@@ -57,7 +57,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     setCommentLoading(true);
     setCommentError(null);
     try {
-      const response = await fetch(`${API_URL}/fitness/api/comments/`);
+      const response = await fetch(`${API_URL}/fitness/api/comments/${workoutType}/${workoutId}/`);
       const data = await response.json();
       
       if (data.success) {
