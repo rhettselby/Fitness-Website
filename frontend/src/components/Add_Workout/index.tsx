@@ -197,7 +197,7 @@ const AddWorkoutPage = () => {
               <button
                 type="button"
                 onClick={() => setShowTime(true)}
-                className="text-sm text-gray-500 hover:text-primary-500"
+                className="text-sm text-black hover:text-primary-500"
               >
               ⏱ Edit time (optional)
               </button>
