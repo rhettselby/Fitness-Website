@@ -216,13 +216,13 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                       </div>
                       <button 
                         onClick={() => handleCommentClick(workout)}
-                        className="relative text-primary-500 hover:text-primary-700 transition-colors"
+                        className="relative text-primary-500 hover:text-primary-700 transition-colors group"
                         title="View Comments"
                       >
                         <ChatBubbleBottomCenterTextIcon className="h-6 w-6" />
                           
                           {workout.comment_count > 0 && (
-                            <span className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-primary-500/90 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                            <span className="absolute group-hover:scale-110 top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-primary-500/90 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                               {workout.comment_count > 9 ? "9+" : workout.comment_count}
                             </span>
                           )}
