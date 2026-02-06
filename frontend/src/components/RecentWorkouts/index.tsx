@@ -233,7 +233,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
       <AnimatePresence>
         {selectedWorkout && (
           <motion.div 
-            className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+            className="fixed inset-0 bg-white bg-opacity-50 z-50 flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -272,7 +272,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                     {comments.map((comment) => (
                       <div 
                         key={comment.id} 
-                        className="bg-gray-100 p-3 rounded-lg"
+                        className="bg-white p-3 rounded-lg"
                       >
                         <div className="flex justify-between items-center mb-2">
                           <span className="font-bold text-primary-500">
