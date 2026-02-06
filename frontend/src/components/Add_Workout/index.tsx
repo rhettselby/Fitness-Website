@@ -136,14 +136,14 @@ const AddWorkoutPage = () => {
 
               <button
                 className="px-6 py-3 bg-secondary-500 text-white rounded-lg text-lg font-semibold hover:bg-secondary-600 transition"
-                onClick={() => setType("gym")}
+                onClick={() => {setType("gym"); setShowTime(false);}}
               >
                 💪 Gym
               </button>
 
               <button
                 className="px-6 py-3 bg-accent-500 text-white rounded-lg text-lg font-semibold hover:bg-accent-600 transition"
-                onClick={() => setType("cardio")}
+                onClick={() => {setType("cardio"); setShowTime(false);}}
               >
                 🚴 Cardio
               </button>
@@ -193,51 +193,51 @@ const AddWorkoutPage = () => {
               )}
 
              <div>
-  {!showTime ? (
-    <button
-      type="button"
-      onClick={() => setShowTime(true)}
-      className="text-sm text-gray-500 hover:text-primary-500"
-    >
-      ⏱ Edit time (optional)
-    </button>
-  ) : (
-    <div className="mt-3 space-y-3">
-      <div>
-        <label className="block text-gray-600 font-medium mb-1 text-sm">
-          Date
-        </label>
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          max={new Date().toISOString().slice(0, 10)}
-          className="w-full border rounded-lg px-4 py-2 text-black"
-        />
-      </div>
+              {!showTime ? (
+              <button
+                type="button"
+                onClick={() => setShowTime(true)}
+                className="text-sm text-gray-500 hover:text-primary-500"
+              >
+              ⏱ Edit time (optional)
+              </button>
+                ) : (
+                <div className="mt-3 space-y-3">
+                  <div>
+                    <label className="block text-gray-600 font-medium mb-1 text-sm">
+                      Date
+                    </label>
+                      <input
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        max={new Date().toISOString().slice(0, 10)}
+                        className="w-full border rounded-lg px-4 py-2 text-black"
+                      />
+                    </div>
 
-      <div>
-        <label className="block text-gray-600 font-medium mb-1 text-sm">
-          Time
-        </label>
-        <input
-          type="time"
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
-          className="w-full border rounded-lg px-4 py-2 text-black"
-        />
-      </div>
+                  <div>
+                    <label className="block text-gray-600 font-medium mb-1 text-sm">
+                      Time
+                   </label>
+                    <input
+                      type="time"
+                      value={time}
+                      onChange={(e) => setTime(e.target.value)}
+                      className="w-full border rounded-lg px-4 py-2 text-black"
+                    />
+                  </div>
 
-      <button
-        type="button"
-        onClick={() => setShowTime(false)}
-        className="text-xs text-gray-500 hover:text-primary-500"
-      >
-        Done
-      </button>
-    </div>
-  )}
-</div>
+               <button
+                type="button"
+                onClick={() => setShowTime(false)}
+                className="text-xs text-gray-500 hover:text-primary-500"
+                >
+                Done
+              </button>
+            </div>
+            )}
+          </div>
 
               {error && (
                 <p className="text-red-500 text-center">{error}</p>
