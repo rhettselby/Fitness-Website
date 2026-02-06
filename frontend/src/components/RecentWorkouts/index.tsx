@@ -233,7 +233,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
       <AnimatePresence>
         {selectedWorkout && (
           <motion.div 
-            className="fixed inset-0 bg-white bg-opacity-50 z-50 flex items-center justify-center"
+            className="fixed inset-0 bg-black/20 z-50 flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -246,7 +246,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
             >
               {/* Modal Header */}
               <div className="flex justify-between items-center p-4 border-b verflow-visible">
-                <h2 className="text-xl font-bold">
+                <h2 className="text-xl font-bold text-black">
                   Comments for {selectedWorkout.activity}
                 </h2>
                 <button 
@@ -306,7 +306,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                     onChange={(e) => setNewComment(e.target.value)}
                     placeholder="Write a comment (max 200 characters)..."
                     maxLength={200}
-                    className="flex-grow p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="flex-grow p-2 border rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
                   <button 
                     type="submit"
