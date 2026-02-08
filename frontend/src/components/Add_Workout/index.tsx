@@ -184,7 +184,8 @@ const AddWorkoutPage = () => {
                     type="number"
                     min="1"
                     value={duration}
-                    onChange={(e) => setDuration(Number(e.target.value))}
+                    onChange={(e) => {const value = e.target.value;
+                        setDuration(value === "" ? "" : Number(value));}}
                     required
                     className="w-full border rounded-lg px-4 py-2 text-black"
                     placeholder="E.g. 30"
