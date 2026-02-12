@@ -104,28 +104,27 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
         <div className={`${navbarBackground} ${flexBetween} mx-auto w-5/6 pr-8`}>
           <div className={`${flexBetween} w-full gap-16`}>
             {/* Left Side */}
-            {/* Left Side */}
-<button
-  onClick={() => navigate("/")}
-  className="flex flex-col leading-none text-left bg-transparent border-none cursor-pointer p-0"
->
-  <span
-    className={`font-extrabold tracking-tight ${
-      isTopOfPage ? "text-white" : "text-gray-900"
-    }`}
-    style={{ fontSize: "1.25rem" }}
-  >
-    Rhett's
-  </span>
-  <span
-    className={`font-bold tracking-wide ${
-      isTopOfPage ? "text-primary-300" : "text-primary-500"
-    }`}
-    style={{ fontSize: "1rem" }}
-  >
-    Fitness
-  </span>
-</button>
+              <button
+                onClick={() => navigate("/")}
+                  className="flex flex-col leading-none text-left bg-transparent border-none cursor-pointer p-0"
+                >
+                <span
+                  className={`font-extrabold tracking-tight ${
+                    isTopOfPage ? "text-white" : "text-gray-900"
+                  }`}
+                  style={{ fontSize: "1.25rem" }}
+                >
+                  Rhett's Fitness
+                </span>
+                <span
+                  className={`font-bold tracking-wide ${
+                    isTopOfPage ? "text-primary-300" : "text-primary-500"
+                  }`}
+                  style={{ fontSize: "1rem" }}
+                >
+                  Community
+                </span>
+              </button>
 
             {/* Right Side */}
             {isAboveMediumScreens ? (
