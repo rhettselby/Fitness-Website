@@ -104,35 +104,28 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
         <div className={`${navbarBackground} ${flexBetween} mx-auto w-5/6 pr-8`}>
           <div className={`${flexBetween} w-full gap-16`}>
             {/* Left Side */}
-            <button
-              onClick={() => navigate("/")}
-              className="flex items-center bg-transparent border-none cursor-pointer p-0"
-            >
-              {logoError ? (
-                <img 
-                  alt="Logo Placeholder" 
-                  src={RhettLogo} 
-                  className="h-12 w-auto cursor-pointer hover:opacity-80 transition-opacity"
-                  style={{ backgroundColor: 'transparent' }}
-                />
-              ) : (
-                <img 
-                  alt="Logo" 
-                  src={RhettLogo} 
-                  className="cursor-pointer hover:opacity-90 transition-opacity"
-                  style={{ 
-                    height: '50px',
-                    width: '130px',
-                    minWidth: '130px',
-                    backgroundColor: 'transparent',
-                    display: 'block',
-                    border: 'none',
-                    outline: 'none'
-                  }}
-                  onError={() => setLogoError(true)}
-                />
-              )}
-            </button>
+            {/* Left Side */}
+<button
+  onClick={() => navigate("/")}
+  className="flex flex-col leading-none text-left bg-transparent border-none cursor-pointer p-0"
+>
+  <span
+    className={`font-extrabold tracking-tight ${
+      isTopOfPage ? "text-white" : "text-gray-900"
+    }`}
+    style={{ fontSize: "1.25rem" }}
+  >
+    Rhett's
+  </span>
+  <span
+    className={`font-bold tracking-wide ${
+      isTopOfPage ? "text-primary-300" : "text-primary-500"
+    }`}
+    style={{ fontSize: "1rem" }}
+  >
+    Fitness
+  </span>
+</button>
 
             {/* Right Side */}
             {isAboveMediumScreens ? (
