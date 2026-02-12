@@ -114,7 +114,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                   }`}
                   style={{ fontSize: "1.25rem" }}
                 >
-                  Rhett's Fitness
+                  Rhett's
                 </span>
                 <span
                   className={`font-bold tracking-wide ${
@@ -122,7 +122,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                   }`}
                   style={{ fontSize: "1rem" }}
                 >
-                  Community
+                  Fitness
                 </span>
               </button>
 
