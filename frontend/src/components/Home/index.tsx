@@ -106,7 +106,7 @@ const Home = ({ setSelectedPage }: Props) => {
 
         {/* ================= HERO ATHLETES — MOBILE ================= */}
         {!isAboveMediumScreen && (
-          <div className="relative flex justify-between items-end mt-8 h-52 w-full px-6">
+          <div className="relative flex justify-center items-end mt-8 h-52 w-full gap-12">
             {/* Kate — far left */}
             <motion.img
               src={KateTennis}
