@@ -35,19 +35,17 @@ const Home = ({ setSelectedPage }: Props) => {
               visible: { opacity: 1, x: 0 },
             }}
           >
-            {/* Main Welcome Text - Large and Prominent */}
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-relaxed mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-relaxed mb-4 md:mb-6">
               Welcome to<br />Rhett's Fitness<br />Community
             </h1>
 
-            {/* Subtext - Larger but smaller than welcome */}
-            <p className="text-2xl md:text-3xl text-white font-medium">
+            <p className="text-xl sm:text-2xl md:text-3xl text-white font-medium">
               Log your workouts every day!
             </p>
           </motion.div>
 
           <motion.div
-            className="mt-8 flex items-center gap-8"
+            className="mt-6 md:mt-8 flex items-center gap-6 md:gap-8"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
@@ -71,7 +69,7 @@ const Home = ({ setSelectedPage }: Props) => {
           </motion.div>
         </div>
 
-        {/* ================= HERO ATHLETES ================= */}
+        {/* ================= HERO ATHLETES — DESKTOP ================= */}
         {isAboveMediumScreen && (
           <div
             className="
@@ -104,6 +102,35 @@ const Home = ({ setSelectedPage }: Props) => {
               whileInView={{ opacity: 1, x: 90, y: 0, scale: 1.15 }}
               viewport={{ once: true }}
               transition={{ duration: 1.4, ease: "easeOut", delay: 0.1 }}
+            />
+          </div>
+        )}
+
+        {/* ================= HERO ATHLETES — MOBILE ================= */}
+        {!isAboveMediumScreen && (
+          <div className="relative flex justify-center items-end mt-8 h-56 w-full">
+            {/* Kate — LEFT */}
+            <motion.img
+              src={KateTennis}
+              alt="Kate playing tennis"
+              className="absolute z-10 h-48 w-auto object-contain"
+              style={{ left: "8%" }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+            />
+
+            {/* Rhett — RIGHT, slightly larger */}
+            <motion.img
+              src={RhettSoccer}
+              alt="Rhett playing soccer"
+              className="absolute z-20 h-56 w-auto object-contain"
+              style={{ right: "8%" }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.2, ease: "easeOut", delay: 0.1 }}
             />
           </div>
         )}

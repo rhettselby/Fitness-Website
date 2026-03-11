@@ -1,5 +1,4 @@
 import { SelectedPage } from "@/shared/types";
-import HText from "@/shared/HText";
 import { motion } from "framer-motion";
 import Class from "./Class";
 import { useEffect, useState } from "react";
@@ -29,41 +28,31 @@ const Leaderboard = ({ setSelectedPage }: Props) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        ...(token && { "Authorization": `Bearer ${token} `}),
+        ...(token && { Authorization: `Bearer ${token}` }),
       },
     })
       .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
       })
       .then((data) => {
         if (data.leaderboard && Array.isArray(data.leaderboard)) {
-          const sortedLeaders = data.leaderboard.slice(0, 5);
-          setLeaders(sortedLeaders);
+          setLeaders(data.leaderboard.slice(0, 5));
         } else {
-          console.error("Unexpected data format:", data);
           setLeaders([]);
         }
       })
-      .catch((error) => {
-        console.error("Error fetching leaderboard:", error);
-        setLeaders([]);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .catch(() => setLeaders([])
+      )
+      .finally(() => setLoading(false));
   }, []);
 
-
-  
   return (
-    <section id="leaderboard" className="w-full bg-primary-100 py-20">
+    <section id="leaderboard" className="w-full bg-primary-100 py-16 md:py-20">
       <div className="max-w-7xl mx-auto px-4">
-        <motion.div
-          onViewportEnter={() => setSelectedPage(SelectedPage.Leaderboard)}
-        >
+        <motion.div onViewportEnter={() => setSelectedPage(SelectedPage.Leaderboard)}>
+
+          {/* ── Header ── */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -75,42 +64,64 @@ const Leaderboard = ({ setSelectedPage }: Props) => {
             }}
           >
             <div className="w-full flex flex-col items-center text-center">
-              <h1 className="basis-3/5 font-montserrat text-3xl font-bold text-gray-900">
-                  Weekly Leaderboard 🏆
+              <h1 className="font-montserrat text-2xl sm:text-3xl font-bold text-gray-900">
+                Weekly Leaderboard 🏆
               </h1>
-              <p className="py-5 text-gray-900 font-semibold">
+              <p className="py-4 md:py-5 text-gray-900 font-semibold text-sm sm:text-base">
                 The top 5 members with the most workouts this week!
               </p>
             </div>
           </motion.div>
 
-          <div className="mt-10 h-[240] overflow-x-auto overflow-y-hidden">
-            <div className="flex justify-center">
-              {loading ? (
-                <div className="flex items-center justify-center h-full">
-                  <p className="text-lg">Loading leaderboard...</p>
-                </div>
-              ) : leaders.length === 0 ? (
-                <div className="flex items-center justify-center h-full">
-                  <p className="text-lg">No workouts logged this week yet. Be the first!</p>
-                </div>
-              ) : (
-                <ul className="inline-flex whitespace-nowrap gap-3">
+          {/* ── Cards ── */}
+          <div className="mt-6 md:mt-10">
+            {loading ? (
+              <div className="flex items-center justify-center py-16">
+                <p className="text-lg">Loading leaderboard...</p>
+              </div>
+            ) : leaders.length === 0 ? (
+              <div className="flex items-center justify-center py-16">
+                <p className="text-lg text-center">
+                  No workouts logged this week yet. Be the first!
+                </p>
+              </div>
+            ) : (
+              <>
+                {/* Mobile: 2-col grid */}
+                <div className="grid grid-cols-2 gap-4 sm:hidden">
                   {leaders.map((user, index) => (
                     <Class
                       key={`${user.username}-${index}`}
                       name={`#${index + 1} ${user.username}`}
-                      description={`${user.count} workout${user.count !== 1 ? 's' : ''}`}
+                      description={`${user.count} workout${user.count !== 1 ? "s" : ""}`}
                       image=""
                       bio={user.bio}
                       location={user.location}
                       rank={index + 1}
                     />
                   ))}
-                </ul>
-              )}
-            </div>
+                </div>
+
+                {/* sm+: horizontal scroll row (original behaviour) */}
+                <div className="hidden sm:flex justify-center overflow-x-auto pb-2">
+                  <ul className="inline-flex whitespace-nowrap gap-3">
+                    {leaders.map((user, index) => (
+                      <Class
+                        key={`${user.username}-${index}`}
+                        name={`#${index + 1} ${user.username}`}
+                        description={`${user.count} workout${user.count !== 1 ? "s" : ""}`}
+                        image=""
+                        bio={user.bio}
+                        location={user.location}
+                        rank={index + 1}
+                      />
+                    ))}
+                  </ul>
+                </div>
+              </>
+            )}
           </div>
+
         </motion.div>
       </div>
     </section>

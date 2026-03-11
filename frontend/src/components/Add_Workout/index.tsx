@@ -16,19 +16,12 @@ const AddWorkoutPage = () => {
   const [showTime, setShowTime] = useState(false);
 
   const now = new Date();
-  
-  const [date, setDate] = useState(
-  now.toISOString().slice(0, 10) // YYYY-MM-DD
-);
-  const [time, setTime] = useState(
-  now.toTimeString().slice(0, 5) // HH:MM
-);
+  const [date, setDate] = useState(now.toISOString().slice(0, 10));
+  const [time, setTime] = useState(now.toTimeString().slice(0, 5));
 
   const navigate = useNavigate();
 
-
   const handleSubmit = async (e: React.FormEvent) => {
-    
     e.preventDefault();
     setError(null);
 
@@ -39,24 +32,19 @@ const AddWorkoutPage = () => {
 
     let url = `${API_URL}`;
     const formData = new URLSearchParams();
-    
     formData.append("activity", activity.trim());
-    
-    const dateTime = time
-      ? `${date}T${time}`
-      : `${date}T00:00`;
 
+    const dateTime = time ? `${date}T${time}` : `${date}T00:00`;
     formData.append("date", dateTime);
 
     if (type === "gym") {
       url = `${API_URL}/api/fitness/api/add/gym-jwt/`;
     } else if (type === "cardio") {
       url = `${API_URL}/api/fitness/api/add/cardio-jwt/`;
-      if (duration === "" || duration === null || duration === undefined || Number(duration) <= 0) {
+      if (!duration || Number(duration) <= 0) {
         setError("Please enter a valid duration (greater than 0) for cardio workouts.");
         return;
       }
-      // Convert duration to string
       formData.append("duration", String(duration));
     } else {
       setError("Please select a workout type.");
@@ -69,7 +57,7 @@ const AddWorkoutPage = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
-          ...(token && {"Authorization": `Bearer ${token}`}),
+          ...(token && { Authorization: `Bearer ${token}` }),
         },
         body: formData.toString(),
       });
@@ -78,23 +66,20 @@ const AddWorkoutPage = () => {
         let errorMessage = "Could not save workout. Please double-check your inputs.";
         try {
           const err = await response.json();
-          console.error("Error response:", err);
-          // Extract error message from response
           if (err.errors) {
-            // Handle Django form errors
-            const errorArray = Object.entries(err.errors).map(([field, messages]: [string, any]) => {
-              const fieldName = field.charAt(0).toUpperCase() + field.slice(1);
-              const msgArray = Array.isArray(messages) ? messages : [messages];
-              return `${fieldName}: ${msgArray.join(", ")}`;
-            });
-            errorMessage = errorArray.join(". ");
+            errorMessage = Object.entries(err.errors)
+              .map(([field, messages]: [string, any]) => {
+                const fieldName = field.charAt(0).toUpperCase() + field.slice(1);
+                const msgArray = Array.isArray(messages) ? messages : [messages];
+                return `${fieldName}: ${msgArray.join(", ")}`;
+              })
+              .join(". ");
           } else if (err.message) {
             errorMessage = err.message;
           } else if (err.error) {
             errorMessage = err.error;
           }
-        } catch (parseError) {
-          console.error("Failed to parse error response:", parseError);
+        } catch {
           errorMessage = `Server error: ${response.status} ${response.statusText}`;
         }
         setError(errorMessage);
@@ -121,48 +106,50 @@ const AddWorkoutPage = () => {
         setSelectedPage={setSelectedPage}
       />
 
-      <div className="pt-24 pb-16">
-        <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-10">
-          <h1 className="text-4xl font-bold text-primary-500 mb-8 text-center">
+      {/* ── Page Body ── */}
+      <div className="pt-20 pb-12 md:pt-24 md:pb-16 px-4">
+        <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6 sm:p-8 md:p-10">
+          <h1 className="text-3xl md:text-4xl font-bold text-primary-500 mb-6 md:mb-8 text-center">
             Add Workout
           </h1>
 
-          {/* Step 1: Select type */}
+          {/* ── Step 1: Select Type ── */}
           {!type && (
-            <div className="flex flex-col items-center gap-6">
-              <p className="text-lg font-medium text-gray-700">
+            <div className="flex flex-col items-center gap-4 md:gap-6">
+              <p className="text-base md:text-lg font-medium text-gray-700">
                 Choose workout type:
               </p>
 
               <button
-                className="px-6 py-3 bg-secondary-500 text-white rounded-lg text-lg font-semibold hover:bg-secondary-600 transition"
-                onClick={() => {setType("gym"); setShowTime(false);}}
+                className="w-full sm:w-auto px-6 py-4 md:py-3 bg-secondary-500 text-white rounded-lg text-lg font-semibold hover:bg-secondary-600 transition active:scale-95"
+                onClick={() => { setType("gym"); setShowTime(false); }}
               >
                 💪 Gym
               </button>
 
               <button
-                className="px-6 py-3 bg-accent-500 text-white rounded-lg text-lg font-semibold hover:bg-accent-600 transition"
-                onClick={() => {setType("cardio"); setShowTime(false);}}
+                className="w-full sm:w-auto px-6 py-4 md:py-3 bg-accent-500 text-white rounded-lg text-lg font-semibold hover:bg-accent-600 transition active:scale-95"
+                onClick={() => { setType("cardio"); setShowTime(false); }}
               >
                 🚴 Cardio
               </button>
             </div>
           )}
 
-          {/* Step 2: Form */}
+          {/* ── Step 2: Form ── */}
           {type && (
-            <form onSubmit={handleSubmit} className="space-y-6 mt-6">
+            <form onSubmit={handleSubmit} className="space-y-5 mt-4">
               <button
-                className="text-sm text-gray-500 hover:text-primary-500"
+                className="text-sm text-gray-500 hover:text-primary-500 transition"
                 onClick={() => setType(null)}
                 type="button"
               >
                 ← Change workout type
               </button>
 
+              {/* Activity */}
               <div>
-                <label className="block text-gray-700 font-semibold mb-1">
+                <label className="block text-gray-700 font-semibold mb-1 text-sm md:text-base">
                   Activity
                 </label>
                 <input
@@ -170,83 +157,87 @@ const AddWorkoutPage = () => {
                   value={activity}
                   onChange={(e) => setActivity(e.target.value)}
                   required
-                  className="w-full border rounded-lg px-4 py-2 text-black"
+                  className="w-full border rounded-lg px-4 py-3 text-black text-base"
                   placeholder="E.g. Bench Press, Running, Squats"
                 />
               </div>
 
+              {/* Duration (cardio only) */}
               {type === "cardio" && (
                 <div>
-                  <label className="block text-gray-700 font-semibold mb-1">
+                  <label className="block text-gray-700 font-semibold mb-1 text-sm md:text-base">
                     Duration (minutes)
                   </label>
                   <input
                     type="number"
                     min="1"
                     value={duration}
-                    onChange={(e) => {const value = e.target.value;
-                        setDuration(value === "" ? "" : Number(value));}}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setDuration(value === "" ? "" : Number(value));
+                    }}
                     required
-                    className="w-full border rounded-lg px-4 py-2 text-black"
+                    className="w-full border rounded-lg px-4 py-3 text-black text-base"
                     placeholder="E.g. 30"
                   />
                 </div>
               )}
 
-             <div>
-              {!showTime ? (
-              <button
-                type="button"
-                onClick={() => setShowTime(true)}
-                className="text-sm text-black hover:text-primary-500"
-              >
-              ⏱ Edit time (optional)
-              </button>
+              {/* Optional time */}
+              <div>
+                {!showTime ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowTime(true)}
+                    className="text-sm text-black hover:text-primary-500 transition py-1"
+                  >
+                    ⏱ Edit time (optional)
+                  </button>
                 ) : (
-                <div className="mt-3 space-y-3">
-                  <div>
-                    <label className="block text-gray-600 font-medium mb-1 text-sm">
-                      Date
-                    </label>
+                  <div className="mt-2 space-y-3 bg-gray-50 rounded-lg p-4">
+                    <div>
+                      <label className="block text-gray-600 font-medium mb-1 text-sm">
+                        Date
+                      </label>
                       <input
                         type="date"
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
                         max={new Date().toISOString().slice(0, 10)}
-                        className="w-full border rounded-lg px-4 py-2 text-black"
+                        className="w-full border rounded-lg px-4 py-3 text-black text-base"
                       />
                     </div>
-
-                  <div>
-                    <label className="block text-gray-600 font-medium mb-1 text-sm">
-                      Time
-                   </label>
-                    <input
-                      type="time"
-                      value={time}
-                      onChange={(e) => setTime(e.target.value)}
-                      className="w-full border rounded-lg px-4 py-2 text-black"
-                    />
+                    <div>
+                      <label className="block text-gray-600 font-medium mb-1 text-sm">
+                        Time
+                      </label>
+                      <input
+                        type="time"
+                        value={time}
+                        onChange={(e) => setTime(e.target.value)}
+                        className="w-full border rounded-lg px-4 py-3 text-black text-base"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowTime(false)}
+                      className="text-xs text-gray-500 hover:text-primary-500 transition"
+                    >
+                      Done
+                    </button>
                   </div>
+                )}
+              </div>
 
-               <button
-                type="button"
-                onClick={() => setShowTime(false)}
-                className="text-xs text-gray-500 hover:text-primary-500"
-                >
-                Done
-              </button>
-            </div>
-            )}
-          </div>
-
+              {/* Error */}
               {error && (
-                <p className="text-red-500 text-center">{error}</p>
+                <p className="text-red-500 text-sm text-center">{error}</p>
               )}
 
+              {/* Submit */}
               <button
                 type="submit"
-                className="w-full bg-primary-500 text-white py-3 rounded-lg text-lg font-semibold hover:bg-primary-600 transition"
+                className="w-full bg-primary-500 text-white py-4 md:py-3 rounded-lg text-lg font-semibold hover:bg-primary-600 transition active:scale-95"
               >
                 Save Workout
               </button>

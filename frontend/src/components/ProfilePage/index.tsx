@@ -34,20 +34,8 @@ const ProfilePage = () => {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<ProfileData | null>(null);
-
-  const [formData, setFormData] = useState<ProfileData>({
-    bio: "",
-    location: "",
-    birthday: "",
-  });
-
-  // New state for separate birthday inputs
-  const [birthdayInputs, setBirthdayInputs] = useState({
-    month: "",
-    day: "",
-    year: ""
-  });
-
+  const [formData, setFormData] = useState<ProfileData>({ bio: "", location: "", birthday: "" });
+  const [birthdayInputs, setBirthdayInputs] = useState({ month: "", day: "", year: "" });
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -66,61 +54,45 @@ const ProfilePage = () => {
 
   useEffect(() => {
     const token = TokenService.getAccessToken();
-    if (!token) {
-      navigate("/");
-      return;
-    }
+    if (!token) { navigate("/"); return; }
 
     fetch(`${API_URL}/users/api/check-auth-jwt/`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
       .then((data) => {
-        if (!data.authenticated) {
-          navigate("/");
-          return;
-        }
+        if (!data.authenticated) { navigate("/"); return; }
         fetchProfileData();
       })
-      .catch(() => {
-        setError("Failed to authenticate");
-        setLoading(false);
-      });
+      .catch(() => { setError("Failed to authenticate"); setLoading(false); });
   }, [navigate]);
 
   const fetchProfileData = async () => {
     try {
       const token = TokenService.getAccessToken();
-      if (!token) {
-        navigate("/");
-        return;
-      }
+      if (!token) { navigate("/"); return; }
 
       const res = await fetch(`${API_URL}/api/profile/profile-jwt/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
       if (!res.ok) throw new Error();
 
       const data: ProfileResponse = await res.json();
-
       setWorkouts(data.workouts);
       setUser(data.user);
       setProfile(data.profile);
-
       setFormData({
         bio: data.profile?.bio ?? "",
         location: data.profile?.location ?? "",
         birthday: data.profile?.birthday ?? "",
       });
 
-      // Populate birthday inputs if birthday exists
       if (data.profile?.birthday) {
-        const birthdayDate = new Date(data.profile.birthday);
+        const d = new Date(data.profile.birthday);
         setBirthdayInputs({
-          month: String(birthdayDate.getMonth() + 1).padStart(2, '0'),
-          day: String(birthdayDate.getDate()).padStart(2, '0'),
-          year: String(birthdayDate.getFullYear())
+          month: String(d.getMonth() + 1).padStart(2, "0"),
+          day: String(d.getDate()).padStart(2, "0"),
+          year: String(d.getFullYear()),
         });
       }
 
@@ -133,12 +105,8 @@ const ProfilePage = () => {
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Combine birthday inputs
     const { month, day, year } = birthdayInputs;
-    const formattedBirthday = month && day && year 
-      ? `${year}-${month}-${day}` 
-      : null;
+    const formattedBirthday = month && day && year ? `${year}-${month}-${day}` : null;
 
     try {
       const token = TokenService.getAccessToken();
@@ -148,15 +116,11 @@ const ProfilePage = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          ...formData,
-          birthday: formattedBirthday
-        }),
+        body: JSON.stringify({ ...formData, birthday: formattedBirthday }),
       });
 
       const data = await res.json();
       if (!data.success) throw new Error();
-
       setProfile(data.profile);
       setIsEditing(false);
     } catch {
@@ -190,117 +154,103 @@ const ProfilePage = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar isTopOfPage={false} selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
 
-      <div className="pt-24 pb-16 max-w-4xl mx-auto px-4">
-        {/* Profile Header */}
-        <div className="bg-white rounded-lg shadow-md p-8 mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-4xl font-bold text-primary-500">
+      <div className="pt-20 pb-12 md:pt-24 md:pb-16 max-w-4xl mx-auto px-4 sm:px-6">
+
+        {/* ── Profile Header ── */}
+        <div className="bg-white rounded-lg shadow-md p-5 sm:p-8 mb-6 md:mb-8">
+
+          {/* Name + Edit button */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-500">
               {user?.username}'s Profile
             </h1>
-
             <button
               onClick={() => setIsEditing(!isEditing)}
-              className="px-4 py-2 bg-secondary-500 text-white rounded-md hover:bg-secondary-600"
+              className="self-start sm:self-auto px-4 py-2 bg-secondary-500 text-white rounded-md hover:bg-secondary-600 transition text-sm sm:text-base whitespace-nowrap"
             >
               {isEditing ? "Cancel" : "Edit Profile"}
             </button>
           </div>
 
+          {/* View mode */}
           {!isEditing && profile && (
-            <div className="space-y-2">
+            <div className="space-y-2 text-sm sm:text-base">
               <p className="text-gray-700">
                 <span className="font-semibold">Bio:</span>{" "}
                 {profile.bio || <span className="text-gray-400 italic">Not set</span>}
               </p>
-
               <p className="text-gray-700">
                 <span className="font-semibold">Location:</span>{" "}
                 {profile.location || <span className="text-gray-400 italic">Not set</span>}
               </p>
-
               <p className="text-gray-700">
                 <span className="font-semibold">Birthday:</span>{" "}
                 {profile.birthday
-                  ? new Date(profile.birthday + 'T00:00:00').toLocaleDateString()
+                  ? new Date(profile.birthday + "T00:00:00").toLocaleDateString()
                   : <span className="text-gray-400 italic">Not set</span>}
               </p>
             </div>
           )}
-          
+
+          {/* Edit mode */}
           {isEditing && (
-            <form onSubmit={handleProfileUpdate} className="space-y-4">
+            <form onSubmit={handleProfileUpdate} className="space-y-4 mt-2">
               <div>
-                <label className="block font-semibold mb-1">Bio</label>
+                <label className="block font-semibold mb-1 text-sm sm:text-base">Bio</label>
                 <textarea
-                  className="w-full border rounded-md p-2 text-black"
+                  className="w-full border rounded-md p-2 text-black text-base"
                   rows={3}
                   value={formData.bio ?? ""}
-                  onChange={(e) =>
-                    setFormData({ ...formData, bio: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                 />
               </div>
 
               <div>
-                <label className="block font-semibold mb-1">Location</label>
+                <label className="block font-semibold mb-1 text-sm sm:text-base">Location</label>
                 <input
                   type="text"
-                  className="w-full border rounded-md p-2 text-black"
+                  className="w-full border rounded-md p-2 text-black text-base"
                   value={formData.location ?? ""}
-                  onChange={(e) =>
-                    setFormData({ ...formData, location: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                 />
               </div>
 
               <div>
-                <label className="block font-semibold mb-1">Birthday</label>
-                <div className="flex space-x-2">
+                <label className="block font-semibold mb-1 text-sm sm:text-base">Birthday</label>
+                <div className="grid grid-cols-3 gap-2">
                   <select
-                    className="w-1/3 border rounded-md p-2 text-black"
+                    className="border rounded-md p-2 text-black text-sm"
                     value={birthdayInputs.month}
-                    onChange={(e) => 
-                      setBirthdayInputs(prev => ({ ...prev, month: e.target.value }))
-                    }
+                    onChange={(e) => setBirthdayInputs((prev) => ({ ...prev, month: e.target.value }))}
                   >
                     <option value="">Month</option>
                     {[...Array(12)].map((_, i) => (
-                      <option key={i} value={String(i + 1).padStart(2, '0')}>
-                        {new Date(2000, i, 1).toLocaleString('default', { month: 'long' })}
+                      <option key={i} value={String(i + 1).padStart(2, "0")}>
+                        {new Date(2000, i, 1).toLocaleString("default", { month: "long" })}
                       </option>
                     ))}
                   </select>
-                  
+
                   <select
-                    className="w-1/3 border rounded-md p-2 text-black"
+                    className="border rounded-md p-2 text-black text-sm"
                     value={birthdayInputs.day}
-                    onChange={(e) => 
-                      setBirthdayInputs(prev => ({ ...prev, day: e.target.value }))
-                    }
+                    onChange={(e) => setBirthdayInputs((prev) => ({ ...prev, day: e.target.value }))}
                   >
                     <option value="">Day</option>
                     {[...Array(31)].map((_, i) => (
-                      <option key={i} value={String(i + 1).padStart(2, '0')}>
-                        {i + 1}
-                      </option>
+                      <option key={i} value={String(i + 1).padStart(2, "0")}>{i + 1}</option>
                     ))}
                   </select>
-                  
+
                   <select
-                    className="w-1/3 border rounded-md p-2 text-black"
+                    className="border rounded-md p-2 text-black text-sm"
                     value={birthdayInputs.year}
-                    onChange={(e) => 
-                      setBirthdayInputs(prev => ({ ...prev, year: e.target.value }))
-                    }
+                    onChange={(e) => setBirthdayInputs((prev) => ({ ...prev, year: e.target.value }))}
                   >
                     <option value="">Year</option>
                     {[...Array(100)].map((_, i) => {
                       const year = new Date().getFullYear() - i;
-                      return (
-                        <option key={year} value={year}>
-                          {year}
-                        </option>
-                      );
+                      return <option key={year} value={year}>{year}</option>;
                     })}
                   </select>
                 </div>
@@ -308,7 +258,7 @@ const ProfilePage = () => {
 
               <button
                 type="submit"
-                className="px-6 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600"
+                className="w-full sm:w-auto px-6 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 transition active:scale-95"
               >
                 Save Changes
               </button>
@@ -316,24 +266,24 @@ const ProfilePage = () => {
           )}
         </div>
 
-        {/* Workouts Section - remains unchanged */}
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-3xl font-bold text-primary-500 mb-6">
+        {/* ── Workouts Section ── */}
+        <div className="bg-white rounded-lg shadow-md p-5 sm:p-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-primary-500 mb-5 md:mb-6">
             Your Workouts
           </h2>
 
           {workouts.length === 0 ? (
             <p className="text-gray-500">No workouts logged yet.</p>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4">
               {workouts.map((workout) => (
                 <div
                   key={workout.id}
-                  className="border-2 border-primary-300 rounded-lg p-6 hover:bg-primary-50 transition-colors"
+                  className="border-2 border-primary-300 rounded-lg p-4 sm:p-6 hover:bg-primary-50 transition-colors"
                 >
-                  <div className="flex items-center gap-3 mb-2">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
                     <span
-                      className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                      className={`px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${
                         workout.type === "cardio"
                           ? "bg-accent-500 text-white"
                           : "bg-secondary-500 text-white"
@@ -341,20 +291,18 @@ const ProfilePage = () => {
                     >
                       {workout.type.toUpperCase()}
                     </span>
-
-                    <h3 className="text-xl font-bold text-gray-800">
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-800">
                       {workout.activity}
                     </h3>
                   </div>
 
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 text-xs sm:text-sm">
                     {formatDate(workout.date)}
                   </p>
 
                   {workout.duration && (
-                    <p className="text-gray-700 mt-2">
-                      <span className="font-semibold">Duration:</span>{" "}
-                      {workout.duration} minutes
+                    <p className="text-gray-700 mt-1 sm:mt-2 text-sm">
+                      <span className="font-semibold">Duration:</span> {workout.duration} minutes
                     </p>
                   )}
                 </div>
@@ -362,6 +310,7 @@ const ProfilePage = () => {
             </div>
           )}
         </div>
+
       </div>
     </div>
   );

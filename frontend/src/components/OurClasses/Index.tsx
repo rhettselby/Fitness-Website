@@ -1,115 +1,71 @@
-import { SelectedPage } from "@/shared/types";
-import HText from "@/shared/HText";
-import { motion } from "framer-motion";
-import Class from "./Class";
-import { useEffect, useState } from "react";
-import { API_URL } from "@/lib/config";
+import { useState } from "react";
 
-type LeaderboardUser = {
-  username: string;
-  count: number;
+type Props = {
+  name: string;
+  description?: string;
+  image: string;
   bio?: string | null;
   location?: string | null;
 };
 
-type Props = {
-  setSelectedPage: (value: SelectedPage) => void;
-};
-
-const Leaderboard = ({ setSelectedPage }: Props) => {
-  const [leaders, setLeaders] = useState<LeaderboardUser[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    setLoading(true);
-    fetch(`${API_URL}/api/leaderboard/`, {
-      credentials: "include",
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log("Leaderboard data received:", data); // Debug log
-        if (data.leaderboard && Array.isArray(data.leaderboard)) {
-          console.log("Leaderboard items:", data.leaderboard); // Debug log
-          const sortedLeaders = data.leaderboard.slice(0, 5);
-          console.log("Top 5 leaders:", sortedLeaders); // Debug log
-          setLeaders(sortedLeaders);
-        } else {
-          console.error("Unexpected data format:", data);
-          setLeaders([]);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching leaderboard:", error);
-        setLeaders([]);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+const Class = ({ name, description, bio, location }: Props) => {
+  const [expanded, setExpanded] = useState(false);
+  const hasExtra = !!(bio || location);
 
   return (
-    <section id="leaderboard" className="w-full bg-primary-100 py-40">
-      <div className="max-w-4xl mx-auto px-4">
-        <motion.div
-          onViewportEnter={() => setSelectedPage(SelectedPage.Leaderboard)}
-        >
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ delay: 0.1, duration: 2 }}
-            variants={{
-              hidden: { opacity: 0, x: -50 },
-              visible: { opacity: 1, x: 0 },
-            }}
-          >
-            <div className="md:w-3/5">
-              <HText>Weekly Leaderboard 🏆</HText>
-              <p className="py-5">
-                The top 5 members with the most workouts this week!
-              </p>
-            </div>
-          </motion.div>
-
-          <div className="mt-10 h-[320] overflow-x-auto overflow-y-hidden">
-            <div className="flex justify-center">
-              {loading ? (
-                <div className="flex items-center justify-center h-full">
-                  <p className="text-lg">Loading leaderboard...</p>
-                </div>
-              ) : leaders.length === 0 ? (
-                <div className="flex items-center justify-center h-full">
-                  <p className="text-lg">No workouts logged this week yet. Be the first!</p>
-                </div>
-              ) : (
-                <ul className="inline-flex whitespace-nowrap gap-3">
-                  {leaders.map((user, index) => (
-                    <Class
-                      key={`${user.username}-${index}`}
-                      name={`#${index + 1} ${user.username}`}
-                      description={`${user.count} workout${user.count !== 1 ? 's' : ''}`}
-                      image=""
-                      bio={user.bio}
-                      location={user.location}
-                    />
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
-        </motion.div>
+    <li
+      className="relative w-[160px] sm:w-[220px] md:w-[280px] flex-shrink-0"
+      onClick={() => hasExtra && setExpanded((v) => !v)}
+      onMouseLeave={() => setExpanded(false)}
+    >
+      {/* Base card */}
+      <div className="flex flex-col items-center justify-center h-[160px] sm:h-[220px] md:h-[280px] w-full bg-gray-200 border-2 border-primary-300 rounded-lg shadow-lg">
+        <div className="text-3xl md:text-4xl font-bold text-primary-500 mb-2">
+          🏋️
+        </div>
+        <p className="text-sm md:text-base font-bold text-gray-800 mb-2 px-3 text-center">
+          {name}
+        </p>
+        <p className="text-xs md:text-sm text-gray-600 px-2 text-center">
+          {description}
+        </p>
+        {hasExtra && (
+          <p className="mt-2 text-xs text-primary-400 md:hidden">tap for info</p>
+        )}
       </div>
-    </section>
+
+      {/* Overlay — hover on desktop, tap on mobile */}
+      <div
+        className={`
+          p-4 absolute top-0 left-0 z-30
+          flex flex-col items-center justify-center
+          h-[160px] sm:h-[220px] md:h-[280px] w-full
+          whitespace-normal bg-primary-500 text-center text-white
+          rounded-lg border-2 border-primary-300
+          transition-opacity duration-300
+          ${expanded ? "opacity-90" : "opacity-0"}
+          md:hover:opacity-90
+        `}
+      >
+        <p className="text-base font-bold mb-1">{name}</p>
+        <p className="mb-2 text-sm">{description}</p>
+        {hasExtra && (
+          <div className="mt-2 pt-2 border-t border-white/30 w-full">
+            {bio && (
+              <p className="text-xs mb-1 px-2">
+                <span className="font-semibold">Bio:</span> {bio}
+              </p>
+            )}
+            {location && (
+              <p className="text-xs px-2">
+                <span className="font-semibold">Location:</span> {location}
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+    </li>
   );
 };
 
-export default Leaderboard;
+export default Class;
