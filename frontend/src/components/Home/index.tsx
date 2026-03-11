@@ -38,7 +38,6 @@ const Home = ({ setSelectedPage }: Props) => {
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-relaxed mb-4 md:mb-6">
               Welcome to<br />Rhett's Fitness<br />Community
             </h1>
-
             <p className="text-xl sm:text-2xl md:text-3xl text-white font-medium">
               Log your workouts every day!
             </p>
@@ -91,8 +90,7 @@ const Home = ({ setSelectedPage }: Props) => {
               viewport={{ once: true }}
               transition={{ duration: 1.4, ease: "easeOut" }}
             />
-
-            {/* Rhett — RIGHT, LARGER (TRUE HERO) */}
+            {/* Rhett — RIGHT, LARGER */}
             <motion.img
               src={RhettSoccer}
               alt="Rhett playing soccer"
@@ -108,25 +106,22 @@ const Home = ({ setSelectedPage }: Props) => {
 
         {/* ================= HERO ATHLETES — MOBILE ================= */}
         {!isAboveMediumScreen && (
-          <div className="relative flex justify-center items-end mt-8 h-56 w-full">
-            {/* Kate — LEFT */}
+          <div className="relative flex justify-between items-end mt-8 h-52 w-full px-6">
+            {/* Kate — far left */}
             <motion.img
               src={KateTennis}
               alt="Kate playing tennis"
-              className="absolute z-10 h-48 w-auto object-contain"
-              style={{ left: "8%" }}
+              className="z-10 h-40 w-auto object-contain"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 1.2, ease: "easeOut" }}
             />
-
-            {/* Rhett — RIGHT, slightly larger */}
+            {/* Rhett — far right, slightly taller */}
             <motion.img
               src={RhettSoccer}
               alt="Rhett playing soccer"
-              className="absolute z-20 h-56 w-auto object-contain"
-              style={{ right: "8%" }}
+              className="z-20 h-48 w-auto object-contain"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
