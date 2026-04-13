@@ -68,10 +68,8 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
 
   useEffect(() => {
     checkAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setIsMenuToggled(false);
   }, [location.pathname]);
@@ -91,25 +89,15 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
         <div className={`${navbarBackground} ${flexBetween} mx-auto w-5/6 pr-8`}>
           <div className={`${flexBetween} w-full gap-16`}>
 
-            {/* ── Logo / Brand ── */}
+            {/* ── Logo ── */}
             <button
               onClick={() => navigate("/")}
               className="flex flex-col leading-none text-left bg-transparent border-none cursor-pointer p-0 shrink-0"
             >
-              <span
-                className={`font-extrabold tracking-tight ${
-                  isTopOfPage ? "text-white" : "text-gray-900"
-                }`}
-                style={{ fontSize: "1.25rem" }}
-              >
+              <span className={`font-extrabold tracking-tight ${isTopOfPage ? "text-white" : "text-gray-900"}`} style={{ fontSize: "1.25rem" }}>
                 Rhett's
               </span>
-              <span
-                className={`font-bold tracking-wide ${
-                  isTopOfPage ? "text-primary-300" : "text-primary-500"
-                }`}
-                style={{ fontSize: "1rem" }}
-              >
+              <span className={`font-bold tracking-wide ${isTopOfPage ? "text-primary-300" : "text-primary-500"}`} style={{ fontSize: "1rem" }}>
                 Fitness
               </span>
             </button>
@@ -137,6 +125,19 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                   )}
                   {isAuthenticated && (
                     <Link page="Connect" selectedPage={selectedPage} isTopOfPage={isTopOfPage} setSelectedPage={setSelectedPage} />
+                  )}
+                  {/* ── Groups button (desktop) ── */}
+                  {isAuthenticated && (
+                    <button
+                      onClick={() => navigate("/groups")}
+                      className={`font-bold transition duration-500 hover:text-primary-300 ${
+                        location.pathname === "/groups"
+                          ? "text-primary-500"
+                          : isTopOfPage ? "text-white" : "text-gray-900"
+                      }`}
+                    >
+                      Groups
+                    </button>
                   )}
                 </div>
 
@@ -183,7 +184,6 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                 </div>
               </div>
             ) : (
-              /* ── Hamburger Button (mobile) ── */
               <div className="ml-auto">
                 <button
                   aria-label="Open menu"
@@ -192,7 +192,6 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                   }`}
                   onClick={() => setIsMenuToggled(true)}
                 >
-                  {/* Hamburger icon */}
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                   </svg>
@@ -203,45 +202,38 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
         </div>
       </div>
 
-      {/* ── Mobile Slide-Out Menu ── */}
+      {/* ── Mobile Drawer ── */}
       {!isAboveMediumScreens && (
         <>
-          {/* Backdrop */}
           <div
             className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 ${
               isMenuToggled ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
             }`}
             onClick={() => setIsMenuToggled(false)}
           />
-
-          {/* Drawer */}
           <div
             className={`fixed right-0 top-0 z-50 h-full w-[300px] bg-primary-100 drop-shadow-xl
               transform transition-transform duration-300 ease-in-out
               ${isMenuToggled ? "translate-x-0" : "translate-x-full"}`}
           >
-            {/* Close button */}
             <div className="flex justify-end p-5">
               <button
                 aria-label="Close menu"
                 className="p-2 rounded-md text-gray-900 hover:bg-gray-200 transition"
                 onClick={() => setIsMenuToggled(false)}
               >
-                {/* X icon */}
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
-            {/* Greeting (if logged in) */}
             {isAuthenticated && (
               <div className="px-8 pb-4 text-sm font-bold text-gray-700">
                 Hello, {username}
               </div>
             )}
 
-            {/* Menu Items */}
             <div className="flex flex-col gap-6 px-8 text-xl font-bold text-gray-900">
               <Link page="Home" selectedPage={selectedPage} setSelectedPage={setSelectedPage} isTopOfPage={false} />
               <Link page="Leaderboard" selectedPage={selectedPage} setSelectedPage={setSelectedPage} isTopOfPage={false} />
@@ -258,6 +250,15 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
               )}
               {isAuthenticated && (
                 <Link page="Connect" selectedPage={selectedPage} setSelectedPage={setSelectedPage} isTopOfPage={false} />
+              )}
+              {/* ── Groups button (mobile) ── */}
+              {isAuthenticated && (
+                <button
+                  onClick={() => { navigate("/groups"); setIsMenuToggled(false); }}
+                  className="text-left hover:text-primary-500 transition"
+                >
+                  Groups
+                </button>
               )}
               {isAuthenticated && (
                 <button
