@@ -146,6 +146,12 @@ const Groups = () => {
 
   return (
     <section className="w-full bg-primary-100 min-h-screen py-24 px-4">
+      <button
+  onClick={() => navigate("/")}
+  className="flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-primary-500 transition mb-6"
+>
+  ← Back to Home
+</button>
       <div className="max-w-4xl mx-auto">
 
         {/* ── Header ── */}
