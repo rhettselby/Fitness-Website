@@ -6,6 +6,7 @@ import AddWorkoutPage from "@/components/Add_Workout/index";
 import "./App.css";
 import WearablesCallback from "@/pages/WearablesCallback";
 import ConnectionsPage from "@/components/Connections";
+import Groups from "@/components/Groups";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/add-workout" element={<AddWorkoutPage/>} />
         <Route path="/wearables/callback" element={<WearablesCallback/>} />
         <Route path="/connect" element={<ConnectionsPage/>} />
+        <Route path="/groups" element={<Groups />} />
       </Routes>
     </BrowserRouter>
   );
