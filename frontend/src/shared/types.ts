@@ -8,6 +8,7 @@ export enum SelectedPage {
   AddWorkout = "addworkout",
   RecentWorkouts = "recentworkouts",
   Connect = "connect",
+  Group="group",
 }
 
 export interface BenefitType {

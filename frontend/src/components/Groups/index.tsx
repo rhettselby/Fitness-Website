@@ -70,7 +70,7 @@ const Groups = () => {
     setLoadingLeaderboard(true);
     const token = TokenService.getAccessToken();
     try {
-      const res = await fetch(`${API_URL}/groups/${group.id}/leaderboard/`, {
+      const res = await fetch(`${API_URL}/groups/get_leaderboard/${group.id}/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error();
@@ -94,7 +94,7 @@ const Groups = () => {
     setJoinLoading(true);
     const token = TokenService.getAccessToken();
     try {
-      const res = await fetch(`${API_URL}/groups/${id}/join/`, {
+      const res = await fetch(`${API_URL}/groups/join_group/${id}/`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -142,13 +142,6 @@ const Groups = () => {
     } finally {
       setCreateLoading(false);
     }
-  };
-
-  const getEmoji = (rank: number) => {
-    if (rank === 1) return "🥇";
-    if (rank === 2) return "🥈";
-    if (rank === 3) return "🥉";
-    return "🏋️";
   };
 
   return (
