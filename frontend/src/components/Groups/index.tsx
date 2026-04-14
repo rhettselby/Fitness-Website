@@ -121,6 +121,7 @@ const Groups = () => {
     }
     setCreateLoading(true);
     const token = TokenService.getAccessToken();
+    console.log("Token at create time:", token);
     try {
       const res = await fetch(`${API_URL}/groups/create_group/`, {
         method: "POST",
