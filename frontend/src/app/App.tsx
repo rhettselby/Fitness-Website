@@ -6,7 +6,9 @@ import AddWorkoutPage from "@/components/Add_Workout/index";
 import "./App.css";
 import WearablesCallback from "@/pages/WearablesCallback";
 import ConnectionsPage from "@/components/Connections";
-import Groups from "@/components/Groups";
+import Groups from "@/components/Groups/groups";
+import GroupLeaderboard from "@/components/Groups/groupLeaderboard";
+
 
 function App() {
   return (
@@ -18,9 +20,12 @@ function App() {
         <Route path="/wearables/callback" element={<WearablesCallback/>} />
         <Route path="/connect" element={<ConnectionsPage/>} />
         <Route path="/groups" element={<Groups />} />
+        <Route path="/groups/:id/leaderboard" element={<GroupLeaderboard />} />
       </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
+
+
