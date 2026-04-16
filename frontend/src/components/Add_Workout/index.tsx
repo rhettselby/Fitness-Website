@@ -336,7 +336,7 @@ const AddWorkoutPage = () => {
                 onClick={() => setGymView("exercises")}
                 className="w-full border border-gray-300 rounded-lg py-3 text-gray-700 font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
               >
-                💪 Input workout data
+                 Input workout data
                 {exercises.length > 0 && (
                   <span className="ml-2 text-sm bg-primary-100 text-primary-600 px-2 py-0.5 rounded-full">
                     {exercises.length} exercise{exercises.length !== 1 ? "s" : ""}
@@ -371,7 +371,7 @@ const AddWorkoutPage = () => {
                 {exercises.map((ex, i) => (
                   <div key={i} className="bg-gray-50 rounded-lg p-4 flex items-start justify-between">
                     <div>
-                      <p className="font-semibold text-gray-800">{ex.name}</p>
+                      <p className="font-semibold text-white">{ex.name}</p>
                       <p className="text-sm text-gray-500 mt-0.5">
                         {ex.sets.length} set{ex.sets.length !== 1 ? "s" : ""} · {ex.sets[0].reps} reps · {ex.sets[0].weight} lbs max
                       </p>
