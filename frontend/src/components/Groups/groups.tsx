@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 type Group = {
   id: number;
   name: string;
+  motto: string | null;
 };
 
 const Groups = () => {
@@ -211,6 +212,9 @@ const Groups = () => {
                   <p className="font-bold text-gray-900 text-lg sm:text-xl">
                     {group.name}
                   </p>
+                  {group.motto && (
+                 <p className="text-xs text-gray-400 font-normal mt-0.5">{group.motto}</p>
+                  )}
                   <div className="flex items-center gap-3">
                     <span className="text-xs text-gray-400 font-medium">ID: {group.id}</span>
                     <span className="text-sm font-bold text-primary-500 opacity-0 group-hover:opacity-100 transition-opacity">
