@@ -22,6 +22,7 @@ const Groups = () => {
   const [joinOpen, setJoinOpen] = useState(false);
 
   const [createName, setCreateName] = useState("");
+  const [createMotto, setCreateMotto] = useState("");
   const [createError, setCreateError] = useState("");
   const [createLoading, setCreateLoading] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
@@ -38,7 +39,6 @@ const Groups = () => {
     fetchGroups();
   }, []);
 
-  // Auto-focus input when panel opens
   useEffect(() => {
     if (joinOpen) setTimeout(() => joinInputRef.current?.focus(), 300);
   }, [joinOpen]);
@@ -107,7 +107,10 @@ const Groups = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ name: createName.trim() }),
+        body: JSON.stringify({
+          name: createName.trim(),
+          motto: createMotto.trim() || null,
+        }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -115,6 +118,7 @@ const Groups = () => {
         return;
       }
       setCreateName("");
+      setCreateMotto("");
       setCreateOpen(false);
       await fetchGroups();
     } catch {
@@ -128,11 +132,8 @@ const Groups = () => {
     if (e.key === "Enter") action();
   };
 
-
-
   return (
     <section className="w-full bg-primary-100 min-h-screen py-20 px-4">
-      {/* Back button */}
       <button
         onClick={() => navigate("/")}
         className="flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-primary-500 transition mb-8"
@@ -157,7 +158,7 @@ const Groups = () => {
           </p>
         </motion.div>
 
-        {/* ── Your Groups (prominent) ── */}
+        {/* ── Your Groups ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -209,12 +210,16 @@ const Groups = () => {
                     })
                   }
                 >
-                  <p className="font-bold text-gray-900 text-lg sm:text-xl">
-                    {group.name}
-                  </p>
-                  {group.motto && (
-                 <p className="text-xs text-gray-400 font-normal mt-0.5">{group.motto}</p>
-                  )}
+                  <div>
+                    <p className="font-bold text-gray-900 text-lg sm:text-xl">
+                      {group.name}
+                    </p>
+                    {group.motto && (
+                      <p className="text-xs text-gray-400 font-normal mt-0.5">
+                        {group.motto}
+                      </p>
+                    )}
+                  </div>
                   <div className="flex items-center gap-3">
                     <span className="text-xs text-gray-400 font-medium">ID: {group.id}</span>
                     <span className="text-sm font-bold text-primary-500 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -234,7 +239,6 @@ const Groups = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="grid grid-cols-2 gap-3 mb-3"
         >
-          {/* Join toggle button */}
           <button
             onClick={() => {
               setJoinOpen((v) => !v);
@@ -255,7 +259,6 @@ const Groups = () => {
             </span>
           </button>
 
-          {/* Create toggle button */}
           <button
             onClick={() => {
               setCreateOpen((v) => !v);
@@ -339,23 +342,33 @@ const Groups = () => {
                 <p className="text-gray-500 text-xs font-medium mb-3 uppercase tracking-widest">
                   Name your new group
                 </p>
-                <div className="flex gap-2">
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <input
+                      ref={createInputRef}
+                      type="text"
+                      placeholder="Group name"
+                      value={createName}
+                      onChange={(e) => setCreateName(e.target.value)}
+                      onKeyDown={(e) => handleKeyDown(e, handleCreate)}
+                      className="flex-1 border-2 border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-primary-400 text-gray-900 placeholder-gray-400"
+                    />
+                    <button
+                      onClick={handleCreate}
+                      disabled={createLoading}
+                      className="px-5 py-2.5 bg-primary-500 text-white rounded-lg hover:bg-primary-600 font-semibold disabled:bg-gray-300 transition-all active:scale-95 text-sm whitespace-nowrap"
+                    >
+                      {createLoading ? "Creating…" : "Create →"}
+                    </button>
+                  </div>
                   <input
-                    ref={createInputRef}
                     type="text"
-                    placeholder="Group name"
-                    value={createName}
-                    onChange={(e) => setCreateName(e.target.value)}
+                    placeholder="Group motto (optional)"
+                    value={createMotto}
+                    onChange={(e) => setCreateMotto(e.target.value)}
                     onKeyDown={(e) => handleKeyDown(e, handleCreate)}
-                    className="flex-1 border-2 border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-primary-400 text-gray-900 placeholder-gray-400"
+                    className="w-full border-2 border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-primary-400 text-gray-900 placeholder-gray-400"
                   />
-                  <button
-                    onClick={handleCreate}
-                    disabled={createLoading}
-                    className="px-5 py-2.5 bg-primary-500 text-white rounded-lg hover:bg-primary-600 font-semibold disabled:bg-gray-300 transition-all active:scale-95 text-sm whitespace-nowrap"
-                  >
-                    {createLoading ? "Creating…" : "Create →"}
-                  </button>
                 </div>
                 {createError && (
                   <motion.p
