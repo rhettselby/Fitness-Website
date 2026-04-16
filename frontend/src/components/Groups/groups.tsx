@@ -210,16 +210,16 @@ const Groups = () => {
                     })
                   }
                 >
-                  <div>
-                    <p className="font-bold text-gray-900 text-lg sm:text-xl">
-                      {group.name}
-                    </p>
+                <div className="flex items-center gap-3">
+                  <p className="font-bold text-gray-900 text-lg sm:text-xl">
+                    {group.name}
+                  </p>
                     {group.motto && (
-                      <p className="text-xs text-gray-400 font-normal mt-0.5">
-                        {group.motto}
-                      </p>
-                    )}
-                  </div>
+                  <p className="text-sm sm:text-base text-gray-400 font-normal">
+                    {group.motto}
+                  </p>
+                  )}
+                </div>
                   <div className="flex items-center gap-3">
                     <span className="text-xs text-gray-400 font-medium">ID: {group.id}</span>
                     <span className="text-sm font-bold text-primary-500 opacity-0 group-hover:opacity-100 transition-opacity">
