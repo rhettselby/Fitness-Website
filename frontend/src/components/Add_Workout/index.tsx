@@ -367,7 +367,7 @@ const AddWorkoutPage = () => {
                 <p className="text-center text-gray-400 text-sm py-4">No exercises added yet.</p>
               )}
 
-              <div className="space-y-3">
+              <div className="space-y-3 overflow-y-auto max-h-72 pr-1">
                 {exercises.map((ex, i) => (
                   <div key={i} className="bg-gray-50 rounded-lg p-4 flex items-start justify-between">
                     <div>
