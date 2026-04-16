@@ -127,13 +127,7 @@ const Groups = () => {
     if (e.key === "Enter") action();
   };
 
-  // Rank badge colors
-  const rankStyle = (index: number) => {
-    if (index === 0) return { border: "border-yellow-400", bg: "bg-yellow-50", badge: "🥇" };
-    if (index === 1) return { border: "border-gray-400", bg: "bg-gray-50", badge: "🥈" };
-    if (index === 2) return { border: "border-amber-600", bg: "bg-amber-50", badge: "🥉" };
-    return { border: "border-gray-200", bg: "bg-white", badge: null };
-  };
+
 
   return (
     <section className="w-full bg-primary-100 min-h-screen py-20 px-4">
@@ -200,43 +194,31 @@ const Groups = () => {
             </div>
           ) : (
             <div className="flex flex-col gap-3">
-              {groups.map((group, index) => {
-                const { border, bg, badge } = rankStyle(index);
-                return (
-                  <motion.div
-                    key={group.id}
-                    initial={{ opacity: 0, x: -15 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.35, delay: index * 0.07 }}
-                    whileHover={{ scale: 1.015, x: 4 }}
-                    className={`flex items-center justify-between border-2 ${border} ${bg} rounded-xl px-4 py-3 cursor-pointer transition-all group shadow-sm hover:shadow-md`}
-                    onClick={() =>
-                      navigate(`/groups/${group.id}/leaderboard`, {
-                        state: { groupName: group.name },
-                      })
-                    }
-                  >
-                    <div className="flex items-center gap-3">
-                      {badge ? (
-                        <span className="text-xl">{badge}</span>
-                      ) : (
-                        <span className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200 text-xs font-bold text-gray-500">
-                          {index + 1}
-                        </span>
-                      )}
-                      <div>
-                        <p className="font-semibold text-gray-900 text-sm sm:text-base">
-                          {group.name}
-                        </p>
-                        <p className="text-xs text-gray-400">ID: {group.id}</p>
-                      </div>
-                    </div>
+              {groups.map((group, index) => (
+                <motion.div
+                  key={group.id}
+                  initial={{ opacity: 0, x: -15 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.35, delay: index * 0.07 }}
+                  whileHover={{ scale: 1.015, x: 4 }}
+                  className="relative flex items-center justify-between border-2 border-yellow-300 bg-yellow-50 rounded-xl px-5 py-4 cursor-pointer transition-all group shadow-sm hover:shadow-md hover:border-yellow-400"
+                  onClick={() =>
+                    navigate(`/groups/${group.id}/leaderboard`, {
+                      state: { groupName: group.name },
+                    })
+                  }
+                >
+                  <p className="font-bold text-gray-900 text-lg sm:text-xl">
+                    {group.name}
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-gray-400 font-medium">ID: {group.id}</span>
                     <span className="text-sm font-bold text-primary-500 opacity-0 group-hover:opacity-100 transition-opacity">
                       View →
                     </span>
-                  </motion.div>
-                );
-              })}
+                  </div>
+                </motion.div>
+              ))}
             </div>
           )}
         </motion.div>
