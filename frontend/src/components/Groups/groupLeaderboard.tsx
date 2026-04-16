@@ -112,7 +112,6 @@ const GroupLeaderboard = () => {
 
   // revealedCount tracks how many cards have been flipped so far
   const [revealedCount, setRevealedCount] = useState(0);
-  const [replayKey, setReplayKey] = useState(0);
 
   useEffect(() => {
     const token = TokenService.getAccessToken();
@@ -141,19 +140,17 @@ const GroupLeaderboard = () => {
   // Start the sequential reveal once data is loaded
   useEffect(() => {
     if (loading || leaderboard.length === 0) return;
-    setRevealedCount(0);
     const order = [4, 6, 5, 2, 3, 1].filter((r) =>
       leaderboard.some((e) => e.rank === r)
     );
-    const pyramidTotal = order.length;
     let count = 0;
     const interval = setInterval(() => {
       count += 1;
       setRevealedCount(count);
-      if (count >= pyramidTotal) clearInterval(interval);
+      if (count >= order.length) clearInterval(interval);
     }, REVEAL_DELAY_MS);
     return () => clearInterval(interval);
-  }, [loading, leaderboard, replayKey]);
+  }, [loading, leaderboard]);
 
   // Reveal only ranks that actually exist, in bottom-up dramatic order
   const fullRevealOrder = [4, 6, 5, 2, 3, 1];
@@ -241,18 +238,7 @@ const GroupLeaderboard = () => {
               )}
             </div>
 
-            {/* Replay button */}
-            <div className="flex justify-center mb-8">
-              <button
-                onClick={() => {
-                  setRevealedCount(0);
-                  setReplayKey((k) => k + 1);
-                }}
-                className="px-5 py-2 text-sm font-semibold text-primary-600 border-2 border-primary-300 rounded-full hover:bg-primary-200 transition active:scale-95"
-              >
-                ↺ Replay Reveal
-              </button>
-            </div>
+
 
             {/* Rest of the list (rank 7+) */}
             <AnimatePresence>
