@@ -258,11 +258,11 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
               {/* Comments List */}
               <div className="flex-grow overflow-y-auto p-4">
                 {commentLoading ? (
-                  <p className="text-center text-gray-500">Loading comments...</p>
+                  <p className="text-center text-white">Loading comments...</p>
                 ) : commentError ? (
                   <p className="text-center text-red-500">{commentError}</p>
                 ) : comments.length === 0 ? (
-                  <p className="text-center text-gray-500">No comments yet</p>
+                  <p className="text-center text-white">No comments yet</p>
                 ) : (
                   <div className="space-y-3">
                     {comments.map((comment) => (
@@ -275,7 +275,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                             {formatDate(comment.created_at)}
                           </span>
                         </div>
-                        <p className="text-gray-900 text-sm">{comment.text}</p>
+                        <p className="text-white text-sm">{comment.text}</p>
                       </div>
                     ))}
                   </div>
