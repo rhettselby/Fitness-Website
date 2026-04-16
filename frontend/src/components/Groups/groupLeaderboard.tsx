@@ -143,7 +143,11 @@ const GroupLeaderboard = () => {
     if (!loading && leaderboard.length > 0 && !revealStarted) {
       setRevealStarted(true);
       setRevealedCount(0);
-      const pyramidTotal = Math.min(leaderboard.length, 6);
+      // Use the same dramatic order, filtered to ranks that exist
+      const order = [4, 6, 5, 2, 3, 1].filter((r) =>
+        leaderboard.some((e) => e.rank === r)
+      );
+      const pyramidTotal = order.length;
       let count = 0;
       const interval = setInterval(() => {
         count += 1;
@@ -154,9 +158,10 @@ const GroupLeaderboard = () => {
     }
   }, [loading, leaderboard]);
 
-  // Build flat reveal order: bottom-left, bottom-right, bottom-center, mid-left, mid-right, top
-  // Maps reveal step → rank
-  const revealSequence = [4, 6, 5, 2, 3, 1]; // the order cards flip
+  // Reveal only ranks that actually exist, in bottom-up dramatic order
+  const fullRevealOrder = [4, 6, 5, 2, 3, 1];
+  const presentRanks = new Set(leaderboard.map((e) => e.rank));
+  const revealSequence = fullRevealOrder.filter((r) => presentRanks.has(r));
 
   const isRevealed = (rank: number) => {
     const step = revealSequence.indexOf(rank);
