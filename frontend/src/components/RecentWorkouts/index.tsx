@@ -192,6 +192,9 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                         <div className="flex flex-wrap items-center gap-2 md:gap-4 mt-2 text-xs md:text-sm text-gray-600">
                           {workout.duration && <span>{workout.duration} min</span>}
                           <span>{formatDate(workout.date)}</span>
+                          {workout.score > 0 && (
+                            <span className="font-semibold text-accent-500">{workout.score} Points</span>
+                          )}
                         </div>
                       </div>
 
@@ -208,14 +211,6 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                           </span>
                         )}
                       </button>
-                    </div>
-
-                    {/* Score footer */}
-                    <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
-                      <span className="text-xs text-gray-400 font-medium uppercase tracking-wide">Score</span>
-                      <span className="text-sm font-bold text-accent-500">
-                        +{workout.score} pts
-                      </span>
                     </div>
                   </motion.div>
                 ))}
