@@ -16,6 +16,7 @@ type Workout = {
   date: string;
   duration: number | null;
   username: string;
+  score: number;
 };
 
 type Comment = {
@@ -208,6 +209,14 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                         )}
                       </button>
                     </div>
+
+                    {/* Score footer */}
+                    <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
+                      <span className="text-xs text-gray-400 font-medium uppercase tracking-wide">Score</span>
+                      <span className="text-sm font-bold text-accent-500">
+                        +{workout.score} pts
+                      </span>
+                    </div>
                   </motion.div>
                 ))}
               </div>
@@ -235,12 +244,17 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
             >
               {/* Modal Header */}
               <div className="flex justify-between items-center p-4 border-b">
-                <h2 className="text-base sm:text-xl font-bold text-black truncate pr-4">
-                  Comments for {selectedWorkout.activity}
-                </h2>
+                <div className="flex items-center gap-3 min-w-0">
+                  <h2 className="text-base sm:text-xl font-bold text-black truncate">
+                    Comments for {selectedWorkout.activity}
+                  </h2>
+                  <span className="flex-shrink-0 text-xs font-bold text-accent-500 bg-accent-100 px-2 py-0.5 rounded-full">
+                    +{selectedWorkout.score} pts
+                  </span>
+                </div>
                 <button
                   onClick={() => setSelectedWorkout(null)}
-                  className="text-gray-500 hover:text-gray-900 flex-shrink-0"
+                  className="text-gray-500 hover:text-gray-900 flex-shrink-0 ml-2"
                 >
                   <XMarkIcon className="h-6 w-6" />
                 </button>
