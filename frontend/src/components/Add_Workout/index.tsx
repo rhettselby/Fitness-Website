@@ -145,14 +145,18 @@ const AddWorkoutPage = () => {
 
       const token = TokenService.getAccessToken();
       try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+          const response = await fetch(url, {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
             ...(token && { Authorization: `Bearer ${token}` }),
           },
-          body: formData.toString(),
-        });
+          body: JSON.stringify({
+          activity: activity.trim(),
+          date: dateTime,
+          duration: duration,
+          }),
+      });
 
         if (!response.ok) {
           let errorMessage = "Could not save workout. Please double-check your inputs.";
