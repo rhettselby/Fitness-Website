@@ -139,6 +139,50 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     return "bg-secondary-500 text-white";
   };
 
+  // Reusable top row — type badge + username + comment btn
+  const CardTopRow = ({ workout }: { workout: Workout }) => (
+    <div className="flex items-center justify-between px-3 pt-3 flex-shrink-0">
+      <div className="flex items-center gap-1.5 min-w-0">
+        <span className={`px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0 ${typeColor(workout.type)}`}>
+          {workout.type.toUpperCase()}
+        </span>
+        <span className="text-sm font-bold text-primary-500 truncate">
+          @{workout.username}
+        </span>
+      </div>
+      <button
+        onClick={() => handleCommentClick(workout)}
+        className="relative text-primary-500 hover:text-primary-700 transition-colors flex-shrink-0 ml-1"
+        title="View Comments"
+      >
+        <ChatBubbleBottomCenterTextIcon className="h-5 w-5" />
+        {workout.comment_count > 0 && (
+          <span className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-primary-500/90 text-white text-[9px] font-bold rounded-full h-3.5 w-3.5 flex items-center justify-center">
+            {workout.comment_count > 9 ? "9+" : workout.comment_count}
+          </span>
+        )}
+      </button>
+    </div>
+  );
+
+  // Reusable activity + score row
+  const CardMeta = ({ workout }: { workout: Workout }) => (
+    <div className="flex flex-col gap-1 px-3">
+      <p className="text-base font-extrabold text-gray-900 truncate leading-tight">
+        {workout.activity}
+      </p>
+      <div className="flex items-center gap-2 flex-wrap">
+        {workout.score > 0 && (
+          <span className="text-sm font-extrabold text-accent-500">{workout.score} pts</span>
+        )}
+        <span className="text-xs text-gray-400">{formatDate(workout.date)}</span>
+        {workout.duration && (
+          <span className="text-xs text-gray-400">{workout.duration}m</span>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <section id="recentworkouts" className="w-full bg-primary-100 py-16 md:py-20">
       <style>{`
@@ -190,46 +234,16 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}
                   >
+                    {/* Top row — always pinned to top */}
+                    <CardTopRow workout={workout} />
+
                     {workout.image_url ? (
-                      /* Card WITH image — metadata top, button bottom */
+                      /* HAS IMAGE: activity + score in middle, button at bottom */
                       <>
-                        <div className="px-3 pt-3 flex flex-col gap-2 flex-1">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-1.5 min-w-0">
-                              <span className={`px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0 ${typeColor(workout.type)}`}>
-                                {workout.type.toUpperCase()}
-                              </span>
-                              <span className="text-sm font-bold text-primary-500 truncate">
-                                @{workout.username}
-                              </span>
-                            </div>
-                            <button
-                              onClick={() => handleCommentClick(workout)}
-                              className="relative text-primary-500 hover:text-primary-700 transition-colors flex-shrink-0 ml-1"
-                              title="View Comments"
-                            >
-                              <ChatBubbleBottomCenterTextIcon className="h-5 w-5" />
-                              {workout.comment_count > 0 && (
-                                <span className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-primary-500/90 text-white text-[9px] font-bold rounded-full h-3.5 w-3.5 flex items-center justify-center">
-                                  {workout.comment_count > 9 ? "9+" : workout.comment_count}
-                                </span>
-                              )}
-                            </button>
-                          </div>
-                          <p className="text-base font-extrabold text-gray-900 truncate leading-tight">
-                            {workout.activity}
-                          </p>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            {workout.score > 0 && (
-                              <span className="text-sm font-extrabold text-accent-500">{workout.score} pts</span>
-                            )}
-                            <span className="text-xs text-gray-400">{formatDate(workout.date)}</span>
-                            {workout.duration && (
-                              <span className="text-xs text-gray-400">{workout.duration}m</span>
-                            )}
-                          </div>
+                        <div className="flex-1 flex flex-col justify-center">
+                          <CardMeta workout={workout} />
                         </div>
-                        <div className="px-3 pb-3">
+                        <div className="px-3 pb-3 flex-shrink-0">
                           <button
                             onClick={() => handleViewPhoto(workout)}
                             className="pulse-photo-btn w-full flex items-center justify-center gap-1.5 bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold py-2 rounded-lg transition-colors"
@@ -240,42 +254,9 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                         </div>
                       </>
                     ) : (
-                      /* Card WITHOUT image — metadata vertically centered */
-                      <div className="flex flex-col justify-center h-full px-3 py-3 gap-2">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-1.5 min-w-0">
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-bold flex-shrink-0 ${typeColor(workout.type)}`}>
-                              {workout.type.toUpperCase()}
-                            </span>
-                            <span className="text-sm font-bold text-primary-500 truncate">
-                              @{workout.username}
-                            </span>
-                          </div>
-                          <button
-                            onClick={() => handleCommentClick(workout)}
-                            className="relative text-primary-500 hover:text-primary-700 transition-colors flex-shrink-0 ml-1"
-                            title="View Comments"
-                          >
-                            <ChatBubbleBottomCenterTextIcon className="h-5 w-5" />
-                            {workout.comment_count > 0 && (
-                              <span className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-primary-500/90 text-white text-[9px] font-bold rounded-full h-3.5 w-3.5 flex items-center justify-center">
-                                {workout.comment_count > 9 ? "9+" : workout.comment_count}
-                              </span>
-                            )}
-                          </button>
-                        </div>
-                        <p className="text-base font-extrabold text-gray-900 truncate leading-tight">
-                          {workout.activity}
-                        </p>
-                        <div className="flex items-center gap-2 flex-wrap">
-                          {workout.score > 0 && (
-                            <span className="text-sm font-extrabold text-accent-500">{workout.score} pts</span>
-                          )}
-                          <span className="text-xs text-gray-400">{formatDate(workout.date)}</span>
-                          {workout.duration && (
-                            <span className="text-xs text-gray-400">{workout.duration}m</span>
-                          )}
-                        </div>
+                      /* NO IMAGE: activity + score centered in remaining space */
+                      <div className="flex-1 flex flex-col justify-center">
+                        <CardMeta workout={workout} />
                       </div>
                     )}
                   </motion.div>
@@ -318,14 +299,16 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                 </button>
               </div>
 
-              {/* Photo — object-contain with white letterbox, only when opened via View Photo */}
+              {/* Photo — fixed 45% height, object-contain with white letterbox */}
               {showPhoto && selectedWorkout.image_url && (
-                <div className="flex-shrink-0 w-full bg-white flex items-center justify-center" style={{ maxHeight: "45%" }}>
+                <div
+                  className="flex-shrink-0 w-full bg-white border-b flex items-center justify-center"
+                  style={{ height: "45%" }}
+                >
                   <img
                     src={selectedWorkout.image_url}
                     alt={selectedWorkout.activity}
-                    className="max-w-full max-h-full object-contain"
-                    style={{ maxHeight: "45vh" }}
+                    className="h-full w-full object-contain"
                   />
                 </div>
               )}
