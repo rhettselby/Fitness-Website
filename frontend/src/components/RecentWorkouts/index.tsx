@@ -11,12 +11,13 @@ type Props = {
 type Workout = {
   comment_count: number;
   id: number;
-  type: "cardio" | "gym";
+  type: "cardio" | "gym" | "sport";
   activity: string;
   date: string;
   duration: number | null;
   username: string;
   score: number;
+  image_url: string | null;
 };
 
 type Comment = {
@@ -50,7 +51,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     fetchRecentWorkouts();
   }, []);
 
-  const fetchComments = async (workoutId: number, workoutType: "cardio" | "gym") => {
+  const fetchComments = async (workoutId: number, workoutType: "cardio" | "gym" | "sport") => {
     setCommentLoading(true);
     setCommentError(null);
     try {
@@ -124,6 +125,12 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     return `${date.toLocaleDateString("en-US", { month: "short", day: "numeric" })} • ${timeString}`;
   };
 
+  const typeColor = (type: string) => {
+    if (type === "cardio") return "bg-accent-500 text-white";
+    if (type === "sport") return "bg-purple-600 text-white";
+    return "bg-secondary-500 text-white";
+  };
+
   return (
     <section id="recentworkouts" className="w-full bg-primary-100 py-16 md:py-20">
       <div className="max-w-7xl mx-auto px-4">
@@ -160,7 +167,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                 {workouts.map((workout, index) => (
                   <motion.div
                     key={workout.id}
-                    className="flex-shrink-0 w-[260px] sm:w-[300px] md:w-[350px] border-2 border-gray-200 rounded-lg p-4 md:p-6 bg-white hover:border-primary-300 transition-colors relative"
+                    className="flex-shrink-0 w-[260px] sm:w-[300px] md:w-[350px] border-2 border-gray-200 rounded-lg bg-white hover:border-primary-300 transition-colors relative overflow-hidden"
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.5 }}
@@ -170,47 +177,55 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                       visible: { opacity: 1, y: 0 },
                     }}
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 min-w-0 pr-3">
-                        <div className="flex flex-wrap items-center gap-2 mb-2">
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                              workout.type === "cardio"
-                                ? "bg-accent-500 text-white"
-                                : "bg-secondary-500 text-white"
-                            }`}
-                          >
-                            {workout.type.toUpperCase()}
-                          </span>
-                          <span className="text-sm font-bold text-primary-500 truncate">
-                            @{workout.username}
-                          </span>
-                        </div>
-                        <h3 className="text-base md:text-lg font-bold text-gray-800 truncate">
-                          {workout.activity}
-                        </h3>
-                        <div className="flex flex-wrap items-center gap-2 md:gap-4 mt-2 text-xs md:text-sm text-gray-600">
-                          {workout.duration && <span>{workout.duration} min</span>}
-                          <span>{formatDate(workout.date)}</span>
-                          {workout.score > 0 && (
-                            <span className="font-semibold text-accent-500">{workout.score} Points</span>
-                          )}
-                        </div>
+                    {/* Square Image — shown at top if present */}
+                    {workout.image_url && (
+                      <div className="w-full aspect-square overflow-hidden">
+                        <img
+                          src={workout.image_url}
+                          alt={workout.activity}
+                          className="w-full h-full object-cover"
+                        />
                       </div>
+                    )}
 
-                      {/* Comment button */}
-                      <button
-                        onClick={() => handleCommentClick(workout)}
-                        className="relative text-primary-500 hover:text-primary-700 transition-colors group flex-shrink-0"
-                        title="View Comments"
-                      >
-                        <ChatBubbleBottomCenterTextIcon className="h-6 w-6" />
-                        {workout.comment_count > 0 && (
-                          <span className="absolute group-hover:scale-110 top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-primary-500/90 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                            {workout.comment_count > 9 ? "9+" : workout.comment_count}
-                          </span>
-                        )}
-                      </button>
+                    {/* Card Content */}
+                    <div className="p-4 md:p-6">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1 min-w-0 pr-3">
+                          <div className="flex flex-wrap items-center gap-2 mb-2">
+                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${typeColor(workout.type)}`}>
+                              {workout.type.toUpperCase()}
+                            </span>
+                            <span className="text-sm font-bold text-primary-500 truncate">
+                              @{workout.username}
+                            </span>
+                          </div>
+                          <h3 className="text-base md:text-lg font-bold text-gray-800 truncate">
+                            {workout.activity}
+                          </h3>
+                          <div className="flex flex-wrap items-center gap-2 md:gap-4 mt-2 text-xs md:text-sm text-gray-600">
+                            {workout.duration && <span>{workout.duration} min</span>}
+                            <span>{formatDate(workout.date)}</span>
+                            {workout.score > 0 && (
+                              <span className="font-semibold text-accent-500">{workout.score} Points</span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Comment button */}
+                        <button
+                          onClick={() => handleCommentClick(workout)}
+                          className="relative text-primary-500 hover:text-primary-700 transition-colors group flex-shrink-0"
+                          title="View Comments"
+                        >
+                          <ChatBubbleBottomCenterTextIcon className="h-6 w-6" />
+                          {workout.comment_count > 0 && (
+                            <span className="absolute group-hover:scale-110 top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-primary-500/90 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                              {workout.comment_count > 9 ? "9+" : workout.comment_count}
+                            </span>
+                          )}
+                        </button>
+                      </div>
                     </div>
                   </motion.div>
                 ))}
