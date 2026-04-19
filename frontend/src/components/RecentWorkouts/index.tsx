@@ -167,7 +167,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                 {workouts.map((workout, index) => (
                   <motion.div
                     key={workout.id}
-                    className="flex-shrink-0 w-[260px] sm:w-[300px] md:w-[350px] border-2 border-gray-200 rounded-lg bg-white hover:border-primary-300 transition-colors relative overflow-hidden"
+                    className="flex-shrink-0 w-[200px] sm:w-[220px] md:w-[240px] border-2 border-gray-200 rounded-lg bg-white hover:border-primary-300 transition-colors relative overflow-hidden"
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.5 }}
