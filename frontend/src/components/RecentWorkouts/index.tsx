@@ -27,6 +27,8 @@ type Comment = {
   created_at: string;
 };
 
+const CARD_HEIGHT = 280;
+
 const RecentWorkouts = ({ setSelectedPage }: Props) => {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,6 +37,9 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
   const [commentLoading, setCommentLoading] = useState(false);
   const [newComment, setNewComment] = useState("");
   const [commentError, setCommentError] = useState<string | null>(null);
+  const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
+  const [cardComments, setCardComments] = useState<Record<number, Comment[]>>({});
+  const [cardCommentLoading, setCardCommentLoading] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     const fetchRecentWorkouts = async () => {
@@ -50,6 +55,33 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     };
     fetchRecentWorkouts();
   }, []);
+
+  const fetchCommentsForCard = async (workout: Workout) => {
+    if (cardComments[workout.id]) return; // already fetched
+    setCardCommentLoading(prev => ({ ...prev, [workout.id]: true }));
+    try {
+      const response = await fetch(`${API_URL}/api/fitness/api/comments/${workout.type}/${workout.id}/`);
+      const data = await response.json();
+      if (data.success) {
+        setCardComments(prev => ({ ...prev, [workout.id]: data.comments || [] }));
+      }
+    } catch {
+      setCardComments(prev => ({ ...prev, [workout.id]: [] }));
+    } finally {
+      setCardCommentLoading(prev => ({ ...prev, [workout.id]: false }));
+    }
+  };
+
+  const handleFlip = (workout: Workout) => {
+    const newFlipped = new Set(flippedCards);
+    if (newFlipped.has(workout.id)) {
+      newFlipped.delete(workout.id);
+    } else {
+      newFlipped.add(workout.id);
+      fetchCommentsForCard(workout);
+    }
+    setFlippedCards(newFlipped);
+  };
 
   const fetchComments = async (workoutId: number, workoutType: "cardio" | "gym" | "sport") => {
     setCommentLoading(true);
@@ -78,7 +110,6 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     e.preventDefault();
     if (!selectedWorkout || !newComment.trim()) return;
     setCommentError(null);
-
     try {
       const response = await fetch(`${API_URL}/api/fitness/api/comments/`, {
         method: "POST",
@@ -92,7 +123,6 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
           text: newComment,
         }),
       });
-
       const data = await response.json();
       if (data.success) {
         setComments([data.comment, ...comments]);
@@ -109,14 +139,11 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     const date = new Date(dateString);
     const now = new Date();
     const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-
     if (diffInHours < 1) return "Just now";
     if (diffInHours < 24) return `${diffInHours}h ago`;
-
     const yesterday = new Date(now);
     yesterday.setDate(yesterday.getDate() - 1);
     if (date.toDateString() === yesterday.toDateString()) return "Yesterday";
-
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   };
 
@@ -128,6 +155,36 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
 
   return (
     <section id="recentworkouts" className="w-full bg-primary-100 py-16 md:py-20">
+      <style>{`
+        .card-scene { perspective: 1000px; }
+        .card-inner {
+          position: relative;
+          width: 100%;
+          height: ${CARD_HEIGHT}px;
+          transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+          transform-style: preserve-3d;
+        }
+        .card-inner.flipped { transform: rotateY(180deg); }
+        .card-face {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+          border-radius: 0.75rem;
+          overflow: hidden;
+        }
+        .card-back { transform: rotateY(180deg); }
+
+        @keyframes pulse-btn {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.08); }
+        }
+        .pulse-photo-btn {
+          animation: pulse-btn 1.6s ease-in-out infinite;
+        }
+      `}</style>
+
       <div className="max-w-7xl mx-auto px-4">
         <motion.div onViewportEnter={() => setSelectedPage(SelectedPage.Home)}>
 
@@ -138,10 +195,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.5 }}
-            variants={{
-              hidden: { opacity: 0, x: 50 },
-              visible: { opacity: 1, x: 0 },
-            }}
+            variants={{ hidden: { opacity: 0, x: 50 }, visible: { opacity: 1, x: 0 } }}
           >
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-500">
               RECENT ACTIVITY
@@ -159,74 +213,124 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
               <p className="text-center text-gray-500">No recent workouts yet</p>
             ) : (
               <div className="flex gap-3 md:gap-4 min-w-min items-start">
-                {workouts.map((workout, index) => (
-                  <motion.div
-                    key={workout.id}
-                    className="flex-shrink-0 w-[200px] sm:w-[220px] md:w-[240px] border border-gray-200 rounded-xl bg-white hover:border-primary-300 transition-colors relative overflow-hidden shadow-sm"
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.5 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    variants={{
-                      hidden: { opacity: 0, y: 50 },
-                      visible: { opacity: 1, y: 0 },
-                    }}
-                  >
-                    {/* Square Image — only shown if present */}
-                    {workout.image_url && (
-                      <div className="w-full aspect-square overflow-hidden">
-                        <img
-                          src={workout.image_url}
-                          alt={workout.activity}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
+                {workouts.map((workout, index) => {
+                  const isFlipped = flippedCards.has(workout.id);
+                  const comments_ = cardComments[workout.id] || [];
+                  const commentsLoading_ = cardCommentLoading[workout.id];
 
-                    {/* Compact Card Info */}
-                    <div className="p-2.5">
-                      {/* Top row: type badge + username + comment btn */}
-                      <div className="flex items-center justify-between mb-1">
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold flex-shrink-0 ${typeColor(workout.type)}`}>
-                            {workout.type.toUpperCase()}
-                          </span>
-                          <span className="text-xs font-semibold text-primary-500 truncate">
-                            @{workout.username}
-                          </span>
-                        </div>
-                        <button
-                          onClick={() => handleCommentClick(workout)}
-                          className="relative text-primary-500 hover:text-primary-700 transition-colors group flex-shrink-0 ml-1"
-                          title="View Comments"
-                        >
-                          <ChatBubbleBottomCenterTextIcon className="h-4 w-4" />
-                          {workout.comment_count > 0 && (
-                            <span className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-primary-500/90 text-white text-[9px] font-bold rounded-full h-3.5 w-3.5 flex items-center justify-center">
-                              {workout.comment_count > 9 ? "9+" : workout.comment_count}
-                            </span>
+                  return (
+                    <motion.div
+                      key={workout.id}
+                      className="flex-shrink-0 w-[200px] sm:w-[220px] md:w-[240px] card-scene"
+                      style={{ height: CARD_HEIGHT }}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, amount: 0.5 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}
+                    >
+                      <div className={`card-inner ${isFlipped ? "flipped" : ""}`}>
+
+                        {/* ── FRONT ── */}
+                        <div className="card-face border border-gray-200 bg-white shadow-sm flex flex-col justify-between">
+                          <div className="p-2.5 flex flex-col gap-1">
+                            {/* Top row */}
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-1.5 min-w-0">
+                                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold flex-shrink-0 ${typeColor(workout.type)}`}>
+                                  {workout.type.toUpperCase()}
+                                </span>
+                                <span className="text-xs font-semibold text-primary-500 truncate">
+                                  @{workout.username}
+                                </span>
+                              </div>
+                              <button
+                                onClick={() => handleCommentClick(workout)}
+                                className="relative text-primary-500 hover:text-primary-700 transition-colors flex-shrink-0 ml-1"
+                                title="View Comments"
+                              >
+                                <ChatBubbleBottomCenterTextIcon className="h-4 w-4" />
+                                {workout.comment_count > 0 && (
+                                  <span className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-primary-500/90 text-white text-[9px] font-bold rounded-full h-3.5 w-3.5 flex items-center justify-center">
+                                    {workout.comment_count > 9 ? "9+" : workout.comment_count}
+                                  </span>
+                                )}
+                              </button>
+                            </div>
+
+                            {/* Activity */}
+                            <p className="text-xs font-bold text-gray-800 truncate leading-tight">
+                              {workout.activity}
+                            </p>
+
+                            {/* Meta */}
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              {workout.duration && (
+                                <span className="text-[10px] text-gray-500">{workout.duration}m</span>
+                              )}
+                              <span className="text-[10px] text-gray-400">{formatDate(workout.date)}</span>
+                              {workout.score > 0 && (
+                                <span className="text-[10px] font-bold text-accent-500">{workout.score}pts</span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* View Photo button — pulsing, only if image exists */}
+                          {workout.image_url && (
+                            <div className="px-2.5 pb-2.5">
+                              <button
+                                onClick={() => handleFlip(workout)}
+                                className="pulse-photo-btn w-full flex items-center justify-center gap-1.5 bg-primary-500 hover:bg-primary-600 text-white text-xs font-semibold py-2 rounded-lg transition-colors"
+                              >
+                                <span>📷</span>
+                                <span>View Photo</span>
+                              </button>
+                            </div>
                           )}
-                        </button>
-                      </div>
+                        </div>
 
-                      {/* Activity name */}
-                      <p className="text-xs font-bold text-gray-800 truncate leading-tight">
-                        {workout.activity}
-                      </p>
+                        {/* ── BACK ── */}
+                        <div className="card-face card-back border border-gray-200 bg-white shadow-sm flex flex-col">
+                          {/* Photo — fixed 60% height */}
+                          <div className="flex-shrink-0 relative" style={{ height: CARD_HEIGHT * 0.62 }}>
+                            <img
+                              src={workout.image_url || ""}
+                              alt={workout.activity}
+                              className="w-full h-full object-cover"
+                            />
+                            {/* Back button */}
+                            <button
+                              onClick={() => handleFlip(workout)}
+                              className="absolute top-2 left-2 bg-black/50 hover:bg-black/70 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs transition"
+                              aria-label="Flip back"
+                            >
+                              ✕
+                            </button>
+                          </div>
 
-                      {/* Metadata: duration, time, score */}
-                      <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-                        {workout.duration && (
-                          <span className="text-[10px] text-gray-500">{workout.duration}m</span>
-                        )}
-                        <span className="text-[10px] text-gray-400">{formatDate(workout.date)}</span>
-                        {workout.score > 0 && (
-                          <span className="text-[10px] font-bold text-accent-500">{workout.score}pts</span>
-                        )}
+                          {/* Comments — scrollable, remaining 40% */}
+                          <div className="flex-1 overflow-y-auto px-2.5 py-1.5 space-y-1.5" style={{ minHeight: 0 }}>
+                            {commentsLoading_ ? (
+                              <p className="text-[10px] text-gray-400 text-center pt-2">Loading...</p>
+                            ) : comments_.length === 0 ? (
+                              <p className="text-[10px] text-gray-400 text-center pt-2">No comments yet</p>
+                            ) : (
+                              comments_.map(comment => (
+                                <div key={comment.id}>
+                                  <span className="text-[10px] font-bold text-primary-500">
+                                    @{comment.user.username}{" "}
+                                  </span>
+                                  <span className="text-[10px] text-gray-600">{comment.text}</span>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
+
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -234,7 +338,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
         </motion.div>
       </div>
 
-      {/* Comments Modal */}
+      {/* Full Comments Modal */}
       <AnimatePresence>
         {selectedWorkout && (
           <motion.div
@@ -260,10 +364,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                     +{selectedWorkout.score} pts
                   </span>
                 </div>
-                <button
-                  onClick={() => setSelectedWorkout(null)}
-                  className="text-gray-500 hover:text-gray-900 flex-shrink-0 ml-2"
-                >
+                <button onClick={() => setSelectedWorkout(null)} className="text-gray-500 hover:text-gray-900 flex-shrink-0 ml-2">
                   <XMarkIcon className="h-6 w-6" />
                 </button>
               </div>
@@ -297,9 +398,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
 
               {/* Comment Input */}
               <form onSubmit={handleSubmitComment} className="p-4 border-t flex flex-col gap-2">
-                {commentError && (
-                  <p className="text-red-500 text-sm">{commentError}</p>
-                )}
+                {commentError && <p className="text-red-500 text-sm">{commentError}</p>}
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
@@ -318,9 +417,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                   </button>
                 </div>
                 {newComment.length > 0 && (
-                  <span className="text-xs text-gray-500 self-end">
-                    {newComment.length}/200
-                  </span>
+                  <span className="text-xs text-gray-500 self-end">{newComment.length}/200</span>
                 )}
               </form>
             </motion.div>
