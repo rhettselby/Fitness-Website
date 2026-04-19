@@ -109,20 +109,15 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     const date = new Date(dateString);
     const now = new Date();
     const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-    const timeString = date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
 
     if (diffInHours < 1) return "Just now";
     if (diffInHours < 24) return `${diffInHours}h ago`;
 
     const yesterday = new Date(now);
     yesterday.setDate(yesterday.getDate() - 1);
-    if (date.toDateString() === yesterday.toDateString()) return `Yesterday`;
+    if (date.toDateString() === yesterday.toDateString()) return "Yesterday";
 
-    return `${date.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`;
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   };
 
   const typeColor = (type: string) => {
@@ -163,7 +158,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
             ) : workouts.length === 0 ? (
               <p className="text-center text-gray-500">No recent workouts yet</p>
             ) : (
-              <div className="flex gap-3 md:gap-4 min-w-min">
+              <div className="flex gap-3 md:gap-4 min-w-min items-start">
                 {workouts.map((workout, index) => (
                   <motion.div
                     key={workout.id}
@@ -177,21 +172,14 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                       visible: { opacity: 1, y: 0 },
                     }}
                   >
-                    {/* Square Image */}
-                    {workout.image_url ? (
+                    {/* Square Image — only shown if present */}
+                    {workout.image_url && (
                       <div className="w-full aspect-square overflow-hidden">
                         <img
                           src={workout.image_url}
                           alt={workout.activity}
                           className="w-full h-full object-cover"
                         />
-                      </div>
-                    ) : (
-                      // Placeholder when no image
-                      <div className="w-full aspect-square bg-gray-100 flex items-center justify-center">
-                        <span className="text-3xl">
-                          {workout.type === "cardio" ? "🚴" : workout.type === "sport" ? "🏅" : "💪"}
-                        </span>
                       </div>
                     )}
 
