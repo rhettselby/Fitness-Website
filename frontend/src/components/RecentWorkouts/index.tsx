@@ -116,13 +116,13 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     });
 
     if (diffInHours < 1) return "Just now";
-    if (diffInHours < 24) return `${diffInHours}h ago • ${timeString}`;
+    if (diffInHours < 24) return `${diffInHours}h ago`;
 
     const yesterday = new Date(now);
     yesterday.setDate(yesterday.getDate() - 1);
-    if (date.toDateString() === yesterday.toDateString()) return `Yesterday • ${timeString}`;
+    if (date.toDateString() === yesterday.toDateString()) return `Yesterday`;
 
-    return `${date.toLocaleDateString("en-US", { month: "short", day: "numeric" })} • ${timeString}`;
+    return `${date.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`;
   };
 
   const typeColor = (type: string) => {
@@ -167,7 +167,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                 {workouts.map((workout, index) => (
                   <motion.div
                     key={workout.id}
-                    className="flex-shrink-0 w-[200px] sm:w-[220px] md:w-[240px] border-2 border-gray-200 rounded-lg bg-white hover:border-primary-300 transition-colors relative overflow-hidden"
+                    className="flex-shrink-0 w-[200px] sm:w-[220px] md:w-[240px] border border-gray-200 rounded-xl bg-white hover:border-primary-300 transition-colors relative overflow-hidden shadow-sm"
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.5 }}
@@ -177,8 +177,8 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                       visible: { opacity: 1, y: 0 },
                     }}
                   >
-                    {/* Square Image — shown at top if present */}
-                    {workout.image_url && (
+                    {/* Square Image */}
+                    {workout.image_url ? (
                       <div className="w-full aspect-square overflow-hidden">
                         <img
                           src={workout.image_url}
@@ -186,45 +186,55 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                           className="w-full h-full object-cover"
                         />
                       </div>
+                    ) : (
+                      // Placeholder when no image
+                      <div className="w-full aspect-square bg-gray-100 flex items-center justify-center">
+                        <span className="text-3xl">
+                          {workout.type === "cardio" ? "🚴" : workout.type === "sport" ? "🏅" : "💪"}
+                        </span>
+                      </div>
                     )}
 
-                    {/* Card Content */}
-                    <div className="p-4 md:p-6">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1 min-w-0 pr-3">
-                          <div className="flex flex-wrap items-center gap-2 mb-2">
-                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${typeColor(workout.type)}`}>
-                              {workout.type.toUpperCase()}
-                            </span>
-                            <span className="text-sm font-bold text-primary-500 truncate">
-                              @{workout.username}
-                            </span>
-                          </div>
-                          <h3 className="text-base md:text-lg font-bold text-gray-800 truncate">
-                            {workout.activity}
-                          </h3>
-                          <div className="flex flex-wrap items-center gap-2 md:gap-4 mt-2 text-xs md:text-sm text-gray-600">
-                            {workout.duration && <span>{workout.duration} min</span>}
-                            <span>{formatDate(workout.date)}</span>
-                            {workout.score > 0 && (
-                              <span className="font-semibold text-accent-500">{workout.score} Points</span>
-                            )}
-                          </div>
+                    {/* Compact Card Info */}
+                    <div className="p-2.5">
+                      {/* Top row: type badge + username + comment btn */}
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold flex-shrink-0 ${typeColor(workout.type)}`}>
+                            {workout.type.toUpperCase()}
+                          </span>
+                          <span className="text-xs font-semibold text-primary-500 truncate">
+                            @{workout.username}
+                          </span>
                         </div>
-
-                        {/* Comment button */}
                         <button
                           onClick={() => handleCommentClick(workout)}
-                          className="relative text-primary-500 hover:text-primary-700 transition-colors group flex-shrink-0"
+                          className="relative text-primary-500 hover:text-primary-700 transition-colors group flex-shrink-0 ml-1"
                           title="View Comments"
                         >
-                          <ChatBubbleBottomCenterTextIcon className="h-6 w-6" />
+                          <ChatBubbleBottomCenterTextIcon className="h-4 w-4" />
                           {workout.comment_count > 0 && (
-                            <span className="absolute group-hover:scale-110 top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-primary-500/90 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                            <span className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-primary-500/90 text-white text-[9px] font-bold rounded-full h-3.5 w-3.5 flex items-center justify-center">
                               {workout.comment_count > 9 ? "9+" : workout.comment_count}
                             </span>
                           )}
                         </button>
+                      </div>
+
+                      {/* Activity name */}
+                      <p className="text-xs font-bold text-gray-800 truncate leading-tight">
+                        {workout.activity}
+                      </p>
+
+                      {/* Metadata: duration, time, score */}
+                      <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                        {workout.duration && (
+                          <span className="text-[10px] text-gray-500">{workout.duration}m</span>
+                        )}
+                        <span className="text-[10px] text-gray-400">{formatDate(workout.date)}</span>
+                        {workout.score > 0 && (
+                          <span className="text-[10px] font-bold text-accent-500">{workout.score}pts</span>
+                        )}
                       </div>
                     </div>
                   </motion.div>
@@ -273,11 +283,11 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
               {/* Comments List */}
               <div className="flex-grow overflow-y-auto p-4">
                 {commentLoading ? (
-                  <p className="text-center text-white">Loading comments...</p>
+                  <p className="text-center text-gray-500">Loading comments...</p>
                 ) : commentError ? (
                   <p className="text-center text-red-500">{commentError}</p>
                 ) : comments.length === 0 ? (
-                  <p className="text-center text-white">No comments yet</p>
+                  <p className="text-center text-gray-400">No comments yet</p>
                 ) : (
                   <div className="space-y-3">
                     {comments.map((comment) => (
@@ -290,7 +300,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                             {formatDate(comment.created_at)}
                           </span>
                         </div>
-                        <p className="text-white text-sm">{comment.text}</p>
+                        <p className="text-gray-700 text-sm">{comment.text}</p>
                       </div>
                     ))}
                   </div>
