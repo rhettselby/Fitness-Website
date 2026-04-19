@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/navbar";
 import { SelectedPage } from "@/shared/types";
@@ -30,6 +30,11 @@ const AddWorkoutPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [showTime, setShowTime] = useState(false);
 
+  // Image
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   // Gym-specific
   const [gymView, setGymView] = useState<GymView>("form");
   const [exercises, setExercises] = useState<Exercise[]>([]);
@@ -51,6 +56,24 @@ const AddWorkoutPage = () => {
 
   const navigate = useNavigate();
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      setError("Image must be under 10MB.");
+      return;
+    }
+    setImage(file);
+    setImagePreview(URL.createObjectURL(file));
+    setError(null);
+  };
+
+  const handleRemoveImage = () => {
+    setImage(null);
+    setImagePreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
   const handleAddExercise = () => {
     setExerciseError(null);
     const { name, numSets, reps, weight } = exerciseInput;
@@ -71,13 +94,7 @@ const AddWorkoutPage = () => {
     setExercises((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const getAuthHeaders = () => {
-    const token = TokenService.getAccessToken();
-    return {
-      "Content-Type": "application/json",
-      ...(token && { Authorization: `Bearer ${token}` }),
-    };
-  };
+  const getToken = () => TokenService.getAccessToken();
 
   const handleErrorResponse = async (response: Response): Promise<string> => {
     try {
@@ -97,19 +114,32 @@ const AddWorkoutPage = () => {
     }
   };
 
+  // Build FormData — no Content-Type header, browser sets it automatically
+  const buildFormData = (fields: Record<string, string>) => {
+    const formData = new FormData();
+    Object.entries(fields).forEach(([key, value]) => formData.append(key, value));
+    if (image) formData.append("image", image);
+    return formData;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
     const dateTime = time ? `${date}T${time}` : `${date}T00:00`;
+    const token = getToken();
+    // Don't set Content-Type — browser sets multipart/form-data boundary automatically
+    const authHeader: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
 
     try {
       if (type === "gym") {
         if (!activity.trim()) return setError("Please enter an activity.");
+        const formData = buildFormData({ activity: activity.trim(), date: dateTime });
+        formData.append("exercises", JSON.stringify(exercises));
         const response = await fetch(`${API_URL}/api/fitness/add/gym/`, {
           method: "POST",
-          headers: getAuthHeaders(),
-          body: JSON.stringify({ activity: activity.trim(), date: dateTime, exercises }),
+          headers: authHeader,
+          body: formData,
         });
         if (!response.ok) return setError(await handleErrorResponse(response));
         const data = await response.json();
@@ -119,10 +149,15 @@ const AddWorkoutPage = () => {
       } else if (type === "cardio") {
         if (!activity.trim()) return setError("Please enter an activity.");
         if (!duration || Number(duration) <= 0) return setError("Please enter a valid duration (greater than 0).");
+        const formData = buildFormData({
+          activity: activity.trim(),
+          date: dateTime,
+          duration: String(duration),
+        });
         const response = await fetch(`${API_URL}/api/fitness/add/cardio/`, {
           method: "POST",
-          headers: getAuthHeaders(),
-          body: JSON.stringify({ activity: activity.trim(), date: dateTime, duration }),
+          headers: authHeader,
+          body: formData,
         });
         if (!response.ok) return setError(await handleErrorResponse(response));
         const data = await response.json();
@@ -132,15 +167,16 @@ const AddWorkoutPage = () => {
       } else if (type === "sport") {
         if (!sportName.trim()) return setError("Please enter a sport.");
         if (!duration || Number(duration) <= 0) return setError("Please enter a valid duration.");
+        const formData = buildFormData({
+          sport: sportName.trim(),
+          date: dateTime,
+          duration: String(duration),
+          level: sportLevel,
+        });
         const response = await fetch(`${API_URL}/api/fitness/add/sport/`, {
           method: "POST",
-          headers: getAuthHeaders(),
-          body: JSON.stringify({
-            sport: sportName.trim(),
-            date: dateTime,
-            duration,
-            level: sportLevel,
-          }),
+          headers: authHeader,
+          body: formData,
         });
         if (!response.ok) return setError(await handleErrorResponse(response));
         const data = await response.json();
@@ -155,6 +191,42 @@ const AddWorkoutPage = () => {
       setError("Could not save workout. Please double-check your inputs.");
     }
   };
+
+  // Reusable image upload section
+  const ImageUploadSection = () => (
+    <div>
+      <label className="block text-gray-700 font-semibold mb-2 text-sm md:text-base">
+        Photo <span className="text-gray-400 font-normal">(optional)</span>
+      </label>
+      {imagePreview ? (
+        <div className="relative rounded-lg overflow-hidden border border-gray-200">
+          <img src={imagePreview} alt="Preview" className="w-full h-48 object-cover" />
+          <button
+            type="button"
+            onClick={handleRemoveImage}
+            className="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm hover:bg-opacity-70 transition"
+            aria-label="Remove image"
+          >
+            ×
+          </button>
+        </div>
+      ) : (
+        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 hover:bg-gray-50 transition">
+          <span className="text-2xl mb-1">📷</span>
+          <span className="text-sm text-gray-500 font-medium">Take a photo or upload</span>
+          <span className="text-xs text-gray-400 mt-0.5">Opens camera on mobile</span>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            onChange={handleImageChange}
+            className="hidden"
+          />
+        </label>
+      )}
+    </div>
+  );
 
   const TimePickerSection = () => (
     <div>
@@ -246,6 +318,7 @@ const AddWorkoutPage = () => {
                 />
               </div>
               <TimePickerSection />
+              <ImageUploadSection />
               {error && <p className="text-red-500 text-sm text-center">{error}</p>}
               <button type="submit" className="w-full bg-primary-500 text-white py-4 md:py-3 rounded-lg text-lg font-semibold hover:bg-primary-600 transition active:scale-95">
                 Save Workout
@@ -311,6 +384,7 @@ const AddWorkoutPage = () => {
                 </div>
               </div>
               <TimePickerSection />
+              <ImageUploadSection />
               {error && <p className="text-red-500 text-sm text-center">{error}</p>}
               <button
                 type="submit"
@@ -352,6 +426,7 @@ const AddWorkoutPage = () => {
                   </span>
                 )}
               </button>
+              <ImageUploadSection />
               {error && <p className="text-red-500 text-sm text-center">{error}</p>}
               <button type="submit" className="w-full bg-primary-500 text-white py-4 md:py-3 rounded-lg text-lg font-semibold hover:bg-primary-600 transition active:scale-95">
                 Save Workout
