@@ -191,8 +191,8 @@ const AddWorkoutPage = () => {
       setError("Could not save workout. Please double-check your inputs.");
     }
   };
-
-  // Reusable image upload section d
+  //force redploy
+  // Reusable image upload section
   const ImageUploadSection = () => (
     <div>
       <label className="block text-gray-700 font-semibold mb-2 text-sm md:text-base">
