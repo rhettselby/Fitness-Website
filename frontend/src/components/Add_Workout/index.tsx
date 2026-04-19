@@ -192,7 +192,7 @@ const AddWorkoutPage = () => {
     }
   };
 
-  // Reusable image upload section
+  // Reusable image upload section 
   const ImageUploadSection = () => (
     <div>
       <label className="block text-gray-700 font-semibold mb-2 text-sm md:text-base">
