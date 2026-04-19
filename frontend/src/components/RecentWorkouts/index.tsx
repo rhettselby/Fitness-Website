@@ -139,7 +139,6 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     return "bg-secondary-500 text-white";
   };
 
-  // Reusable top row — type badge + username + comment btn
   const CardTopRow = ({ workout }: { workout: Workout }) => (
     <div className="flex items-center justify-between px-3 pt-3 flex-shrink-0">
       <div className="flex items-center gap-1.5 min-w-0">
@@ -165,7 +164,6 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     </div>
   );
 
-  // Reusable activity + score row
   const CardMeta = ({ workout }: { workout: Workout }) => (
     <div className="flex flex-col gap-1 px-3">
       <p className="text-base font-extrabold text-gray-900 truncate leading-tight">
@@ -234,31 +232,31 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}
                   >
-                    {/* Top row — always pinned to top */}
+                    {/* Top row — always pinned */}
                     <CardTopRow workout={workout} />
 
-                    {workout.image_url ? (
-                      /* HAS IMAGE: activity + score in middle, button at bottom */
-                      <>
-                        <div className="flex-1 flex flex-col justify-center">
-                          <CardMeta workout={workout} />
+                    {/* Middle — activity + score centered */}
+                    <div className="flex-1 flex flex-col justify-center">
+                      <CardMeta workout={workout} />
+                    </div>
+
+                    {/* Bottom — View Photo or dashed placeholder */}
+                    <div className="px-3 pb-3 flex-shrink-0">
+                      {workout.image_url ? (
+                        <button
+                          onClick={() => handleViewPhoto(workout)}
+                          className="pulse-photo-btn w-full flex items-center justify-center gap-1.5 bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold py-2 rounded-lg transition-colors"
+                        >
+                          <span>📷</span>
+                          <span>View Photo</span>
+                        </button>
+                      ) : (
+                        <div className="w-full flex items-center justify-center gap-1.5 border-2 border-dashed border-gray-200 rounded-lg py-2">
+                          <span className="text-sm text-gray-300">📷</span>
+                          <span className="text-xs text-gray-300 font-medium">No photo added</span>
                         </div>
-                        <div className="px-3 pb-3 flex-shrink-0">
-                          <button
-                            onClick={() => handleViewPhoto(workout)}
-                            className="pulse-photo-btn w-full flex items-center justify-center gap-1.5 bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold py-2 rounded-lg transition-colors"
-                          >
-                            <span>📷</span>
-                            <span>View Photo</span>
-                          </button>
-                        </div>
-                      </>
-                    ) : (
-                      /* NO IMAGE: activity + score centered in remaining space */
-                      <div className="flex-1 flex flex-col justify-center">
-                        <CardMeta workout={workout} />
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </motion.div>
                 ))}
               </div>
