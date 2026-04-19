@@ -318,7 +318,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                 ) : commentError ? (
                   <p className="text-center text-red-500">{commentError}</p>
                 ) : comments.length === 0 ? (
-                  <p className="text-center text-gray-400">No comments yet</p>
+                  <p className="text-center text-white">No comments yet</p>
                 ) : (
                   <div className="space-y-3">
                     {comments.map((comment) => (
@@ -327,7 +327,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                           <span className="font-bold text-primary-500 text-sm truncate">
                             @{comment.user.username}
                           </span>
-                          <span className="text-xs text-gray-500 flex-shrink-0">
+                          <span className="text-xs text-white flex-shrink-0">
                             {formatDate(comment.created_at)}
                           </span>
                         </div>
