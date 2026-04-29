@@ -237,13 +237,13 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
 
     if (isOwner) {
       return (
-        <label className="w-full flex items-center justify-center gap-1.5 border-2 border-dashed border-primary-300 hover:border-primary-500 hover:bg-primary-50 rounded-lg py-2 cursor-pointer transition-colors">
+        <label className="w-full flex items-center justify-center gap-1.5 bg-primary-500 hover:bg-primary-600 active:scale-95 text-white text-sm font-semibold py-2 rounded-lg cursor-pointer transition-all shadow-sm">
           {isUploading ? (
-            <span className="text-xs text-primary-400 font-medium">Uploading...</span>
+            <span className="text-xs text-white font-medium">Uploading...</span>
           ) : (
             <>
-              <span className="text-sm text-primary-400">📷</span>
-              <span className="text-xs text-primary-400 font-medium">Add Photo</span>
+              <span className="text-sm">📷</span>
+              <span className="text-sm font-bold">Add Photo</span>
             </>
           )}
           <input
