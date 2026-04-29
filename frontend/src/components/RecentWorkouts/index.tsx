@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SelectedPage } from "@/shared/types";
 import { API_URL } from "@/lib/config";
+import { TokenService } from "@/utils/auth";
 import { XMarkIcon, ChatBubbleBottomCenterTextIcon } from "@heroicons/react/24/solid";
 
 type Props = {
@@ -38,6 +39,10 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
   const [commentLoading, setCommentLoading] = useState(false);
   const [newComment, setNewComment] = useState("");
   const [commentError, setCommentError] = useState<string | null>(null);
+  const [uploadingId, setUploadingId] = useState<number | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const currentUser = TokenService.getUser();
 
   useEffect(() => {
     const fetchRecentWorkouts = async () => {
@@ -69,6 +74,39 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
       setCommentError("Network error. Please try again.");
     } finally {
       setCommentLoading(false);
+    }
+  };
+
+  const handleUploadImage = async (workoutId: number, workoutType: string, file: File) => {
+    setUploadingId(workoutId);
+    setUploadError(null);
+    const formData = new FormData();
+    formData.append("image", file);
+    try {
+      const response = await fetch(`${API_URL}/api/fitness/api/add-image/${workoutId}/`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+        body: formData,
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setWorkouts((prev) =>
+          prev.map((w) =>
+            w.id === workoutId && w.type === workoutType
+              ? { ...w, image_url: data.image_url }
+              : w
+          )
+        );
+      } else {
+        setUploadError(data.error || "Upload failed");
+      }
+    } catch (err) {
+      console.error("Upload failed:", err);
+      setUploadError("Network error. Please try again.");
+    } finally {
+      setUploadingId(null);
     }
   };
 
@@ -181,6 +219,57 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     </div>
   );
 
+  const CardBottomRow = ({ workout }: { workout: Workout }) => {
+    const isOwner = currentUser?.username === workout.username;
+    const isUploading = uploadingId === workout.id;
+
+    if (workout.image_url) {
+      return (
+        <button
+          onClick={() => handleViewPhoto(workout)}
+          className="pulse-photo-btn w-full flex items-center justify-center gap-1.5 bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold py-2 rounded-lg transition-colors"
+        >
+          <span>📷</span>
+          <span>View Photo</span>
+        </button>
+      );
+    }
+
+    if (isOwner) {
+      return (
+        <label className="w-full flex items-center justify-center gap-1.5 border-2 border-dashed border-primary-300 hover:border-primary-500 hover:bg-primary-50 rounded-lg py-2 cursor-pointer transition-colors">
+          {isUploading ? (
+            <span className="text-xs text-primary-400 font-medium">Uploading...</span>
+          ) : (
+            <>
+              <span className="text-sm text-primary-400">📷</span>
+              <span className="text-xs text-primary-400 font-medium">Add Photo</span>
+            </>
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            capture="environment"
+            className="hidden"
+            disabled={isUploading}
+            onChange={(e) => {
+              if (e.target.files?.[0]) {
+                handleUploadImage(workout.id, workout.type, e.target.files[0]);
+              }
+            }}
+          />
+        </label>
+      );
+    }
+
+    return (
+      <div className="w-full flex items-center justify-center gap-1.5 border-2 border-dashed border-gray-200 rounded-lg py-2">
+        <span className="text-sm text-gray-300">📷</span>
+        <span className="text-xs text-gray-300 font-medium">No photo added</span>
+      </div>
+    );
+  };
+
   return (
     <section id="recentworkouts" className="w-full bg-primary-100 py-16 md:py-20">
       <style>{`
@@ -213,6 +302,21 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
             </p>
           </motion.div>
 
+          {/* Upload error toast */}
+          <AnimatePresence>
+            {uploadError && (
+              <motion.div
+                className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm text-center"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+              >
+                {uploadError}
+                <button onClick={() => setUploadError(null)} className="ml-2 font-bold">×</button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {/* Workout Cards */}
           <div className="overflow-x-auto overflow-y-hidden pb-4 -mx-4 px-4">
             {loading ? (
@@ -232,30 +336,14 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}
                   >
-                    {/* Top row — always pinned */}
                     <CardTopRow workout={workout} />
 
-                    {/* Middle — activity + score centered */}
                     <div className="flex-1 flex flex-col justify-center">
                       <CardMeta workout={workout} />
                     </div>
 
-                    {/* Bottom — View Photo or dashed placeholder */}
                     <div className="px-3 pb-3 flex-shrink-0">
-                      {workout.image_url ? (
-                        <button
-                          onClick={() => handleViewPhoto(workout)}
-                          className="pulse-photo-btn w-full flex items-center justify-center gap-1.5 bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold py-2 rounded-lg transition-colors"
-                        >
-                          <span>📷</span>
-                          <span>View Photo</span>
-                        </button>
-                      ) : (
-                        <div className="w-full flex items-center justify-center gap-1.5 border-2 border-dashed border-gray-200 rounded-lg py-2">
-                          <span className="text-sm text-gray-300">📷</span>
-                          <span className="text-xs text-gray-300 font-medium">No photo added</span>
-                        </div>
-                      )}
+                      <CardBottomRow workout={workout} />
                     </div>
                   </motion.div>
                 ))}
@@ -297,7 +385,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                 </button>
               </div>
 
-              {/* Photo — fixed 45% height, object-contain with white letterbox */}
+              {/* Photo */}
               {showPhoto && selectedWorkout.image_url && (
                 <div
                   className="flex-shrink-0 w-full bg-white border-b flex items-center justify-center"
@@ -314,11 +402,11 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
               {/* Comments List */}
               <div className="flex-grow overflow-y-auto p-4">
                 {commentLoading ? (
-                  <p className="text-center text-white">Loading comments...</p>
+                  <p className="text-center text-gray-400">Loading comments...</p>
                 ) : commentError ? (
                   <p className="text-center text-red-500">{commentError}</p>
                 ) : comments.length === 0 ? (
-                  <p className="text-center text-white">No comments yet</p>
+                  <p className="text-center text-gray-400">No comments yet</p>
                 ) : (
                   <div className="space-y-3">
                     {comments.map((comment) => (
@@ -327,11 +415,11 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                           <span className="font-bold text-primary-500 text-sm truncate">
                             @{comment.user.username}
                           </span>
-                          <span className="text-xs text-white flex-shrink-0">
+                          <span className="text-xs text-gray-400 flex-shrink-0">
                             {formatDate(comment.created_at)}
                           </span>
                         </div>
-                        <p className="text-white text-sm">{comment.text}</p>
+                        <p className="text-gray-700 text-sm">{comment.text}</p>
                       </div>
                     ))}
                   </div>

@@ -46,12 +46,20 @@ const AddWorkoutPage = () => {
   });
   const [exerciseError, setExerciseError] = useState<string | null>(null);
 
+
+  const toLocalDateString = (d: Date) => {
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+  };
+
   // Sport-specific
   const [sportName, setSportName] = useState("");
   const [sportLevel, setSportLevel] = useState<"recreational" | "competitive">("recreational");
 
   const now = new Date();
-  const [date, setDate] = useState(now.toISOString().slice(0, 10));
+  const [date, setDate] = useState(toLocalDateString(now));
   const [time, setTime] = useState(now.toTimeString().slice(0, 5));
 
   const navigate = useNavigate();
@@ -89,6 +97,7 @@ const AddWorkoutPage = () => {
     setExerciseInput({ name: "", numSets: "", reps: "", weight: "" });
     setGymView("exercises");
   };
+
 
   const handleRemoveExercise = (index: number) => {
     setExercises((prev) => prev.filter((_, i) => i !== index));
@@ -238,7 +247,7 @@ const AddWorkoutPage = () => {
         <div className="mt-2 space-y-3 bg-gray-50 rounded-lg p-4">
           <div>
             <label className="block text-gray-600 font-medium mb-1 text-sm">Date</label>
-            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} max={new Date().toISOString().slice(0, 10)} className="w-full border rounded-lg px-4 py-3 text-black text-base" />
+            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} max={toLocalDateString(new Date())} className="w-full border rounded-lg px-4 py-3 text-black text-base" />
           </div>
           <div>
             <label className="block text-gray-600 font-medium mb-1 text-sm">Time</label>
