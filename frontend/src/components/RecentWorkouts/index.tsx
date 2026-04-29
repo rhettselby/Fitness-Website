@@ -119,7 +119,6 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
   const handleViewPhoto = (workout: Workout) => {
     setSelectedWorkout(workout);
     setShowPhoto(true);
-    fetchComments(workout.id, workout.type);
   };
 
   const handleCloseModal = () => {
@@ -219,7 +218,8 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     </div>
   );
 
-  const CardBottomRow = ({ workout }: { workout: Workout }) => {
+  const CardBottomRow = ({ workout: initialWorkout }: { workout: Workout }) => {
+    const workout = workouts.find((w) => w.id === initialWorkout.id && w.type === initialWorkout.type) ?? initialWorkout;
     const isOwner = currentUser?.username === workout.username;
     const isUploading = uploadingId === workout.id;
 
@@ -354,9 +354,44 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
         </motion.div>
       </div>
 
-      {/* Modal */}
+      {/* Photo-only Modal */}
       <AnimatePresence>
-        {selectedWorkout && (
+        {selectedWorkout && showPhoto && (
+          <motion.div
+            className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center px-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={(e) => { if (e.target === e.currentTarget) handleCloseModal(); }}
+          >
+            <motion.div
+              className="relative w-full max-w-2xl"
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+            >
+              <button
+                onClick={handleCloseModal}
+                className="absolute -top-10 right-0 text-white hover:text-gray-300 transition"
+              >
+                <XMarkIcon className="h-7 w-7" />
+              </button>
+              <img
+                src={selectedWorkout.image_url!}
+                alt={selectedWorkout.activity}
+                className="w-full max-h-[80vh] object-contain rounded-lg"
+              />
+              <p className="text-white text-center text-sm mt-3 font-semibold">
+                {selectedWorkout.activity} — @{selectedWorkout.username}
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Comments Modal */}
+      <AnimatePresence>
+        {selectedWorkout && !showPhoto && (
           <motion.div
             className="fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center px-0 sm:px-4"
             initial={{ opacity: 0 }}
@@ -384,20 +419,6 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                   <XMarkIcon className="h-6 w-6" />
                 </button>
               </div>
-
-              {/* Photo */}
-              {showPhoto && selectedWorkout.image_url && (
-                <div
-                  className="flex-shrink-0 w-full bg-white border-b flex items-center justify-center"
-                  style={{ height: "45%" }}
-                >
-                  <img
-                    src={selectedWorkout.image_url}
-                    alt={selectedWorkout.activity}
-                    className="h-full w-full object-contain"
-                  />
-                </div>
-              )}
 
               {/* Comments List */}
               <div className="flex-grow overflow-y-auto p-4">
