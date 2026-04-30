@@ -91,6 +91,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     setUploadError(null);
     const formData = new FormData();
     formData.append("image", file);
+    formData.append("workout_type", workoutType); 
     try {
       const response = await fetch(`${API_URL}/api/fitness/api/add-image/${workoutId}/`, {
         method: "POST",
