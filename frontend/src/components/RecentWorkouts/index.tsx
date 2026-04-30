@@ -235,6 +235,12 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
 
     const isOwner = currentUser?.username === workout.username;
     const isUploading = uploadingId === workout.id;
+    console.log({
+  currentUser: currentUser?.username,
+  workoutUser: workout.username,
+  image: workout.image_url,
+  isOwner,
+});
 
     // Workout already has a photo — show "View Photo" for everyone
     if (workout.image_url) {
@@ -366,9 +372,9 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                   </motion.div>
                 ))}
               </div>
+
             )}
           </div>
-
         </motion.div>
       </div>
 
