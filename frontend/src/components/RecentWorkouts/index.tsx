@@ -43,32 +43,18 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
   const [uploadingId, setUploadingId] = useState<number | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
-  // Fetch current logged-in user from the server using the JWT token
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      const token = TokenService.getAccessToken();
-      if (!token) return;
-      try {
-        const response = await fetch(`${API_URL}/api/posts/me/`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          if (data.username) setCurrentUser(data);
-        }
-      } catch (error) {
-        console.error("Error fetching current user:", error);
-      }
-    };
-    fetchCurrentUser();
-  }, []);
-
   useEffect(() => {
     const fetchRecentWorkouts = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/posts/recent-workouts/`);
+        const response = await fetch(`${API_URL}/api/posts/recent-workouts/`, {
+          headers: {
+            Authorization: `Bearer ${TokenService.getAccessToken()}`,
+          },
+        });
         const data = await response.json();
         setWorkouts(data.workouts || []);
+        // Read the logged-in user directly from the response
+        if (data.user) setCurrentUser(data.user);
       } catch (error) {
         console.error("Error fetching recent workouts:", error);
       } finally {
