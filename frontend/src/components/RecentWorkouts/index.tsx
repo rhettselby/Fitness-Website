@@ -31,9 +31,9 @@ type Comment = {
 const CARD_HEIGHT = 157;
 
 const RecentWorkouts = ({ setSelectedPage }: Props) => {
-  console.log("TokenService user:", TokenService.getUser());
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState<{ id: number; username: string } | null>(null);
   const [selectedWorkout, setSelectedWorkout] = useState<Workout | null>(null);
   const [showPhoto, setShowPhoto] = useState(false);
   const [comments, setComments] = useState<Comment[]>([]);
@@ -43,7 +43,25 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
   const [uploadingId, setUploadingId] = useState<number | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
-  const currentUser = TokenService.getUser();
+  // Fetch current logged-in user from the server using the JWT token
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const token = TokenService.getAccessToken();
+      if (!token) return;
+      try {
+        const response = await fetch(`${API_URL}/api/posts/me/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          if (data.username) setCurrentUser(data);
+        }
+      } catch (error) {
+        console.error("Error fetching current user:", error);
+      }
+    };
+    fetchCurrentUser();
+  }, []);
 
   useEffect(() => {
     const fetchRecentWorkouts = async () => {
@@ -78,7 +96,6 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     }
   };
 
-  // FIX: workoutType is now the proper union type instead of `string`
   const handleUploadImage = async (
     workoutId: number,
     workoutType: "cardio" | "gym" | "sport",
@@ -92,14 +109,12 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
       const response = await fetch(`${API_URL}/api/fitness/api/add-image/${workoutId}/`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          Authorization: `Bearer ${TokenService.getAccessToken()}`,
         },
         body: formData,
       });
       const data = await response.json();
       if (response.ok) {
-        // FIX: match on both id AND type so workouts with the same id but
-        // different types don't get their image_url incorrectly updated
         setWorkouts((prev) =>
           prev.map((w) =>
             w.id === workoutId && w.type === workoutType
@@ -146,7 +161,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          Authorization: `Bearer ${TokenService.getAccessToken()}`,
         },
         body: JSON.stringify({
           workout_id: selectedWorkout.id,
@@ -227,8 +242,6 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
   );
 
   const CardBottomRow = ({ workout: initialWorkout }: { workout: Workout }) => {
-    // FIX: match on both id AND type to get the freshest state for this
-    // specific workout, since different workout types can share the same id
     const workout =
       workouts.find(
         (w) => w.id === initialWorkout.id && w.type === initialWorkout.type
@@ -236,12 +249,6 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
 
     const isOwner = currentUser?.username === workout.username;
     const isUploading = uploadingId === workout.id;
-    console.log({
-  currentUser: currentUser?.username,
-  workoutUser: workout.username,
-  image: workout.image_url,
-  isOwner,
-});
 
     // Workout already has a photo — show "View Photo" for everyone
     if (workout.image_url) {
@@ -276,8 +283,6 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
             disabled={isUploading}
             onChange={(e) => {
               if (e.target.files?.[0]) {
-                // FIX: pass workout.type (union type) — not a plain string —
-                // so the state update comparison in handleUploadImage works correctly
                 handleUploadImage(workout.id, workout.type, e.target.files[0]);
               }
             }}
@@ -373,9 +378,9 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                   </motion.div>
                 ))}
               </div>
-
             )}
           </div>
+
         </motion.div>
       </div>
 
