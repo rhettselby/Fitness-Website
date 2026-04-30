@@ -77,7 +77,12 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     }
   };
 
-  const handleUploadImage = async (workoutId: number, workoutType: string, file: File) => {
+  // FIX: workoutType is now the proper union type instead of `string`
+  const handleUploadImage = async (
+    workoutId: number,
+    workoutType: "cardio" | "gym" | "sport",
+    file: File
+  ) => {
     setUploadingId(workoutId);
     setUploadError(null);
     const formData = new FormData();
@@ -92,6 +97,8 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
       });
       const data = await response.json();
       if (response.ok) {
+        // FIX: match on both id AND type so workouts with the same id but
+        // different types don't get their image_url incorrectly updated
         setWorkouts((prev) =>
           prev.map((w) =>
             w.id === workoutId && w.type === workoutType
@@ -219,10 +226,17 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
   );
 
   const CardBottomRow = ({ workout: initialWorkout }: { workout: Workout }) => {
-    const workout = workouts.find((w) => w.id === initialWorkout.id && w.type === initialWorkout.type) ?? initialWorkout;
+    // FIX: match on both id AND type to get the freshest state for this
+    // specific workout, since different workout types can share the same id
+    const workout =
+      workouts.find(
+        (w) => w.id === initialWorkout.id && w.type === initialWorkout.type
+      ) ?? initialWorkout;
+
     const isOwner = currentUser?.username === workout.username;
     const isUploading = uploadingId === workout.id;
 
+    // Workout already has a photo — show "View Photo" for everyone
     if (workout.image_url) {
       return (
         <button
@@ -235,6 +249,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
       );
     }
 
+    // No photo yet — only the owner can add one
     if (isOwner) {
       return (
         <label className="w-full flex items-center justify-center gap-1.5 bg-primary-500 hover:bg-primary-600 active:scale-95 text-white text-sm font-semibold py-2 rounded-lg cursor-pointer transition-all shadow-sm">
@@ -254,6 +269,8 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
             disabled={isUploading}
             onChange={(e) => {
               if (e.target.files?.[0]) {
+                // FIX: pass workout.type (union type) — not a plain string —
+                // so the state update comparison in handleUploadImage works correctly
                 handleUploadImage(workout.id, workout.type, e.target.files[0]);
               }
             }}
@@ -262,6 +279,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
       );
     }
 
+    // No photo and not the owner — show placeholder
     return (
       <div className="w-full flex items-center justify-center gap-1.5 border-2 border-dashed border-gray-200 rounded-lg py-2">
         <span className="text-sm text-gray-300">📷</span>
@@ -327,7 +345,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
               <div className="flex gap-3 md:gap-4 min-w-min items-start">
                 {workouts.map((workout, index) => (
                   <motion.div
-                    key={workout.id}
+                    key={`${workout.type}-${workout.id}`}
                     className="flex-shrink-0 w-[200px] sm:w-[220px] md:w-[240px] border border-gray-200 rounded-xl bg-white shadow-sm hover:border-primary-300 transition-colors overflow-hidden flex flex-col"
                     style={{ height: CARD_HEIGHT }}
                     initial="hidden"
