@@ -31,6 +31,7 @@ type Comment = {
 const CARD_HEIGHT = 157;
 
 const RecentWorkouts = ({ setSelectedPage }: Props) => {
+  console.log("TokenService user:", TokenService.getUser());
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedWorkout, setSelectedWorkout] = useState<Workout | null>(null);
