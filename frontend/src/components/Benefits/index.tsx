@@ -37,7 +37,6 @@ const container = {
 };
 
 const RANK_MEDALS: Record<number, string> = { 1: "🥇", 2: "🥈", 3: "🥉" };
-const REVEAL_DELAY_MS = 1200;
 
 type LeaderboardEntry = {
   rank: number;
@@ -57,10 +56,10 @@ type Props = {
 
 /* ── Pyramid card ── */
 const rankAccent = (rank: number) => {
-  if (rank === 1) return { border: "border-yellow-400", glow: "shadow-yellow-300", bg: "from-yellow-50 to-amber-100", text: "text-yellow-700" };
-  if (rank === 2) return { border: "border-gray-400",   glow: "shadow-gray-300",   bg: "from-gray-50 to-slate-100",  text: "text-gray-600"   };
-  if (rank === 3) return { border: "border-amber-600",  glow: "shadow-amber-300",  bg: "from-amber-50 to-orange-100",text: "text-amber-700"  };
-  return            { border: "border-primary-200",     glow: "shadow-primary-100",bg: "from-primary-50 to-teal-50", text: "text-primary-600" };
+  if (rank === 1) return { border: "border-yellow-400", glow: "shadow-yellow-300", bg: "from-yellow-50 to-amber-100",   text: "text-yellow-700" };
+  if (rank === 2) return { border: "border-gray-400",   glow: "shadow-gray-300",   bg: "from-gray-50 to-slate-100",    text: "text-gray-600"   };
+  if (rank === 3) return { border: "border-amber-600",  glow: "shadow-amber-300",  bg: "from-amber-50 to-orange-100",  text: "text-amber-700"  };
+  return            { border: "border-slate-400",       glow: "shadow-slate-300",  bg: "from-slate-100 to-slate-200",  text: "text-slate-600"  };
 };
 
 const PyramidCard = ({
@@ -147,16 +146,20 @@ const Benefits = ({ setSelectedPage }: Props) => {
 
   useEffect(() => {
     if (loadingGroup || leaderboard.length === 0) return;
-    const order = [4, 6, 5, 2, 3, 1].filter((r) =>
+    const order = [6, 5, 4, 3, 2, 1].filter((r) =>
       leaderboard.some((e) => e.rank === r)
     );
     let count = 0;
-    const interval = setInterval(() => {
-      count += 1;
-      setRevealedCount(count);
-      if (count >= order.length) clearInterval(interval);
-    }, REVEAL_DELAY_MS);
-    return () => clearInterval(interval);
+    const scheduleNext = () => {
+      const isLast = count + 1 >= order.length;
+      const delay = isLast ? 900 : 400; // fast for all except rank 1
+      setTimeout(() => {
+        count += 1;
+        setRevealedCount(count);
+        if (count < order.length) scheduleNext();
+      }, delay);
+    };
+    scheduleNext();
   }, [loadingGroup, leaderboard]);
 
   const fetchDefaultGroup = async () => {
@@ -196,7 +199,7 @@ const Benefits = ({ setSelectedPage }: Props) => {
     }
   };
 
-  const fullRevealOrder = [4, 6, 5, 2, 3, 1];
+  const fullRevealOrder = [6, 5, 4, 3, 2, 1];
   const presentRanks = new Set(leaderboard.map((e) => e.rank));
   const revealSequence = fullRevealOrder.filter((r) => presentRanks.has(r));
   const isRevealed = (rank: number) => {
@@ -210,7 +213,7 @@ const Benefits = ({ setSelectedPage }: Props) => {
   // ── Logged-in: show group pyramid ──
   if (isAuthenticated) {
     return (
-      <section id="benefits" className="hidden md:block w-full py-16 md:py-20 bg-gray-950 col-span-full" style={{ gridColumn: "1 / -1" }}>
+      <section id="benefits" className="hidden md:block w-full py-16 md:py-20 bg-gray-900 col-span-full" style={{ gridColumn: "1 / -1" }}>
         <div className="max-w-2xl mx-auto px-4">
           <motion.div onViewportEnter={() => setSelectedPage(SelectedPage.Home)}>
             <motion.div
