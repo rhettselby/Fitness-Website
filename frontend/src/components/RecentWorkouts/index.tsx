@@ -19,6 +19,7 @@ type Workout = {
   username: string;
   score: number;
   image_url: string | null;
+  verified: boolean;
 };
 
 type Comment = {
@@ -53,7 +54,6 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
         });
         const data = await response.json();
         setWorkouts(data.workouts || []);
-        // Read the logged-in user directly from the response
         if (data.user) setCurrentUser(data.user);
       } catch (error) {
         console.error("Error fetching recent workouts:", error);
@@ -91,7 +91,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     setUploadError(null);
     const formData = new FormData();
     formData.append("image", file);
-    formData.append("workout_type", workoutType); 
+    formData.append("workout_type", workoutType);
     try {
       const response = await fetch(`${API_URL}/api/fitness/api/add-image/${workoutId}/`, {
         method: "POST",
@@ -195,6 +195,14 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
         <span className="text-sm font-bold text-primary-500 truncate">
           @{workout.username}
         </span>
+        {workout.verified && (
+          <span
+            title="Workout Verified"
+            className="flex-shrink-0 flex items-center gap-0.5 bg-green-100 text-green-600 text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+          >
+            ✓ verified
+          </span>
+        )}
       </div>
       <button
         onClick={() => handleCommentClick(workout)}
@@ -237,7 +245,6 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     const isOwner = currentUser?.username === workout.username;
     const isUploading = uploadingId === workout.id;
 
-    // Workout already has a photo — show "View Photo" for everyone
     if (workout.image_url) {
       return (
         <button
@@ -250,7 +257,6 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
       );
     }
 
-    // No photo yet — only the owner can add one
     if (isOwner) {
       return (
         <label className="w-full flex items-center justify-center gap-1.5 bg-primary-500 hover:bg-primary-600 active:scale-95 text-white text-sm font-semibold py-2 rounded-lg cursor-pointer transition-all shadow-sm">
@@ -278,7 +284,6 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
       );
     }
 
-    // No photo and not the owner — show placeholder
     return (
       <div className="w-full flex items-center justify-center gap-1.5 border-2 border-dashed border-gray-200 rounded-lg py-2">
         <span className="text-sm text-gray-300">📷</span>
@@ -316,6 +321,9 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
             </h1>
             <p className="my-4 md:my-5 text-sm text-gray-900">
               See what the community has been up to lately
+            </p>
+            <p className="text-xs text-green-600 font-semibold flex items-center justify-center gap-1 bg-green-50 px-3 py-1.5 rounded-full border border-green-200">
+              ✓ Add photos to your workouts to get them verified and earn bonus points!
             </p>
           </motion.div>
 
@@ -431,6 +439,11 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                   <span className="flex-shrink-0 text-xs font-bold text-accent-500 bg-accent-100 px-2 py-0.5 rounded-full">
                     +{selectedWorkout.score} pts
                   </span>
+                  {selectedWorkout.verified && (
+                    <span className="flex-shrink-0 text-xs font-bold text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
+                      ✓ verified
+                    </span>
+                  )}
                 </div>
                 <button onClick={handleCloseModal} className="text-gray-500 hover:text-gray-900 flex-shrink-0 ml-2">
                   <XMarkIcon className="h-6 w-6" />
