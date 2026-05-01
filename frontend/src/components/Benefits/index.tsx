@@ -54,12 +54,12 @@ type Props = {
   setSelectedPage: (value: SelectedPage) => void;
 };
 
-/* ── Pyramid card ── */
+/* ── Pyramid card — no 3D transforms for mobile Safari compatibility ── */
 const rankAccent = (rank: number) => {
-  if (rank === 1) return { border: "border-yellow-400", glow: "shadow-yellow-300", bg: "from-yellow-50 to-amber-100",   text: "text-yellow-700" };
-  if (rank === 2) return { border: "border-gray-400",   glow: "shadow-gray-300",   bg: "from-gray-50 to-slate-100",    text: "text-gray-600"   };
-  if (rank === 3) return { border: "border-amber-600",  glow: "shadow-amber-300",  bg: "from-amber-50 to-orange-100",  text: "text-amber-700"  };
-  return            { border: "border-slate-400",       glow: "shadow-slate-300",  bg: "from-slate-100 to-slate-200",  text: "text-slate-600"  };
+  if (rank === 1) return { border: "border-yellow-400", bg: "from-yellow-50 to-amber-100",  text: "text-yellow-700", shadow: "shadow-yellow-200" };
+  if (rank === 2) return { border: "border-gray-400",   bg: "from-gray-50 to-slate-100",    text: "text-gray-600",   shadow: "shadow-gray-200"  };
+  if (rank === 3) return { border: "border-amber-600",  bg: "from-amber-50 to-orange-100",  text: "text-amber-700",  shadow: "shadow-amber-200" };
+  return            { border: "border-slate-400",       bg: "from-slate-100 to-slate-200",  text: "text-slate-600",  shadow: "shadow-slate-200" };
 };
 
 const PyramidCard = ({
@@ -79,47 +79,49 @@ const PyramidCard = ({
   const accent = entry ? rankAccent(entry.rank) : rankAccent(99);
 
   return (
-    <div className={`${sizeClasses[size]} relative`} style={{ perspective: "800px" }}>
+    <div className={`${sizeClasses[size]} relative`}>
+      {/* Unrevealed placeholder */}
       <motion.div
-        className="w-full h-full relative"
-        style={{ transformStyle: "preserve-3d" }}
-        animate={{ rotateY: revealed ? 0 : 180 }}
-        initial={{ rotateY: 180 }}
-        transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+        className="absolute inset-0 rounded-2xl border-2 border-gray-600 bg-gradient-to-br from-gray-700 to-gray-800 flex flex-col items-center justify-center overflow-hidden"
+        animate={{ opacity: revealed ? 0 : 1 }}
+        transition={{ duration: 0.3 }}
       >
-        {/* Back face */}
-        <div
-          className="absolute inset-0 rounded-2xl border-2 border-gray-300 bg-gradient-to-br from-gray-200 to-gray-300 flex flex-col items-center justify-center overflow-hidden"
-          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
-        >
-          <div className="flex flex-col items-center gap-1 opacity-40 blur-[3px] select-none pointer-events-none">
-            <div className="w-10 h-10 rounded-full bg-gray-500" />
-            <div className="w-16 h-2 rounded bg-gray-500 mt-1" />
-            <div className="w-10 h-2 rounded bg-gray-400 mt-1" />
-          </div>
-          <span className="absolute bottom-2 text-gray-400 text-lg">?</span>
+        <div className="flex flex-col items-center gap-1 opacity-40 select-none pointer-events-none">
+          <div className="w-10 h-10 rounded-full bg-gray-500" />
+          <div className="w-16 h-2 rounded bg-gray-500 mt-1" />
+          <div className="w-10 h-2 rounded bg-gray-400 mt-1" />
         </div>
-        {/* Front face */}
-        <div
-          className={`absolute inset-0 rounded-2xl border-2 ${accent.border} bg-gradient-to-br ${accent.bg} flex flex-col items-center justify-center gap-1 shadow-lg ${accent.glow} p-2`}
-          style={{ backfaceVisibility: "hidden" }}
-        >
-          {entry && (
-            <>
-              {RANK_MEDALS[entry.rank] ? (
-                <span className="text-2xl sm:text-3xl leading-none">{RANK_MEDALS[entry.rank]}</span>
-              ) : (
-                <span className={`font-black text-lg sm:text-xl ${accent.text}`}>#{entry.rank}</span>
-              )}
-              <p className="font-bold text-gray-900 text-center leading-tight break-all px-1" style={{ fontSize: "clamp(0.65rem, 2vw, 0.85rem)" }}>
-                {entry.user}
-              </p>
-              <p className={`font-semibold ${accent.text} text-center`} style={{ fontSize: "clamp(0.6rem, 1.5vw, 0.75rem)" }}>
-                {entry.score} pts
-              </p>
-            </>
-          )}
-        </div>
+        <span className="absolute bottom-2 text-gray-400 text-lg">?</span>
+      </motion.div>
+
+      {/* Revealed card */}
+      <motion.div
+        className={`absolute inset-0 rounded-2xl border-2 ${accent.border} bg-gradient-to-br ${accent.bg} flex flex-col items-center justify-center gap-1 shadow-lg ${accent.shadow} p-2`}
+        initial={{ opacity: 0, scale: 0.85 }}
+        animate={{ opacity: revealed ? 1 : 0, scale: revealed ? 1 : 0.85 }}
+        transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+      >
+        {entry && (
+          <>
+            {RANK_MEDALS[entry.rank] ? (
+              <span className="text-2xl sm:text-3xl leading-none">{RANK_MEDALS[entry.rank]}</span>
+            ) : (
+              <span className={`font-black text-lg sm:text-xl ${accent.text}`}>#{entry.rank}</span>
+            )}
+            <p
+              className="font-bold text-gray-900 text-center leading-tight break-all px-1"
+              style={{ fontSize: "clamp(0.65rem, 2vw, 0.85rem)" }}
+            >
+              {entry.user}
+            </p>
+            <p
+              className={`font-semibold ${accent.text} text-center`}
+              style={{ fontSize: "clamp(0.6rem, 1.5vw, 0.75rem)" }}
+            >
+              {entry.score} pts
+            </p>
+          </>
+        )}
       </motion.div>
     </div>
   );
@@ -152,7 +154,7 @@ const Benefits = ({ setSelectedPage }: Props) => {
     let count = 0;
     const scheduleNext = () => {
       const isLast = count + 1 >= order.length;
-      const delay = isLast ? 900 : 400; // fast for all except rank 1
+      const delay = isLast ? 900 : 400;
       setTimeout(() => {
         count += 1;
         setRevealedCount(count);
@@ -213,7 +215,11 @@ const Benefits = ({ setSelectedPage }: Props) => {
   // ── Logged-in: show group pyramid ──
   if (isAuthenticated) {
     return (
-      <section id="benefits" className="hidden md:block w-full py-16 md:py-20 bg-gray-900 col-span-full" style={{ gridColumn: "1 / -1" }}>
+      <section
+        id="benefits"
+        className="hidden md:block w-full py-16 md:py-20 bg-gray-900 col-span-full"
+        style={{ gridColumn: "1 / -1" }}
+      >
         <div className="max-w-2xl mx-auto px-4">
           <motion.div onViewportEnter={() => setSelectedPage(SelectedPage.Home)}>
             <motion.div
@@ -260,7 +266,7 @@ const Benefits = ({ setSelectedPage }: Props) => {
                   {[3, 2, 1].map((n, i) => (
                     <div key={i} className="flex gap-3">
                       {Array.from({ length: n }).map((_, j) => (
-                        <div key={j} className="w-28 h-32 rounded-2xl bg-gray-200 animate-pulse" />
+                        <div key={j} className="w-28 h-32 rounded-2xl bg-gray-700 animate-pulse" />
                       ))}
                     </div>
                   ))}
@@ -309,7 +315,7 @@ const Benefits = ({ setSelectedPage }: Props) => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="bg-gray-900 border-2 border-gray-700 rounded-2xl p-5 shadow-sm"
+                        className="bg-gray-800 border-2 border-gray-700 rounded-2xl p-5 shadow-sm"
                       >
                         <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4">The Rest</h3>
                         <div className="flex flex-col gap-2">
@@ -319,10 +325,10 @@ const Benefits = ({ setSelectedPage }: Props) => {
                               initial={{ opacity: 0, x: -10 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: i * 0.08 }}
-                              className="flex items-center justify-between px-4 py-2.5 rounded-xl border-2 border-gray-700 bg-gray-800"
+                              className="flex items-center justify-between px-4 py-2.5 rounded-xl border-2 border-gray-700 bg-gray-700"
                             >
                               <div className="flex items-center gap-3">
-                                <span className="text-xs font-bold text-gray-500 w-5">#{entry.rank}</span>
+                                <span className="text-xs font-bold text-gray-400 w-5">#{entry.rank}</span>
                                 <p className="font-semibold text-gray-100 text-sm">{entry.user}</p>
                               </div>
                               <span className="text-xs font-semibold text-primary-400">{entry.score} pts</span>
