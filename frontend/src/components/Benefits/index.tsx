@@ -5,7 +5,7 @@ import { HText } from "@/shared/HText";
 import Benefit from "./Benefit";
 import ActionButton from "@/shared/ActionButton";
 import ImSoccer from "@/assets/IMSOCCER.png";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "@/lib/config";
 import { TokenService } from "@/utils/auth";
@@ -52,12 +52,8 @@ type Group = {
 };
 
 type Props = {
-    icon: ReactNode;
-    title: string;
-    description: string;
-    setSelectedPage: (value: SelectedPage) => void;
-    linkTo?: SelectedPage | string;
-}
+  setSelectedPage: (value: SelectedPage) => void;
+};
 
 /* ── Pyramid card ── */
 const rankAccent = (rank: number) => {
@@ -214,7 +210,7 @@ const Benefits = ({ setSelectedPage }: Props) => {
   // ── Logged-in: show group pyramid ──
   if (isAuthenticated) {
     return (
-      <section id="benefits" className="hidden md:block w-full py-16 md:py-20 bg-primary-100 col-span-full" style={{ gridColumn: "1 / -1" }}>
+      <section id="benefits" className="hidden md:block w-full py-16 md:py-20 bg-gray-950 col-span-full" style={{ gridColumn: "1 / -1" }}>
         <div className="max-w-2xl mx-auto px-4">
           <motion.div onViewportEnter={() => setSelectedPage(SelectedPage.Home)}>
             <motion.div
@@ -226,11 +222,11 @@ const Benefits = ({ setSelectedPage }: Props) => {
               {/* Header */}
               <div className="flex items-end justify-between mb-8">
                 <div>
-                  <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
+                  <h1 className="text-3xl sm:text-4xl font-bold text-white">
                     {defaultGroup ? `${defaultGroup.name} 🏆` : "Your Group 🏆"}
                   </h1>
                   {defaultGroup?.motto && (
-                    <p className="mt-1 text-sm text-gray-500">{defaultGroup.motto}</p>
+                    <p className="mt-1 text-sm text-gray-400">{defaultGroup.motto}</p>
                   )}
                 </div>
                 <div className="flex items-center gap-4">
@@ -241,14 +237,14 @@ const Benefits = ({ setSelectedPage }: Props) => {
                           state: { groupName: defaultGroup.name },
                         })
                       }
-                      className="text-sm font-bold text-primary-500 hover:text-primary-300 underline transition"
+                      className="text-sm font-bold text-primary-400 hover:text-primary-300 underline transition"
                     >
                       Full leaderboard →
                     </button>
                   )}
                   <button
                     onClick={() => navigate("/groups")}
-                    className="text-sm font-semibold text-gray-400 hover:text-gray-600 transition"
+                    className="text-sm font-semibold text-gray-500 hover:text-gray-300 transition"
                   >
                     All groups
                   </button>
@@ -267,9 +263,9 @@ const Benefits = ({ setSelectedPage }: Props) => {
                   ))}
                 </div>
               ) : noGroups ? (
-                <div className="flex flex-col items-center justify-center py-16 gap-4 border-2 border-dashed border-gray-300 rounded-2xl">
+                <div className="flex flex-col items-center justify-center py-16 gap-4 border-2 border-dashed border-gray-700 rounded-2xl">
                   <p className="text-4xl">🏃</p>
-                  <p className="text-gray-700 font-semibold text-base">You're not in any groups yet</p>
+                  <p className="text-white font-semibold text-base">You're not in any groups yet</p>
                   <p className="text-gray-400 text-sm text-center max-w-xs">
                     Join or create a group to compete with friends and track your progress together.
                   </p>
@@ -310,9 +306,9 @@ const Benefits = ({ setSelectedPage }: Props) => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="bg-white border-2 border-gray-200 rounded-2xl p-5 shadow-sm"
+                        className="bg-gray-900 border-2 border-gray-700 rounded-2xl p-5 shadow-sm"
                       >
-                        <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">The Rest</h3>
+                        <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4">The Rest</h3>
                         <div className="flex flex-col gap-2">
                           {restOfList.map((entry, i) => (
                             <motion.div
@@ -320,13 +316,13 @@ const Benefits = ({ setSelectedPage }: Props) => {
                               initial={{ opacity: 0, x: -10 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: i * 0.08 }}
-                              className="flex items-center justify-between px-4 py-2.5 rounded-xl border-2 border-gray-100 bg-gray-50"
+                              className="flex items-center justify-between px-4 py-2.5 rounded-xl border-2 border-gray-700 bg-gray-800"
                             >
                               <div className="flex items-center gap-3">
-                                <span className="text-xs font-bold text-gray-400 w-5">#{entry.rank}</span>
-                                <p className="font-semibold text-gray-800 text-sm">{entry.user}</p>
+                                <span className="text-xs font-bold text-gray-500 w-5">#{entry.rank}</span>
+                                <p className="font-semibold text-gray-100 text-sm">{entry.user}</p>
                               </div>
-                              <span className="text-xs font-semibold text-primary-500">{entry.score} pts</span>
+                              <span className="text-xs font-semibold text-primary-400">{entry.score} pts</span>
                             </motion.div>
                           ))}
                         </div>
