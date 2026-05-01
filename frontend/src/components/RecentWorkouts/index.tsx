@@ -293,7 +293,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
   };
 
   return (
-    <section id="recentworkouts" className="w-full bg-primary-100 py-16 md:py-20">
+    <section id="recentworkouts" className="relative w-full bg-primary-100 py-16 md:py-20">
       <style>{`
         @keyframes pulse-btn {
           0%, 100% { transform: scale(1); }
@@ -303,6 +303,13 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
           animation: pulse-btn 1.6s ease-in-out infinite;
         }
       `}</style>
+
+      {/* Verification nudge - top right */}
+      <div className="absolute top-4 right-4 md:top-6 md:right-6">
+        <p className="text-xs text-green-600 font-semibold flex items-center gap-1 bg-green-50 px-3 py-1.5 rounded-full border border-green-200">
+          ✓ Add photos to verify your workouts & earn bonus points!
+        </p>
+      </div>
 
       <div className="max-w-7xl mx-auto px-4">
         <motion.div onViewportEnter={() => setSelectedPage(SelectedPage.Home)}>
@@ -321,9 +328,6 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
             </h1>
             <p className="my-4 md:my-5 text-sm text-gray-900">
               See what the community has been up to lately
-            </p>
-            <p className="text-xs text-green-600 font-semibold flex items-center justify-center gap-1 bg-green-50 px-3 py-1.5 rounded-full border border-green-200">
-              ✓ Add photos to your workouts to get them verified and earn bonus points!
             </p>
           </motion.div>
 
