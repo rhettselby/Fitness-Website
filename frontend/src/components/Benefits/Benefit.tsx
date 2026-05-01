@@ -5,10 +5,11 @@ import { HText } from "@/shared/HText";
 import Benefit from "./Benefit";
 import ActionButton from "@/shared/ActionButton";
 import ImSoccer from "@/assets/IMSOCCER.png";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "@/lib/config";
 import { TokenService } from "@/utils/auth";
+
 
 const benefits: Array<BenefitType> = [
   {
@@ -51,8 +52,12 @@ type Group = {
 };
 
 type Props = {
-  setSelectedPage: (value: SelectedPage) => void;
-};
+    icon: ReactNode;  // ✅ add this line
+    title: string;
+    description: string;
+    setSelectedPage: (value: SelectedPage) => void;
+    linkTo?: SelectedPage | string;
+}
 
 const Benefits = ({ setSelectedPage }: Props) => {
   const navigate = useNavigate();
