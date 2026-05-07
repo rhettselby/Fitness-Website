@@ -93,7 +93,7 @@ const TimePickerSection = ({
 interface ImageUploadSectionProps {
   imagePreview: string | null;
   handleRemoveImage: () => void;
-  fileInputRef: React.RefObject<HTMLInputElement>;
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
   handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
