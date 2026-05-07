@@ -19,8 +19,8 @@ function App() {
         <Route path="/add-workout" element={<AddWorkoutPage/>} />
         <Route path="/wearables/callback" element={<WearablesCallback/>} />
         <Route path="/connect" element={<ConnectionsPage/>} />
-        {/*<Route path="/groups" element={<Groups />} /> */}
-        {/*<Route path="/groups/:id/leaderboard" element={<GroupLeaderboard />} /> */}
+        <Route path="/groups" element={<Groups />} /> 
+        <Route path="/groups/:id/leaderboard" element={<GroupLeaderboard />} /> 
       </Routes>
     </BrowserRouter>
   );
