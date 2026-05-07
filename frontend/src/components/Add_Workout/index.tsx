@@ -20,6 +20,125 @@ interface ExerciseInput {
   weight: string;
 }
 
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+const toLocalDateString = (d: Date) => {
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+};
+
+// ── Sub-components lifted OUT of AddWorkoutPage to prevent remount on every render ──
+
+interface TimePickerSectionProps {
+  showTime: boolean;
+  setShowTime: (v: boolean) => void;
+  date: string;
+  setDate: (v: string) => void;
+  time: string;
+  setTime: (v: string) => void;
+}
+
+const TimePickerSection = ({
+  showTime,
+  setShowTime,
+  date,
+  setDate,
+  time,
+  setTime,
+}: TimePickerSectionProps) => (
+  <div>
+    {!showTime ? (
+      <button
+        type="button"
+        onClick={() => setShowTime(true)}
+        className="text-sm text-black hover:text-primary-500 transition py-1"
+      >
+        ⏱ Edit time (optional)
+      </button>
+    ) : (
+      <div className="mt-2 space-y-3 bg-gray-50 rounded-lg p-4">
+        <div>
+          <label className="block text-gray-600 font-medium mb-1 text-sm">Date</label>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            max={toLocalDateString(new Date())}
+            className="w-full border rounded-lg px-4 py-3 text-black text-base"
+          />
+        </div>
+        <div>
+          <label className="block text-gray-600 font-medium mb-1 text-sm">Time</label>
+          <input
+            type="time"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            className="w-full border rounded-lg px-4 py-3 text-black text-base"
+          />
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowTime(false)}
+          className="text-xs text-gray-500 hover:text-primary-500 transition"
+        >
+          Done
+        </button>
+      </div>
+    )}
+  </div>
+);
+
+interface ImageUploadSectionProps {
+  imagePreview: string | null;
+  handleRemoveImage: () => void;
+  fileInputRef: React.RefObject<HTMLInputElement>;
+  handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const ImageUploadSection = ({
+  imagePreview,
+  handleRemoveImage,
+  fileInputRef,
+  handleImageChange,
+}: ImageUploadSectionProps) => (
+  <div>
+    <label className="block text-gray-700 font-semibold mb-2 text-sm md:text-base">
+      Photo <span className="text-gray-400 font-normal">(optional)</span>
+    </label>
+    {imagePreview ? (
+      <div className="relative rounded-lg overflow-hidden border border-gray-200">
+        <img src={imagePreview} alt="Preview" className="w-full h-48 object-cover" />
+        <button
+          type="button"
+          onClick={handleRemoveImage}
+          className="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm hover:bg-opacity-70 transition"
+          aria-label="Remove image"
+        >
+          ×
+        </button>
+      </div>
+    ) : (
+      <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 hover:bg-gray-50 transition">
+        <span className="text-2xl mb-1">📷</span>
+        <span className="text-sm text-gray-500 font-medium">Take a photo or upload</span>
+        <span className="text-xs text-gray-400 mt-0.5">Opens camera on mobile</span>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          onChange={handleImageChange}
+          className="hidden"
+        />
+      </label>
+    )}
+  </div>
+);
+
+// ── Main Page ─────────────────────────────────────────────────────────────────
+
 const AddWorkoutPage = () => {
   const [selectedPage, setSelectedPage] = useState<SelectedPage>(SelectedPage.Home);
   const [type, setType] = useState<WorkoutType | null>(null);
@@ -45,14 +164,6 @@ const AddWorkoutPage = () => {
     weight: "",
   });
   const [exerciseError, setExerciseError] = useState<string | null>(null);
-
-
-  const toLocalDateString = (d: Date) => {
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}`;
-  };
 
   // Sport-specific
   const [sportName, setSportName] = useState("");
@@ -98,7 +209,6 @@ const AddWorkoutPage = () => {
     setGymView("exercises");
   };
 
-
   const handleRemoveExercise = (index: number) => {
     setExercises((prev) => prev.filter((_, i) => i !== index));
   };
@@ -123,7 +233,6 @@ const AddWorkoutPage = () => {
     }
   };
 
-  // Build FormData — no Content-Type header, browser sets it automatically
   const buildFormData = (fields: Record<string, string>) => {
     const formData = new FormData();
     Object.entries(fields).forEach(([key, value]) => formData.append(key, value));
@@ -135,9 +244,9 @@ const AddWorkoutPage = () => {
     e.preventDefault();
     setError(null);
 
-    const dateTime = time ? `${date}T${time}` : `${date}T00:00`;
+    // FIX: include seconds so Django parses the datetime correctly
+    const dateTime = `${date}T${time || "00:00"}:00`;
     const token = getToken();
-    // Don't set Content-Type — browser sets multipart/form-data boundary automatically
     const authHeader: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
 
     try {
@@ -200,64 +309,10 @@ const AddWorkoutPage = () => {
       setError("Could not save workout. Please double-check your inputs.");
     }
   };
-  //force redploy
-  // Reusable image upload section
-  const ImageUploadSection = () => (
-    <div>
-      <label className="block text-gray-700 font-semibold mb-2 text-sm md:text-base">
-        Photo <span className="text-gray-400 font-normal">(optional)</span>
-      </label>
-      {imagePreview ? (
-        <div className="relative rounded-lg overflow-hidden border border-gray-200">
-          <img src={imagePreview} alt="Preview" className="w-full h-48 object-cover" />
-          <button
-            type="button"
-            onClick={handleRemoveImage}
-            className="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm hover:bg-opacity-70 transition"
-            aria-label="Remove image"
-          >
-            ×
-          </button>
-        </div>
-      ) : (
-        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 hover:bg-gray-50 transition">
-          <span className="text-2xl mb-1">📷</span>
-          <span className="text-sm text-gray-500 font-medium">Take a photo or upload</span>
-          <span className="text-xs text-gray-400 mt-0.5">Opens camera on mobile</span>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            capture="environment"
-            onChange={handleImageChange}
-            className="hidden"
-          />
-        </label>
-      )}
-    </div>
-  );
 
-  const TimePickerSection = () => (
-    <div>
-      {!showTime ? (
-        <button type="button" onClick={() => setShowTime(true)} className="text-sm text-black hover:text-primary-500 transition py-1">
-          ⏱ Edit time (optional)
-        </button>
-      ) : (
-        <div className="mt-2 space-y-3 bg-gray-50 rounded-lg p-4">
-          <div>
-            <label className="block text-gray-600 font-medium mb-1 text-sm">Date</label>
-            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} max={toLocalDateString(new Date())} className="w-full border rounded-lg px-4 py-3 text-black text-base" />
-          </div>
-          <div>
-            <label className="block text-gray-600 font-medium mb-1 text-sm">Time</label>
-            <input type="time" value={time} onChange={(e) => setTime(e.target.value)} className="w-full border rounded-lg px-4 py-3 text-black text-base" />
-          </div>
-          <button type="button" onClick={() => setShowTime(false)} className="text-xs text-gray-500 hover:text-primary-500 transition">Done</button>
-        </div>
-      )}
-    </div>
-  );
+  // Shared props for sub-components
+  const timePickerProps = { showTime, setShowTime, date, setDate, time, setTime };
+  const imageUploadProps = { imagePreview, handleRemoveImage, fileInputRef, handleImageChange };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -326,8 +381,8 @@ const AddWorkoutPage = () => {
                   placeholder="E.g. 30"
                 />
               </div>
-              <TimePickerSection />
-              <ImageUploadSection />
+              <TimePickerSection {...timePickerProps} />
+              <ImageUploadSection {...imageUploadProps} />
               {error && <p className="text-red-500 text-sm text-center">{error}</p>}
               <button type="submit" className="w-full bg-primary-500 text-white py-4 md:py-3 rounded-lg text-lg font-semibold hover:bg-primary-600 transition active:scale-95">
                 Save Workout
@@ -392,8 +447,8 @@ const AddWorkoutPage = () => {
                   </button>
                 </div>
               </div>
-              <TimePickerSection />
-              <ImageUploadSection />
+              <TimePickerSection {...timePickerProps} />
+              <ImageUploadSection {...imageUploadProps} />
               {error && <p className="text-red-500 text-sm text-center">{error}</p>}
               <button
                 type="submit"
@@ -422,7 +477,7 @@ const AddWorkoutPage = () => {
                   placeholder="E.g. Push day, Leg day"
                 />
               </div>
-              <TimePickerSection />
+              <TimePickerSection {...timePickerProps} />
               <button
                 type="button"
                 onClick={() => setGymView("exercises")}
@@ -435,7 +490,7 @@ const AddWorkoutPage = () => {
                   </span>
                 )}
               </button>
-              <ImageUploadSection />
+              <ImageUploadSection {...imageUploadProps} />
               {error && <p className="text-red-500 text-sm text-center">{error}</p>}
               <button type="submit" className="w-full bg-primary-500 text-white py-4 md:py-3 rounded-lg text-lg font-semibold hover:bg-primary-600 transition active:scale-95">
                 Save Workout
