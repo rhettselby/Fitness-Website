@@ -50,16 +50,16 @@ const HomePage = () => {
 
   return (
     <div className="app bg-gray-50">
-      <Navbar
+      {/*<Navbar
         isTopOfPage={isTopOfPage}
         selectedPage={selectedPage}
         setSelectedPage={setSelectedPage}
-      />
+      />*/}
       <Home setSelectedPage={setSelectedPage}/>
       <RecentWorkouts setSelectedPage={setSelectedPage}/>
       <Benefits setSelectedPage={setSelectedPage}/>
       <Leaderboard setSelectedPage={setSelectedPage}/>
-      {/*<ContactUs setSelectedPage={setSelectedPage} />*/}
+      <ContactUs setSelectedPage={setSelectedPage} />
       <Footer />
     </div>
   );
