@@ -116,7 +116,7 @@ const Benefits = ({ setSelectedPage }: Props) => {
                       <span className="text-primary-500">Fit</span>
                     </HText>
                   </motion.div>
-                </div>
+                </div> 
               </div>
 
               {/* Body text */}

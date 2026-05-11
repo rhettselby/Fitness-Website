@@ -148,6 +148,7 @@ const AddWorkoutPage = () => {
   const [duration, setDuration] = useState<number | "">("");
   const [error, setError] = useState<string | null>(null);
   const [showTime, setShowTime] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // ← ADDED
 
   // Image
   const [image, setImage] = useState<File | null>(null);
@@ -242,9 +243,10 @@ const AddWorkoutPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return; // ← ADDED: extra safety net
     setError(null);
+    setIsSubmitting(true); // ← ADDED: lock the form
 
-    // FIX: include seconds so Django parses the datetime correctly
     const dateTime = `${date}T${time || "00:00"}:00`;
     const token = getToken();
     const authHeader: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
@@ -307,6 +309,8 @@ const AddWorkoutPage = () => {
     } catch (err: any) {
       console.error("Submit error:", err);
       setError("Could not save workout. Please double-check your inputs.");
+    } finally {
+      setIsSubmitting(false); // ← ADDED: re-enable only on failure (success navigates away)
     }
   };
 
@@ -384,8 +388,12 @@ const AddWorkoutPage = () => {
               <TimePickerSection {...timePickerProps} />
               <ImageUploadSection {...imageUploadProps} />
               {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-              <button type="submit" className="w-full bg-primary-500 text-white py-4 md:py-3 rounded-lg text-lg font-semibold hover:bg-primary-600 transition active:scale-95">
-                Save Workout
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-primary-500 text-white py-4 md:py-3 rounded-lg text-lg font-semibold hover:bg-primary-600 transition active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? "Saving..." : "Save Workout"}
               </button>
             </form>
           )}
@@ -452,9 +460,10 @@ const AddWorkoutPage = () => {
               {error && <p className="text-red-500 text-sm text-center">{error}</p>}
               <button
                 type="submit"
-                className="w-full bg-purple-600 text-white py-4 md:py-3 rounded-lg text-lg font-semibold hover:bg-purple-700 transition active:scale-95"
+                disabled={isSubmitting}
+                className="w-full bg-purple-600 text-white py-4 md:py-3 rounded-lg text-lg font-semibold hover:bg-purple-700 transition active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Save Sport
+                {isSubmitting ? "Saving..." : "Save Sport"}
               </button>
             </form>
           )}
@@ -492,8 +501,12 @@ const AddWorkoutPage = () => {
               </button>
               <ImageUploadSection {...imageUploadProps} />
               {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-              <button type="submit" className="w-full bg-primary-500 text-white py-4 md:py-3 rounded-lg text-lg font-semibold hover:bg-primary-600 transition active:scale-95">
-                Save Workout
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-primary-500 text-white py-4 md:py-3 rounded-lg text-lg font-semibold hover:bg-primary-600 transition active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? "Saving..." : "Save Workout"}
               </button>
             </form>
           )}
