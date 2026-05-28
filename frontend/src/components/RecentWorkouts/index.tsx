@@ -425,27 +425,27 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
             onClick={(e) => { if (e.target === e.currentTarget) handleCloseModal(); }}
           >
             <motion.div
-              className="bg-white rounded-t-2xl sm:rounded-lg w-full sm:w-3/4 md:w-1/2 h-[85vh] sm:h-3/4 flex flex-col"
+              className="bg-primary-500 rounded-t-2xl sm:rounded-lg w-full sm:w-3/4 md:w-1/2 h-[85vh] sm:h-3/4 flex flex-col"
               initial={{ scale: 0.95, opacity: 0, y: 40 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 40 }}
             >
               {/* Modal Header */}
-              <div className="flex justify-between items-center p-4 border-b flex-shrink-0">
+              <div className="flex justify-between items-center p-4 border-b border-white/20 flex-shrink-0">
                 <div className="flex items-center gap-3 min-w-0">
-                  <h2 className="text-base sm:text-xl font-bold text-black truncate">
+                  <h2 className="text-base sm:text-xl font-bold text-white truncate">
                     {selectedWorkout.activity}
                   </h2>
-                  <span className="flex-shrink-0 text-xs font-bold text-accent-500 bg-accent-100 px-2 py-0.5 rounded-full">
+                  <span className="flex-shrink-0 text-xs font-bold text-white bg-white/20 px-2 py-0.5 rounded-full">
                     +{selectedWorkout.score} pts
                   </span>
                   {selectedWorkout.verified && (
-                    <span className="flex-shrink-0 text-xs font-bold text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
+                    <span className="flex-shrink-0 text-xs font-bold text-white bg-white/20 px-2 py-0.5 rounded-full">
                       ✓ verified
                     </span>
                   )}
                 </div>
-                <button onClick={handleCloseModal} className="text-gray-500 hover:text-gray-900 flex-shrink-0 ml-2">
+                <button onClick={handleCloseModal} className="text-white/70 hover:text-white flex-shrink-0 ml-2">
                   <XMarkIcon className="h-6 w-6" />
                 </button>
               </div>
@@ -453,24 +453,24 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
               {/* Comments List */}
               <div className="flex-grow overflow-y-auto p-4">
                 {commentLoading ? (
-                  <p className="text-center text-gray-400">Loading comments...</p>
+                  <p className="text-center text-white/70">Loading comments...</p>
                 ) : commentError ? (
-                  <p className="text-center text-red-500">{commentError}</p>
+                  <p className="text-center text-red-200">{commentError}</p>
                 ) : comments.length === 0 ? (
-                  <p className="text-center text-gray-400">No comments yet</p>
+                  <p className="text-center text-white/70">No comments yet</p>
                 ) : (
                   <div className="space-y-3">
                     {comments.map((comment) => (
-                      <div key={comment.id} className="bg-gray-50 p-3 rounded-lg">
+                      <div key={comment.id} className="bg-white/10 p-3 rounded-lg">
                         <div className="flex justify-between items-center mb-1 gap-2">
-                          <span className="font-bold text-primary-500 text-sm truncate">
+                          <span className="font-bold text-white text-sm truncate">
                             @{comment.user.username}
                           </span>
-                          <span className="text-xs text-gray-400 flex-shrink-0">
+                          <span className="text-xs text-white/60 flex-shrink-0">
                             {formatDate(comment.created_at)}
                           </span>
                         </div>
-                        <p className="text-gray-700 text-sm">{comment.text}</p>
+                        <p className="text-white text-sm">{comment.text}</p>
                       </div>
                     ))}
                   </div>
@@ -478,8 +478,8 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
               </div>
 
               {/* Comment Input */}
-              <form onSubmit={handleSubmitComment} className="p-4 border-t flex flex-col gap-2 flex-shrink-0">
-                {commentError && <p className="text-red-500 text-sm">{commentError}</p>}
+              <form onSubmit={handleSubmitComment} className="p-4 border-t border-white/20 flex flex-col gap-2 flex-shrink-0">
+                {commentError && <p className="text-red-200 text-sm">{commentError}</p>}
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
@@ -487,18 +487,18 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                     onChange={(e) => setNewComment(e.target.value)}
                     placeholder="Write a comment..."
                     maxLength={200}
-                    className="flex-grow p-2 border rounded-lg text-black text-base focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="flex-grow p-2 border border-white/30 rounded-lg text-black text-base bg-white focus:outline-none focus:ring-2 focus:ring-white/50"
                   />
                   <button
                     type="submit"
                     disabled={!newComment.trim()}
-                    className="bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 disabled:bg-gray-300 transition whitespace-nowrap"
+                    className="bg-white text-primary-500 font-semibold px-4 py-2 rounded-lg hover:bg-white/90 disabled:bg-white/30 disabled:text-white/50 transition whitespace-nowrap"
                   >
                     Send
                   </button>
                 </div>
                 {newComment.length > 0 && (
-                  <span className="text-xs text-gray-500 self-end">{newComment.length}/200</span>
+                  <span className="text-xs text-white/60 self-end">{newComment.length}/200</span>
                 )}
               </form>
             </motion.div>
