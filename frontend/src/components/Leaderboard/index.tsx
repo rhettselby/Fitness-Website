@@ -7,7 +7,7 @@ import { TokenService } from "@/utils/auth";
 
 type LeaderboardUser = {
   username: string;
-  count: number;
+  score: number;
   bio?: string | null;
   location?: string | null;
 };
@@ -68,7 +68,7 @@ const Leaderboard = ({ setSelectedPage }: Props) => {
                 Weekly Leaderboard 🏆
               </h1>
               <p className="py-4 md:py-5 text-gray-900 font-semibold text-sm sm:text-base">
-                The top 5 members with the most workouts this week!
+                The top 5 members with the most points this week!
               </p>
             </div>
           </motion.div>
@@ -93,7 +93,7 @@ const Leaderboard = ({ setSelectedPage }: Props) => {
                     <Class
                       key={`${user.username}-${index}`}
                       name={`#${index + 1} ${user.username}`}
-                      description={`${user.count} workout${user.count !== 1 ? "s" : ""}`}
+                      description={`${user.score} pts`}
                       image=""
                       bio={user.bio}
                       location={user.location}
@@ -109,7 +109,7 @@ const Leaderboard = ({ setSelectedPage }: Props) => {
                       <Class
                         key={`${user.username}-${index}`}
                         name={`#${index + 1} ${user.username}`}
-                        description={`${user.count} workout${user.count !== 1 ? "s" : ""}`}
+                        description={`${user.score} pts`}
                         image=""
                         bio={user.bio}
                         location={user.location}
