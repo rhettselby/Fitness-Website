@@ -36,7 +36,7 @@ const Class = ({ name, description, bio, location, rank }: Props) => {
         <p className="text-sm md:text-base font-bold text-gray-800 mb-1 px-3 text-center">
           {name}
         </p>
-        <p className="text-xs md:text-sm text-gray-600">{description}</p>
+        <p className="text-sm md:text-base font-extrabold text-primary-500">{description}</p>
         {hasExtra && (
           <p className="mt-2 text-xs text-primary-400 md:hidden">tap for info</p>
         )}

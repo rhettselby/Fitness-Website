@@ -70,6 +70,25 @@ const Leaderboard = ({ setSelectedPage }: Props) => {
               <p className="py-4 md:py-5 text-gray-900 font-semibold text-sm sm:text-base">
                 The top 5 members with the most points this week!
               </p>
+
+              {/* Scoring breakdown */}
+              <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-2">
+                {[
+                  { label: "🏃 Cardio", value: "100 pts + 1pt/min" },
+                  { label: "🏋️ Gym",    value: "100 pts" },
+                  { label: "⚽ Sport",  value: "50 pts" },
+                  { label: "📸 Photo verified", value: "+50 pts" },
+                  { label: "⌚ Wearable intensity", value: "bonus pts" },
+                ].map(({ label, value }) => (
+                  <div
+                    key={label}
+                    className="flex items-center gap-1.5 bg-white/70 border border-primary-300 rounded-full px-3 py-1 text-xs font-medium text-gray-700 shadow-sm"
+                  >
+                    <span>{label}</span>
+                    <span className="font-extrabold text-primary-500">{value}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </motion.div>
 
