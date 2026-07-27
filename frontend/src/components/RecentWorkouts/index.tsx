@@ -649,17 +649,17 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                             </div>
                           </div>
                           <div
-                            className={`relative w-[78px] flex-shrink-0 flex items-center justify-center border-l border-gray-200 ${typeTint(workout.type)}`}
+                            className={`relative w-[92px] flex-shrink-0 flex items-center justify-center border-l border-gray-200 [&>svg]:scale-110 ${typeTint(workout.type)}`}
                           >
                             <WorkoutToon type={workout.type} activity={stripSource(workout.activity)} />
                             <button
                               onClick={() => handleCommentClick(workout)}
-                              className="absolute top-1.5 right-1.5 text-primary-500 hover:text-primary-700 transition-colors"
+                              className="absolute top-2 right-2 text-primary-500 hover:text-primary-700 transition-colors"
                               title="View Comments"
                             >
-                              <ChatBubbleBottomCenterTextIcon className="h-4 w-4" />
+                              <ChatBubbleBottomCenterTextIcon className="h-5 w-5" />
                               {workout.comment_count > 0 && (
-                                <span className="absolute -top-1 -right-1 bg-primary-500/90 text-white text-[8px] font-bold rounded-full h-3 w-3 flex items-center justify-center">
+                                <span className="absolute -top-1 -right-1 bg-primary-500/90 text-white text-[9px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
                                   {workout.comment_count > 9 ? "9+" : workout.comment_count}
                                 </span>
                               )}
