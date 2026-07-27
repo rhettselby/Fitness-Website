@@ -284,12 +284,9 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
       );
     }
 
-    return (
-      <div className="w-full flex items-center justify-center gap-1.5 border-2 border-dashed border-gray-200 rounded-lg py-2">
-        <span className="text-sm text-gray-300">📷</span>
-        <span className="text-xs text-gray-300 font-medium">No photo added</span>
-      </div>
-    );
+    // Other people's workouts with no photo: render nothing so the card's
+    // text re-centers and fills the space instead of showing a placeholder.
+    return null;
   };
 
   return (
