@@ -31,48 +31,218 @@ type Comment = {
 
 const CARD_HEIGHT = 157;
 
-const WorkoutToon = ({ type }: { type: Workout["type"] }) => {
-  if (type === "gym") {
-    return (
-      <svg width="84" height="52" viewBox="0 0 84 52" aria-hidden="true">
-        <g transform="translate(42 26)">
-          <g className="toon-lift">
-            <rect x="-24" y="-3" width="48" height="6" rx="3" fill="#3B6370" />
-            <rect x="-32" y="-11" width="8" height="22" rx="2" fill="#2A4A55" />
-            <rect x="24" y="-11" width="8" height="22" rx="2" fill="#2A4A55" />
-            <rect x="-38" y="-8" width="7" height="16" rx="2" fill="#3B6370" />
-            <rect x="31" y="-8" width="7" height="16" rx="2" fill="#3B6370" />
-          </g>
-        </g>
-      </svg>
-    );
-  }
-  if (type === "sport") {
-    return (
-      <svg width="74" height="76" viewBox="0 0 64 66" aria-hidden="true">
-        <ellipse className="toon-bsh" cx="32" cy="58" rx="15" ry="3.5" fill="#9333EA" />
-        <g transform="translate(32 30)">
-          <g className="toon-ball">
-            <circle r="14" fill="#fff" stroke="#6b21a8" strokeWidth="1.5" />
-            <polygon points="0,-6.5 6.5,-1.5 4,6.5 -4,6.5 -6.5,-1.5" fill="#6b21a8" />
-            <path
-              d="M0 -14 L0 -6.5 M12 -6.5 L6.5 -1.5 M8.5 11 L4 6.5 M-8.5 11 L-4 6.5 M-12 -6.5 L-6.5 -1.5"
-              stroke="#6b21a8"
-              strokeWidth="1.3"
-              fill="none"
-            />
-          </g>
-        </g>
-      </svg>
-    );
-  }
-  return (
-    <svg width="74" height="76" viewBox="0 0 64 66" aria-hidden="true">
-      <circle className="toon-ring" cx="32" cy="33" r="20" fill="none" stroke="#D85A30" strokeWidth="2" />
-      <circle className="toon-ring toon-ring-d" cx="32" cy="33" r="20" fill="none" stroke="#D85A30" strokeWidth="2" />
-      <path className="toon-beat" d="M32 46 C13 32 19 15 32 25 C45 15 51 32 32 46 Z" fill="#D85A30" />
+// Small looping animations shown on no-photo cards. The specific cartoon is
+// chosen by keyword-matching the activity name; anything unmatched falls back
+// to the workout type's default (heartbeat for cardio, ball for sport). Gym
+// always uses the dumbbell.
+const WorkoutToon = ({ type, activity }: { type: Workout["type"]; activity: string }) => {
+  const a = (activity || "").toLowerCase();
+
+  const heartbeat = (
+    <svg width="54" height="54" viewBox="0 0 60 60" aria-hidden="true">
+      <circle className="toon-ring" cx="30" cy="30" r="18" fill="none" stroke="#D85A30" strokeWidth="2" />
+      <circle className="toon-ring toon-ring-d" cx="30" cy="30" r="18" fill="none" stroke="#D85A30" strokeWidth="2" />
+      <path className="toon-beat" d="M30 43 C12 29 18 13 30 23 C42 13 48 29 30 43 Z" fill="#D85A30" />
     </svg>
   );
+
+  const soccer = (
+    <svg width="52" height="52" viewBox="0 0 60 60" aria-hidden="true">
+      <ellipse className="toon-bsh" cx="30" cy="52" rx="13" ry="3" fill="#9333EA" />
+      <g transform="translate(30 26)">
+        <g className="toon-ball">
+          <circle r="13" fill="#fff" stroke="#6b21a8" strokeWidth="1.5" />
+          <polygon points="0,-6.5 6.5,-1.5 4,6.5 -4,6.5 -6.5,-1.5" fill="#6b21a8" />
+          <path d="M0 -13 L0 -6.5 M12 -6.5 L6.5 -1.5 M8.5 11 L4 6.5 M-8.5 11 L-4 6.5 M-12 -6.5 L-6.5 -1.5" stroke="#6b21a8" strokeWidth="1.3" fill="none" />
+        </g>
+      </g>
+    </svg>
+  );
+
+  const dumbbell = (
+    <svg width="62" height="38" viewBox="0 0 84 52" aria-hidden="true">
+      <g transform="translate(42 26)">
+        <g className="toon-lift">
+          <rect x="-24" y="-3" width="48" height="6" rx="3" fill="#3B6370" />
+          <rect x="-32" y="-11" width="8" height="22" rx="2" fill="#2A4A55" />
+          <rect x="24" y="-11" width="8" height="22" rx="2" fill="#2A4A55" />
+          <rect x="-38" y="-8" width="7" height="16" rx="2" fill="#3B6370" />
+          <rect x="31" y="-8" width="7" height="16" rx="2" fill="#3B6370" />
+        </g>
+      </g>
+    </svg>
+  );
+
+  if (type === "gym") return dumbbell;
+
+  if (/run|jog/.test(a)) {
+    return (
+      <svg width="56" height="52" viewBox="0 0 64 60" aria-hidden="true">
+        <g stroke="#E6B047" strokeWidth="2.4" strokeLinecap="round">
+          <line className="toon-fp" x1="4" y1="20" x2="15" y2="20" />
+          <line className="toon-fp" style={{ animationDelay: "0.25s" }} x1="2" y1="31" x2="13" y2="31" />
+          <line className="toon-fp" style={{ animationDelay: "0.5s" }} x1="6" y1="42" x2="17" y2="42" />
+        </g>
+        <g transform="translate(30 10)">
+          <g className="toon-bob">
+            <circle cx="9" cy="5" r="5" fill="#3B6370" />
+            <path d="M9 10 L5 27" stroke="#3B6370" strokeWidth="3.4" strokeLinecap="round" fill="none" />
+            <path d="M7 15 L17 12 M7 15 L-1 20" stroke="#3B6370" strokeWidth="3" strokeLinecap="round" fill="none" />
+            <path d="M5 27 L13 35 M5 27 L-3 37" stroke="#3B6370" strokeWidth="3.2" strokeLinecap="round" fill="none" />
+          </g>
+        </g>
+      </svg>
+    );
+  }
+  if (/walk/.test(a)) {
+    return (
+      <svg width="52" height="52" viewBox="0 0 58 58" aria-hidden="true">
+        <ellipse className="toon-fp" cx="20" cy="16" rx="4" ry="6" transform="rotate(-18 20 16)" fill="#3B6370" />
+        <ellipse className="toon-fp" style={{ animationDelay: "0.5s" }} cx="34" cy="30" rx="4" ry="6" transform="rotate(18 34 30)" fill="#3B6370" />
+        <ellipse className="toon-fp" style={{ animationDelay: "1s" }} cx="24" cy="44" rx="4" ry="6" transform="rotate(-18 24 44)" fill="#3B6370" />
+      </svg>
+    );
+  }
+  if (/hik|trek/.test(a)) {
+    return (
+      <svg width="60" height="52" viewBox="0 0 64 56" aria-hidden="true">
+        <circle className="toon-bob" cx="46" cy="17" r="7" fill="#E6B047" />
+        <path d="M6 48 L25 17 L36 34 L44 24 L58 48 Z" fill="#3B6370" />
+        <path d="M21 25 L25 17 L29 25 Z" fill="#fff" />
+      </svg>
+    );
+  }
+  if (/pilates|yoga|stretch|mobility/.test(a)) {
+    return (
+      <svg width="52" height="50" viewBox="0 0 58 56" aria-hidden="true">
+        <g transform="translate(29 28)">
+          <g className="toon-breathe">
+            <circle cx="0" cy="-15" r="5.5" fill="#5D9CAC" />
+            <path d="M-11 7 Q0 -5 11 7 Q0 13 -11 7 Z" fill="#5D9CAC" />
+            <path d="M-3 -7 Q-14 1 -12 7 M3 -7 Q14 1 12 7" stroke="#5D9CAC" strokeWidth="3" fill="none" strokeLinecap="round" />
+          </g>
+        </g>
+      </svg>
+    );
+  }
+  if (/cycl|bike|biking|ride|spin/.test(a)) {
+    return (
+      <svg width="62" height="49" viewBox="0 0 66 52" aria-hidden="true">
+        <g transform="translate(16 36)">
+          <g className="toon-spin">
+            <circle r="10.5" fill="none" stroke="#3B6370" strokeWidth="2.5" />
+            <line x1="-8" y1="0" x2="8" y2="0" stroke="#3B6370" strokeWidth="1.2" />
+            <line x1="0" y1="-8" x2="0" y2="8" stroke="#3B6370" strokeWidth="1.2" />
+          </g>
+        </g>
+        <g transform="translate(50 36)">
+          <g className="toon-spin">
+            <circle r="10.5" fill="none" stroke="#3B6370" strokeWidth="2.5" />
+            <line x1="-8" y1="0" x2="8" y2="0" stroke="#3B6370" strokeWidth="1.2" />
+            <line x1="0" y1="-8" x2="0" y2="8" stroke="#3B6370" strokeWidth="1.2" />
+          </g>
+        </g>
+        <path d="M16 36 L33 36 L24 21 Z M33 36 L44 21 M24 21 L45 21" fill="none" stroke="#D85A30" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+        <line x1="44" y1="21" x2="48" y2="16" stroke="#D85A30" strokeWidth="2.5" strokeLinecap="round" />
+        <line x1="21" y1="21" x2="27" y2="21" stroke="#D85A30" strokeWidth="2.5" strokeLinecap="round" />
+      </svg>
+    );
+  }
+  if (/swim/.test(a)) {
+    return (
+      <svg width="60" height="49" viewBox="0 0 64 52" aria-hidden="true">
+        <g className="toon-wave">
+          <path d="M-14 34 Q-7 29 0 34 T14 34 T28 34 T42 34 T56 34 T70 34" fill="none" stroke="#5D9CAC" strokeWidth="2.5" />
+          <path d="M-14 43 Q-7 38 0 43 T14 43 T28 43 T42 43 T56 43 T70 43" fill="none" stroke="#9FE1CB" strokeWidth="2.5" />
+        </g>
+        <circle cx="24" cy="22" r="5" fill="#D85A30" />
+        <path className="toon-arm" d="M26 22 L39 14" stroke="#D85A30" strokeWidth="3.2" strokeLinecap="round" />
+      </svg>
+    );
+  }
+  if (/\brow/.test(a)) {
+    return (
+      <svg width="60" height="49" viewBox="0 0 64 52" aria-hidden="true">
+        <g className="toon-wave">
+          <path d="M-14 42 Q-7 38 0 42 T14 42 T28 42 T42 42 T56 42 T70 42" fill="none" stroke="#5D9CAC" strokeWidth="2.5" />
+        </g>
+        <path d="M16 33 Q32 43 48 33 L44 29 L20 29 Z" fill="#3B6370" />
+        <circle cx="32" cy="25" r="4" fill="#D85A30" />
+        <path className="toon-oar" d="M32 27 L48 17" stroke="#D85A30" strokeWidth="2.6" strokeLinecap="round" />
+      </svg>
+    );
+  }
+  if (/soccer|football|futbol/.test(a)) return soccer;
+  if (/basket/.test(a)) {
+    return (
+      <svg width="52" height="52" viewBox="0 0 60 60" aria-hidden="true">
+        <ellipse className="toon-bsh fast" cx="30" cy="52" rx="13" ry="3" fill="#9A4A12" />
+        <g transform="translate(30 26)">
+          <g className="toon-ball fast">
+            <circle r="13" fill="#E2711D" stroke="#9A4A12" strokeWidth="1.5" />
+            <line x1="0" y1="-13" x2="0" y2="13" stroke="#9A4A12" strokeWidth="1.3" />
+            <line x1="-13" y1="0" x2="13" y2="0" stroke="#9A4A12" strokeWidth="1.3" />
+            <path d="M-11 -7 Q0 0 -11 7 M11 -7 Q0 0 11 7" fill="none" stroke="#9A4A12" strokeWidth="1.3" />
+          </g>
+        </g>
+      </svg>
+    );
+  }
+  if (/tennis/.test(a)) {
+    return (
+      <svg width="52" height="52" viewBox="0 0 60 60" aria-hidden="true">
+        <ellipse className="toon-bsh fast" cx="30" cy="52" rx="12" ry="2.8" fill="#96A31F" />
+        <g transform="translate(30 26)">
+          <g className="toon-ball fast">
+            <circle r="12" fill="#C4D82E" stroke="#96A31F" strokeWidth="1.3" />
+            <path d="M-9 -9 Q6 -2 9 9 M9 -9 Q-6 2 -9 9" fill="none" stroke="#fff" strokeWidth="1.6" />
+          </g>
+        </g>
+      </svg>
+    );
+  }
+  if (/volley/.test(a)) {
+    return (
+      <svg width="52" height="52" viewBox="0 0 60 60" aria-hidden="true">
+        <ellipse className="toon-bsh" cx="30" cy="52" rx="13" ry="3" fill="#378ADD" />
+        <g transform="translate(30 26)">
+          <g className="toon-ball">
+            <circle r="13" fill="#fff" stroke="#378ADD" strokeWidth="1.5" />
+            <path d="M-2 -13 Q6 0 -1 13 M4 -12 Q13 0 9 11 M-12 -5 Q0 -1 12 -6 M-11 7 Q-2 2 -6 -12" fill="none" stroke="#378ADD" strokeWidth="1.2" />
+          </g>
+        </g>
+      </svg>
+    );
+  }
+  if (/disc|disk|frisbee|ultimate/.test(a)) {
+    return (
+      <svg width="54" height="50" viewBox="0 0 60 56" aria-hidden="true">
+        <g transform="translate(12 30)">
+          <g className="toon-glide">
+            <ellipse cx="0" cy="0" rx="13" ry="4.2" fill="#9333EA" />
+            <ellipse cx="0" cy="-1.4" rx="9.5" ry="2.6" fill="#c4a8f0" />
+          </g>
+        </g>
+      </svg>
+    );
+  }
+  if (/surf/.test(a)) {
+    return (
+      <svg width="58" height="51" viewBox="0 0 64 56" aria-hidden="true">
+        <path d="M4 46 Q8 22 34 24 Q22 28 25 42 Q35 32 47 36 Q57 38 60 46 Z" fill="#378ADD" />
+        <g transform="translate(38 26)">
+          <g className="toon-rock">
+            <ellipse cx="0" cy="2" rx="13" ry="3.4" fill="#D85A30" />
+            <circle cx="0" cy="-9" r="3.6" fill="#3B6370" />
+            <path d="M0 -6 L0 0" stroke="#3B6370" strokeWidth="2.6" strokeLinecap="round" />
+          </g>
+        </g>
+      </svg>
+    );
+  }
+
+  if (type === "sport") return soccer;
+  return heartbeat;
 };
 
 const RecentWorkouts = ({ setSelectedPage }: Props) => {
@@ -359,18 +529,37 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
         }
         @keyframes toon-beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.16); } }
         @keyframes toon-ring { 0% { transform: scale(0.35); opacity: 0.45; } 100% { transform: scale(1.25); opacity: 0; } }
-        @keyframes toon-lift { 0%, 100% { transform: translateY(7px); } 50% { transform: translateY(-7px); } }
-        @keyframes toon-bounce { 0%, 100% { transform: translateY(-16px); } 50% { transform: translateY(8px); } }
+        @keyframes toon-lift { 0%, 100% { transform: translateY(6px); } 50% { transform: translateY(-6px); } }
+        @keyframes toon-bounce { 0%, 100% { transform: translateY(-13px); } 50% { transform: translateY(7px); } }
         @keyframes toon-bsh { 0%, 100% { transform: scaleX(0.55); opacity: 0.3; } 50% { transform: scaleX(1); opacity: 0.55; } }
-        .toon-beat, .toon-ring, .toon-lift, .toon-ball, .toon-bsh { transform-box: fill-box; transform-origin: center; }
+        @keyframes toon-bob { 0%, 100% { transform: translateY(3px); } 50% { transform: translateY(-3px); } }
+        @keyframes toon-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.11); } }
+        @keyframes toon-spin { to { transform: rotate(360deg); } }
+        @keyframes toon-stroke { 0%, 100% { transform: rotate(-22deg); } 50% { transform: rotate(20deg); } }
+        @keyframes toon-wave { to { transform: translateX(-14px); } }
+        @keyframes toon-rock { 0%, 100% { transform: rotate(-9deg); } 50% { transform: rotate(9deg); } }
+        @keyframes toon-glide { from { transform: translate(4px, 5px); } to { transform: translate(34px, -5px); } }
+        @keyframes toon-fade { 0%, 100% { opacity: 0.15; } 50% { opacity: 1; } }
+        .toon-beat, .toon-ring, .toon-lift, .toon-ball, .toon-bsh, .toon-bob, .toon-breathe, .toon-spin, .toon-arm, .toon-oar, .toon-wave, .toon-rock, .toon-glide, .toon-fp { transform-box: fill-box; transform-origin: center; }
+        .toon-arm, .toon-oar { transform-origin: 0% 100%; }
         .toon-beat { animation: toon-beat 1s ease-in-out infinite; }
         .toon-ring { animation: toon-ring 1.8s ease-out infinite; }
         .toon-ring-d { animation-delay: 0.9s; }
         .toon-lift { animation: toon-lift 1.15s ease-in-out infinite; }
         .toon-ball { animation: toon-bounce 1.05s cubic-bezier(0.5, 0.05, 0.5, 0.95) infinite; }
+        .toon-ball.fast { animation-duration: 0.8s; }
         .toon-bsh { animation: toon-bsh 1.05s cubic-bezier(0.5, 0.05, 0.5, 0.95) infinite; }
+        .toon-bsh.fast { animation-duration: 0.8s; }
+        .toon-bob { animation: toon-bob 1.6s ease-in-out infinite; }
+        .toon-breathe { animation: toon-breathe 2.4s ease-in-out infinite; }
+        .toon-spin { animation: toon-spin 1.1s linear infinite; }
+        .toon-arm, .toon-oar { animation: toon-stroke 1.1s ease-in-out infinite; }
+        .toon-wave { animation: toon-wave 1.1s linear infinite; }
+        .toon-rock { animation: toon-rock 1.8s ease-in-out infinite; }
+        .toon-glide { animation: toon-glide 1.4s ease-in-out infinite alternate; }
+        .toon-fp { animation: toon-fade 1.5s ease-in-out infinite; }
         @media (prefers-reduced-motion: reduce) {
-          .toon-beat, .toon-ring, .toon-lift, .toon-ball, .toon-bsh { animation: none; }
+          .toon-beat, .toon-ring, .toon-lift, .toon-ball, .toon-bsh, .toon-bob, .toon-breathe, .toon-spin, .toon-arm, .toon-oar, .toon-wave, .toon-rock, .toon-glide, .toon-fp { animation: none; }
         }
       `}</style>
 
@@ -440,7 +629,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                     >
                       {showCartoon ? (
                         <>
-                          <div className="flex w-[104px] flex-shrink-0 flex-col p-3 min-w-0">
+                          <div className="flex flex-1 flex-col p-3 min-w-0">
                             <span className="text-sm font-bold text-primary-500 truncate">
                               @{workout.username}
                             </span>
@@ -460,9 +649,9 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                             </div>
                           </div>
                           <div
-                            className={`relative flex-1 flex items-center justify-center border-l border-gray-200 ${typeTint(workout.type)}`}
+                            className={`relative w-[78px] flex-shrink-0 flex items-center justify-center border-l border-gray-200 ${typeTint(workout.type)}`}
                           >
-                            <WorkoutToon type={workout.type} />
+                            <WorkoutToon type={workout.type} activity={stripSource(workout.activity)} />
                             <button
                               onClick={() => handleCommentClick(workout)}
                               className="absolute top-1.5 right-1.5 text-primary-500 hover:text-primary-700 transition-colors"
