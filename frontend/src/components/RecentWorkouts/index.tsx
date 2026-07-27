@@ -31,6 +31,50 @@ type Comment = {
 
 const CARD_HEIGHT = 157;
 
+const WorkoutToon = ({ type }: { type: Workout["type"] }) => {
+  if (type === "gym") {
+    return (
+      <svg width="84" height="52" viewBox="0 0 84 52" aria-hidden="true">
+        <g transform="translate(42 26)">
+          <g className="toon-lift">
+            <rect x="-24" y="-3" width="48" height="6" rx="3" fill="#3B6370" />
+            <rect x="-32" y="-11" width="8" height="22" rx="2" fill="#2A4A55" />
+            <rect x="24" y="-11" width="8" height="22" rx="2" fill="#2A4A55" />
+            <rect x="-38" y="-8" width="7" height="16" rx="2" fill="#3B6370" />
+            <rect x="31" y="-8" width="7" height="16" rx="2" fill="#3B6370" />
+          </g>
+        </g>
+      </svg>
+    );
+  }
+  if (type === "sport") {
+    return (
+      <svg width="74" height="76" viewBox="0 0 64 66" aria-hidden="true">
+        <ellipse className="toon-bsh" cx="32" cy="58" rx="15" ry="3.5" fill="#9333EA" />
+        <g transform="translate(32 30)">
+          <g className="toon-ball">
+            <circle r="14" fill="#fff" stroke="#6b21a8" strokeWidth="1.5" />
+            <polygon points="0,-6.5 6.5,-1.5 4,6.5 -4,6.5 -6.5,-1.5" fill="#6b21a8" />
+            <path
+              d="M0 -14 L0 -6.5 M12 -6.5 L6.5 -1.5 M8.5 11 L4 6.5 M-8.5 11 L-4 6.5 M-12 -6.5 L-6.5 -1.5"
+              stroke="#6b21a8"
+              strokeWidth="1.3"
+              fill="none"
+            />
+          </g>
+        </g>
+      </svg>
+    );
+  }
+  return (
+    <svg width="74" height="76" viewBox="0 0 64 66" aria-hidden="true">
+      <circle className="toon-ring" cx="32" cy="33" r="20" fill="none" stroke="#D85A30" strokeWidth="2" />
+      <circle className="toon-ring toon-ring-d" cx="32" cy="33" r="20" fill="none" stroke="#D85A30" strokeWidth="2" />
+      <path className="toon-beat" d="M32 46 C13 32 19 15 32 25 C45 15 51 32 32 46 Z" fill="#D85A30" />
+    </svg>
+  );
+};
+
 const RecentWorkouts = ({ setSelectedPage }: Props) => {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
@@ -186,6 +230,20 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
     return "bg-secondary-500 text-white";
   };
 
+  const typeTint = (type: string) => {
+    if (type === "cardio") return "bg-accent-500/10";
+    if (type === "sport") return "bg-purple-600/10";
+    return "bg-secondary-500/10";
+  };
+
+  // Strip the integration source prefix (e.g. "Strava: Run" -> "Run") for
+  // display, both to save space and to avoid exposing which wearable a user
+  // has connected.
+  const stripSource = (activity: string) => {
+    const cleaned = activity.replace(/^[^:]{1,24}:\s+/, "").trim();
+    return cleaned || activity;
+  };
+
   const CardTopRow = ({ workout }: { workout: Workout }) => (
     <div className="flex items-center justify-between px-3 pt-3 flex-shrink-0">
       <div className="flex items-center gap-1.5 min-w-0">
@@ -222,7 +280,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
   const CardMeta = ({ workout }: { workout: Workout }) => (
     <div className="flex flex-col gap-1 px-3">
       <p className="text-base font-extrabold text-gray-900 truncate leading-tight">
-        {workout.activity}
+        {stripSource(workout.activity)}
       </p>
       <div className="flex items-center gap-2 flex-wrap">
         {workout.score > 0 && (
@@ -299,6 +357,21 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
         .pulse-photo-btn {
           animation: pulse-btn 1.6s ease-in-out infinite;
         }
+        @keyframes toon-beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.16); } }
+        @keyframes toon-ring { 0% { transform: scale(0.35); opacity: 0.45; } 100% { transform: scale(1.25); opacity: 0; } }
+        @keyframes toon-lift { 0%, 100% { transform: translateY(7px); } 50% { transform: translateY(-7px); } }
+        @keyframes toon-bounce { 0%, 100% { transform: translateY(-16px); } 50% { transform: translateY(8px); } }
+        @keyframes toon-bsh { 0%, 100% { transform: scaleX(0.55); opacity: 0.3; } 50% { transform: scaleX(1); opacity: 0.55; } }
+        .toon-beat, .toon-ring, .toon-lift, .toon-ball, .toon-bsh { transform-box: fill-box; transform-origin: center; }
+        .toon-beat { animation: toon-beat 1s ease-in-out infinite; }
+        .toon-ring { animation: toon-ring 1.8s ease-out infinite; }
+        .toon-ring-d { animation-delay: 0.9s; }
+        .toon-lift { animation: toon-lift 1.15s ease-in-out infinite; }
+        .toon-ball { animation: toon-bounce 1.05s cubic-bezier(0.5, 0.05, 0.5, 0.95) infinite; }
+        .toon-bsh { animation: toon-bsh 1.05s cubic-bezier(0.5, 0.05, 0.5, 0.95) infinite; }
+        @media (prefers-reduced-motion: reduce) {
+          .toon-beat, .toon-ring, .toon-lift, .toon-ball, .toon-bsh { animation: none; }
+        }
       `}</style>
 
       <div className="max-w-7xl mx-auto px-4">
@@ -347,28 +420,84 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
               <p className="text-center text-gray-500">No recent workouts yet</p>
             ) : (
               <div className="flex gap-3 md:gap-4 min-w-min items-start">
-                {workouts.map((workout, index) => (
-                  <motion.div
-                    key={`${workout.type}-${workout.id}`}
-                    className="flex-shrink-0 w-[200px] sm:w-[220px] md:w-[240px] border border-gray-200 rounded-xl bg-white shadow-sm hover:border-primary-300 transition-colors overflow-hidden flex flex-col"
-                    style={{ height: CARD_HEIGHT }}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.5 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}
-                  >
-                    <CardTopRow workout={workout} />
+                {workouts.map((workout, index) => {
+                  const isOwner = currentUser?.username === workout.username;
+                  // Other people's workouts with no photo get a playful,
+                  // type-specific animation on the right instead of an empty
+                  // slot. Owner cards and photo'd cards keep the Add/View Photo
+                  // button in the vertical layout.
+                  const showCartoon = !workout.image_url && !isOwner;
+                  return (
+                    <motion.div
+                      key={`${workout.type}-${workout.id}`}
+                      className={`flex-shrink-0 w-[200px] sm:w-[220px] md:w-[240px] border border-gray-200 rounded-xl bg-white shadow-sm hover:border-primary-300 transition-colors overflow-hidden flex ${showCartoon ? "flex-row" : "flex-col"}`}
+                      style={{ height: CARD_HEIGHT }}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, amount: 0.5 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      variants={{ hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0 } }}
+                    >
+                      {showCartoon ? (
+                        <>
+                          <div className="flex w-[104px] flex-shrink-0 flex-col p-3 min-w-0">
+                            <span className="text-sm font-bold text-primary-500 truncate">
+                              @{workout.username}
+                            </span>
+                            <div className="flex-1 flex flex-col justify-center gap-0.5 min-w-0">
+                              <p className="text-base font-extrabold text-gray-900 truncate leading-tight">
+                                {stripSource(workout.activity)}
+                              </p>
+                              {workout.score > 0 && (
+                                <span className="text-sm font-extrabold text-accent-500">
+                                  {workout.score} pts
+                                </span>
+                              )}
+                              <span className="text-xs text-gray-400">{formatDate(workout.date)}</span>
+                              {workout.duration && (
+                                <span className="text-xs text-gray-400">{workout.duration}m</span>
+                              )}
+                            </div>
+                          </div>
+                          <div
+                            className={`relative flex-1 flex items-center justify-center border-l border-gray-200 ${typeTint(workout.type)}`}
+                          >
+                            <WorkoutToon type={workout.type} />
+                            <button
+                              onClick={() => handleCommentClick(workout)}
+                              className="absolute top-1.5 right-1.5 text-primary-500 hover:text-primary-700 transition-colors"
+                              title="View Comments"
+                            >
+                              <ChatBubbleBottomCenterTextIcon className="h-4 w-4" />
+                              {workout.comment_count > 0 && (
+                                <span className="absolute -top-1 -right-1 bg-primary-500/90 text-white text-[8px] font-bold rounded-full h-3 w-3 flex items-center justify-center">
+                                  {workout.comment_count > 9 ? "9+" : workout.comment_count}
+                                </span>
+                              )}
+                            </button>
+                            <span
+                              className={`absolute bottom-1.5 right-1.5 text-[9px] font-extrabold px-2 py-0.5 rounded-full ${typeColor(workout.type)}`}
+                            >
+                              {workout.type.toUpperCase()}
+                            </span>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <CardTopRow workout={workout} />
 
-                    <div className="flex-1 flex flex-col justify-center">
-                      <CardMeta workout={workout} />
-                    </div>
+                          <div className="flex-1 flex flex-col justify-center">
+                            <CardMeta workout={workout} />
+                          </div>
 
-                    <div className="px-3 pb-3 flex-shrink-0">
-                      <CardBottomRow workout={workout} />
-                    </div>
-                  </motion.div>
-                ))}
+                          <div className="px-3 pb-3 flex-shrink-0">
+                            <CardBottomRow workout={workout} />
+                          </div>
+                        </>
+                      )}
+                    </motion.div>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -404,7 +533,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
                 className="w-full max-h-[80vh] object-contain rounded-lg"
               />
               <p className="text-white text-center text-sm mt-3 font-semibold">
-                {selectedWorkout.activity} — @{selectedWorkout.username}
+                {stripSource(selectedWorkout.activity)} — @{selectedWorkout.username}
               </p>
             </motion.div>
           </motion.div>
@@ -431,7 +560,7 @@ const RecentWorkouts = ({ setSelectedPage }: Props) => {
               <div className="flex justify-between items-center p-4 border-b border-white/20 flex-shrink-0">
                 <div className="flex items-center gap-3 min-w-0">
                   <h2 className="text-base sm:text-xl font-bold text-white truncate">
-                    {selectedWorkout.activity}
+                    {stripSource(selectedWorkout.activity)}
                   </h2>
                   <span className="flex-shrink-0 text-xs font-bold text-white bg-white/20 px-2 py-0.5 rounded-full">
                     +{selectedWorkout.score} pts

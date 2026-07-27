@@ -126,19 +126,6 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                   {isAuthenticated && (
                     <Link page="Connect" selectedPage={selectedPage} isTopOfPage={isTopOfPage} setSelectedPage={setSelectedPage} />
                   )}
-                  {/* ── Groups button (desktop) ── */}
-                  {isAuthenticated && (
-                    <button
-                      onClick={() => navigate("/groups")}
-                      className={`font-bold transition duration-500 hover:text-primary-300 ${
-                        location.pathname === "/groups"
-                          ? "text-primary-500"
-                          : isTopOfPage ? "text-white" : "text-gray-900"
-                      }`}
-                    >
-                      Groups
-                    </button>
-                  )}
                 </div>
 
                 <div className={`${flexBetween} gap-8`}>
@@ -250,15 +237,6 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
               )}
               {isAuthenticated && (
                 <Link page="Connect" selectedPage={selectedPage} setSelectedPage={setSelectedPage} isTopOfPage={false} />
-              )}
-              {/* ── Groups button (mobile) ── */}
-              {isAuthenticated && (
-                <button
-                  onClick={() => { navigate("/groups"); setIsMenuToggled(false); }}
-                  className="text-left hover:text-primary-500 transition"
-                >
-                  Groups
-                </button>
               )}
               {isAuthenticated && (
                 <button
