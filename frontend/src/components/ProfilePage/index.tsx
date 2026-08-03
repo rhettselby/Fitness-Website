@@ -4,6 +4,7 @@ import Navbar from "@/components/navbar";
 import { SelectedPage } from "@/shared/types";
 import { API_URL } from "@/lib/config";
 import { TokenService } from "@/utils/auth";
+import WorkoutCalendar from "./WorkoutCalendar";
 
 type Workout = {
   id: number;
@@ -42,15 +43,6 @@ const ProfilePage = () => {
   const [selectedPage, setSelectedPage] = useState<SelectedPage>(SelectedPage.Home);
 
   const navigate = useNavigate();
-
-  const formatDate = (dateString: string) =>
-    new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
 
   useEffect(() => {
     const token = TokenService.getAccessToken();
@@ -275,39 +267,7 @@ const ProfilePage = () => {
           {workouts.length === 0 ? (
             <p className="text-gray-500">No workouts logged yet.</p>
           ) : (
-            <div className="space-y-3 md:space-y-4">
-              {workouts.map((workout) => (
-                <div
-                  key={workout.id}
-                  className="border-2 border-primary-300 rounded-lg p-4 sm:p-6 hover:bg-primary-50 transition-colors"
-                >
-                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${
-                        workout.type === "cardio"
-                          ? "bg-accent-500 text-white"
-                          : "bg-secondary-500 text-white"
-                      }`}
-                    >
-                      {workout.type.toUpperCase()}
-                    </span>
-                    <h3 className="text-lg sm:text-xl font-bold text-gray-800">
-                      {workout.activity}
-                    </h3>
-                  </div>
-
-                  <p className="text-gray-600 text-xs sm:text-sm">
-                    {formatDate(workout.date)}
-                  </p>
-
-                  {workout.duration && (
-                    <p className="text-gray-700 mt-1 sm:mt-2 text-sm">
-                      <span className="font-semibold">Duration:</span> {workout.duration} minutes
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
+            <WorkoutCalendar workouts={workouts} />
           )}
         </div>
 
