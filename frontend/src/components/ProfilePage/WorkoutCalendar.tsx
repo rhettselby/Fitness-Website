@@ -2,9 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
+type WorkoutType = "cardio" | "gym" | "sport";
+
 type Workout = {
   id: number;
-  type: "cardio" | "gym";
+  type: WorkoutType;
   activity: string;
   date: string;
   duration?: number | null;
@@ -17,6 +19,20 @@ type Props = {
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MAX_DOTS = 3;
 
+// Reuses the colors the community feed already assigns each type so a workout
+// reads the same on both pages.
+const TYPE_COLOR: Record<WorkoutType, string> = {
+  cardio: "bg-accent-500",
+  gym: "bg-secondary-500",
+  sport: "bg-purple-600",
+};
+
+const TYPE_LABEL: Record<WorkoutType, string> = {
+  cardio: "Cardio",
+  gym: "Gym",
+  sport: "Sport",
+};
+
 // Bucket keys are built from local-time getters, not from the raw ISO string,
 // so a late-evening workout lands on the same day the cell and modal display it.
 const dayKey = (d: Date) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
@@ -28,11 +44,14 @@ const fromMonthIndex = (index: number) => ({
   month: index % 12,
 });
 
-const typeDot = (type: Workout["type"]) =>
-  type === "cardio" ? "bg-accent-500" : "bg-secondary-500";
+// Unknown types can still arrive if the backend gains a workout kind before the
+// frontend knows about it, so fall back to a neutral swatch instead of silently
+// coloring it like an existing type.
+const typeDot = (type: WorkoutType) => TYPE_COLOR[type] ?? "bg-gray-400";
 
-const typeBadge = (type: Workout["type"]) =>
-  type === "cardio" ? "bg-accent-500 text-white" : "bg-secondary-500 text-white";
+const typeBadge = (type: WorkoutType) => `${typeDot(type)} text-white`;
+
+const typeLabel = (type: WorkoutType) => TYPE_LABEL[type] ?? type;
 
 const WorkoutCalendar = ({ workouts }: Props) => {
   const today = new Date();
@@ -253,13 +272,13 @@ const WorkoutCalendar = ({ workouts }: Props) => {
       </AnimatePresence>
 
       {/* ── Legend ── */}
-      <div className="flex items-center justify-center gap-4 mt-4 text-xs text-gray-600">
-        <span className="flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full bg-accent-500" /> Cardio
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full bg-secondary-500" /> Gym
-        </span>
+      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mt-4 text-xs text-gray-600">
+        {(Object.keys(TYPE_COLOR) as WorkoutType[]).map((type) => (
+          <span key={type} className="flex items-center gap-1.5">
+            <span className={`h-2 w-2 rounded-full ${TYPE_COLOR[type]}`} />
+            {TYPE_LABEL[type]}
+          </span>
+        ))}
       </div>
 
       {/* ── Empty month ── */}
@@ -334,7 +353,7 @@ const WorkoutCalendar = ({ workouts }: Props) => {
                           workout.type
                         )}`}
                       >
-                        {workout.type.toUpperCase()}
+                        {typeLabel(workout.type).toUpperCase()}
                       </span>
                       <h3 className="text-base font-bold text-white truncate">
                         {workout.activity}

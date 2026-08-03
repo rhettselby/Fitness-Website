@@ -8,7 +8,8 @@ import WorkoutCalendar from "./WorkoutCalendar";
 
 type Workout = {
   id: number;
-  type: "cardio" | "gym";
+  // Matches get_workout_type() in the backend's profile_page/views.py.
+  type: "cardio" | "gym" | "sport";
   activity: string;
   date: string;
   duration?: number | null;
