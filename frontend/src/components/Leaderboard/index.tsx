@@ -4,10 +4,21 @@ import Class from "./Class";
 import { useEffect, useState } from "react";
 import { API_URL } from "@/lib/config";
 import { TokenService } from "@/utils/auth";
+import HistoryNav from "@/components/LeaderboardHistory/HistoryNav";
+import { useLeaderboardHistory } from "@/hooks/useLeaderboardHistory";
 
 type LeaderboardUser = {
   username: string;
   score: number;
+  bio?: string | null;
+  location?: string | null;
+};
+
+type Card = {
+  key: string;
+  rank: number;
+  name: string;
+  description: string;
   bio?: string | null;
   location?: string | null;
 };
@@ -19,6 +30,9 @@ type Props = {
 const Leaderboard = ({ setSelectedPage }: Props) => {
   const [leaders, setLeaders] = useState<LeaderboardUser[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  // History endpoints need a login, so the History button only shows to signed-in users.
+  const history = useLeaderboardHistory("/api/leaderboard/history");
+  const loggedIn = !!TokenService.getAccessToken();
 
   useEffect(() => {
     setLoading(true);
@@ -47,6 +61,37 @@ const Leaderboard = ({ setSelectedPage }: Props) => {
       .finally(() => setLoading(false));
   }, []);
 
+  // Live and past weeks render through the same cards; past weeks carry no bio/location.
+  const cards: Card[] = history.open
+    ? (history.week?.leaderboard ?? []).slice(0, 5).map((entry) => ({
+        key: entry.user,
+        rank: entry.rank,
+        name: `#${entry.rank} ${entry.user}`,
+        description: `${entry.score} pts`,
+      }))
+    : leaders.map((user, index) => ({
+        key: user.username,
+        rank: index + 1,
+        name: `#${index + 1} ${user.username}`,
+        description: `${user.score} pts`,
+        bio: user.bio,
+        location: user.location,
+      }));
+
+  const cardElements = cards.map((card) => (
+    <Class
+      key={card.key}
+      name={card.name}
+      description={card.description}
+      image=""
+      bio={card.bio}
+      location={card.location}
+      rank={card.rank}
+    />
+  ));
+
+  const showLoading = history.open ? history.loading : loading;
+
   return (
     <section id="leaderboard" className="w-full bg-primary-100 py-16 md:py-20">
       <div className="max-w-7xl mx-auto px-4">
@@ -64,11 +109,16 @@ const Leaderboard = ({ setSelectedPage }: Props) => {
             }}
           >
             <div className="w-full flex flex-col items-center text-center">
-              <h1 className="font-montserrat text-2xl sm:text-3xl font-bold text-gray-900">
-                Weekly Leaderboard 🏆
-              </h1>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <h1 className="font-montserrat text-2xl sm:text-3xl font-bold text-gray-900">
+                  Weekly Leaderboard 🏆
+                </h1>
+                {loggedIn && <HistoryNav history={history} />}
+              </div>
               <p className="py-4 md:py-5 text-gray-900 font-semibold text-sm sm:text-base">
-                The top 5 members with the most points this week!
+                {history.open
+                  ? "The top 5 members from that week."
+                  : "The top 5 members with the most points this week!"}
               </p>
 
               {/* Scoring breakdown */}
@@ -94,48 +144,30 @@ const Leaderboard = ({ setSelectedPage }: Props) => {
 
           {/* ── Cards ── */}
           <div className="mt-6 md:mt-10">
-            {loading ? (
+            {showLoading ? (
               <div className="flex items-center justify-center py-16">
                 <p className="text-lg">Loading leaderboard...</p>
               </div>
-            ) : leaders.length === 0 ? (
+            ) : history.open && history.error ? (
+              <div className="flex items-center justify-center py-16">
+                <p className="text-lg text-center text-red-500">{history.error}</p>
+              </div>
+            ) : cards.length === 0 ? (
               <div className="flex items-center justify-center py-16">
                 <p className="text-lg text-center">
-                  No workouts logged this week yet. Be the first!
+                  {history.open
+                    ? "No history yet — the first week is saved on Monday."
+                    : "No workouts logged this week yet. Be the first!"}
                 </p>
               </div>
             ) : (
               <>
                 {/* Mobile: 2-col grid */}
-                <div className="grid grid-cols-2 gap-4 sm:hidden">
-                  {leaders.map((user, index) => (
-                    <Class
-                      key={`${user.username}-${index}`}
-                      name={`#${index + 1} ${user.username}`}
-                      description={`${user.score} pts`}
-                      image=""
-                      bio={user.bio}
-                      location={user.location}
-                      rank={index + 1}
-                    />
-                  ))}
-                </div>
+                <div className="grid grid-cols-2 gap-4 sm:hidden">{cardElements}</div>
 
                 {/* sm+: horizontal scroll row (original behaviour) */}
                 <div className="hidden sm:flex justify-center overflow-x-auto pb-2">
-                  <ul className="inline-flex whitespace-nowrap gap-3">
-                    {leaders.map((user, index) => (
-                      <Class
-                        key={`${user.username}-${index}`}
-                        name={`#${index + 1} ${user.username}`}
-                        description={`${user.score} pts`}
-                        image=""
-                        bio={user.bio}
-                        location={user.location}
-                        rank={index + 1}
-                      />
-                    ))}
-                  </ul>
+                  <ul className="inline-flex whitespace-nowrap gap-3">{cardElements}</ul>
                 </div>
               </>
             )}

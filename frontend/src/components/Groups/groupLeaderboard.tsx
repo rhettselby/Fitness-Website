@@ -3,6 +3,8 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { API_URL } from "@/lib/config";
 import { TokenService } from "@/utils/auth";
 import { motion, AnimatePresence } from "framer-motion";
+import HistoryNav from "@/components/LeaderboardHistory/HistoryNav";
+import { useLeaderboardHistory } from "@/hooks/useLeaderboardHistory";
 
 type LeaderboardEntry = {
   rank: number;
@@ -109,6 +111,7 @@ const GroupLeaderboard = () => {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const history = useLeaderboardHistory(`/groups/leaderboard_history/${id}`);
 
   // revealedCount tracks how many cards have been flipped so far
   const [revealedCount, setRevealedCount] = useState(0);
@@ -157,15 +160,23 @@ const GroupLeaderboard = () => {
   const presentRanks = new Set(leaderboard.map((e) => e.rank));
   const revealSequence = fullRevealOrder.filter((r) => presentRanks.has(r));
 
-  const isRevealed = (rank: number) => {
-    const step = revealSequence.indexOf(rank);
+  // Live ranks are dense (1..n) so position == rank. Past weeks share a rank on ties, so
+  // the pyramid is filled by position and each card shows the entry's own rank.
+  const displayed = history.open ? history.week?.leaderboard ?? [] : leaderboard;
+
+  const isRevealed = (position: number) => {
+    if (history.open) return true; // past weeks show at once, no dramatic reveal
+    const step = revealSequence.indexOf(position);
     return step !== -1 && step < revealedCount;
   };
 
-  const entryByRank = (rank: number): LeaderboardEntry | null =>
-    leaderboard.find((e) => e.rank === rank) || null;
+  const entryAt = (position: number): LeaderboardEntry | null =>
+    displayed[position - 1] || null;
 
-  const restOfList = leaderboard.filter((e) => e.rank > 6);
+  const restOfList = displayed.slice(6);
+
+  const showLoading = history.open ? history.loading : loading;
+  const showError = history.open ? history.error : error;
 
   return (
     <section className="w-full bg-primary-100 min-h-screen py-20 px-4">
@@ -185,17 +196,20 @@ const GroupLeaderboard = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-10"
         >
-          <h1 className="font-montserrat text-3xl sm:text-4xl font-bold text-gray-900">
-            {groupName} 🏆
-          </h1>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <h1 className="font-montserrat text-3xl sm:text-4xl font-bold text-gray-900">
+              {groupName} 🏆
+            </h1>
+            <HistoryNav history={history} />
+          </div>
           <p className="mt-2 text-gray-600 font-medium text-sm sm:text-base">
-            Top members ranked by score.
+            {history.open ? "Final standings for that week." : "Top members ranked by score."}
           </p>
           <p className="mt-1 text-gray-400 text-xs">Group ID: {id}</p>
         </motion.div>
 
         {/* Pyramid */}
-        {loading ? (
+        {showLoading ? (
           <div className="flex flex-col items-center gap-2">
             {[3, 2, 1].map((n, i) => (
               <div key={i} className="flex gap-3">
@@ -205,10 +219,12 @@ const GroupLeaderboard = () => {
               </div>
             ))}
           </div>
-        ) : error ? (
-          <p className="text-red-500 text-sm text-center py-8">{error}</p>
-        ) : leaderboard.length === 0 ? (
-          <p className="text-gray-500 text-sm text-center py-8">No members yet.</p>
+        ) : showError ? (
+          <p className="text-red-500 text-sm text-center py-8">{showError}</p>
+        ) : displayed.length === 0 ? (
+          <p className="text-gray-500 text-sm text-center py-8">
+            {history.open ? "No history yet — the first week is saved on Monday." : "No members yet."}
+          </p>
         ) : (
           <>
             {/* ── Pyramid ── */}
@@ -216,23 +232,23 @@ const GroupLeaderboard = () => {
 
               {/* Top -- rank 1 */}
               <div className="flex justify-center">
-                <PyramidCard entry={entryByRank(1)} revealed={isRevealed(1)} size="lg" />
+                <PyramidCard entry={entryAt(1)} revealed={isRevealed(1)} size="lg" />
               </div>
 
               {/* Middle -- ranks 2, 3 */}
-              {leaderboard.length >= 2 && (
+              {displayed.length >= 2 && (
                 <div className="flex justify-center gap-3">
-                  {[2, 3].map((rank) => (
-                    <PyramidCard key={rank} entry={entryByRank(rank)} revealed={isRevealed(rank)} size="md" />
+                  {[2, 3].map((position) => (
+                    <PyramidCard key={position} entry={entryAt(position)} revealed={isRevealed(position)} size="md" />
                   ))}
                 </div>
               )}
 
               {/* Bottom -- ranks 4, 5, 6 */}
-              {leaderboard.length >= 4 && (
+              {displayed.length >= 4 && (
                 <div className="flex justify-center gap-3">
-                  {[4, 5, 6].map((rank) => (
-                    <PyramidCard key={rank} entry={entryByRank(rank)} revealed={isRevealed(rank)} size="sm" />
+                  {[4, 5, 6].map((position) => (
+                    <PyramidCard key={position} entry={entryAt(position)} revealed={isRevealed(position)} size="sm" />
                   ))}
                 </div>
               )}
@@ -242,7 +258,7 @@ const GroupLeaderboard = () => {
 
             {/* Rest of the list (rank 7+) */}
             <AnimatePresence>
-              {restOfList.length > 0 && revealedCount >= Math.min(leaderboard.length, 6) && (
+              {restOfList.length > 0 && (history.open || revealedCount >= Math.min(leaderboard.length, 6)) && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
